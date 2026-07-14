@@ -11,6 +11,7 @@ use App\Http\Controllers\ApiImportantLinkController;
 use App\Http\Controllers\ApiImportantSectionController;
 use App\Http\Controllers\ApiPasswordRecoveryController;
 use App\Http\Controllers\ApiEditPasswordRecoveryController;
+use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -40,3 +41,11 @@ Route::apiResource('passwordRecovery', ApiPasswordRecoveryController::class);
 Route::apiResource('editPasswordRecovery', ApiEditPasswordRecoveryController::class)->middleware('auth:sanctum');
 Route::apiResource('editPasswordRecovery', ApiEditPasswordRecoveryController::class)->middleware('auth:sanctum');
 Route::apiResource('feedbackLink', ApiFeedbackLinkController::class)->middleware('auth:sanctum');
+Route::prefix('dashboard')->group(function () {
+    Route::get('/', [DashboardController::class, 'fetch']);
+    Route::get('/cleardata', [DashboardController::class, 'cleardata']);
+    Route::post('/extract', [DashboardController::class, 'extract']);
+        // ->middleware('auth:sanctum');
+    Route::post('/pushdata', [DashboardController::class, 'pushdata']);
+        // ->middleware('auth:sanctum');
+});
