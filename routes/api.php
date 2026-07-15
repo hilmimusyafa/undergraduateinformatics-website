@@ -43,7 +43,7 @@ Route::apiResource('editPasswordRecovery', ApiEditPasswordRecoveryController::cl
 Route::apiResource('feedbackLink', ApiFeedbackLinkController::class)->middleware('auth:sanctum');
 Route::prefix('dashboard')->group(function () {
     Route::get('/', [DashboardController::class, 'fetch']);
-    Route::get('/cleardata', [DashboardController::class, 'cleardata']);
+    Route::delete('/cleardata', [DashboardController::class, 'cleardata']);
     Route::post('/extract', [DashboardController::class, 'extract']);
         // ->middleware('auth:sanctum');
     Route::post('/pushdata', [DashboardController::class, 'pushdata']);
