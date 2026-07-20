@@ -17,4 +17,9 @@ export default defineConfig({
             '@/': '/resources/js/',
         },
     },
+    test: {
+        environment: 'jsdom',
+        setupFiles: './tests/js/setup.ts',
+        globals: true,
+    },
 });

@@ -1,7 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "nprogress/nprogress.css";
 @import "@fontsource-variable/inter";
+
+#nprogress .bar {
+    @apply bg-primary h-1 !important;
+}
 
 @custom-variant dark (&:is(.dark *));
 
