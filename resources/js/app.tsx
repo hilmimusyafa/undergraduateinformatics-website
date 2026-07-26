@@ -1,13 +1,15 @@
-import './bootstrap';
-import '../css/app.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { createRouter, createRootRoute, createRoute, RouterProvider } from '@tanstack/react-router';
 import { HelmetProvider } from 'react-helmet-async';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
+
 import NProgress from 'nprogress';
-import { AppLayout } from './layouts/AppLayout';
-import { HomePage } from './pages/HomePage';
+
+import '../css/app.css';
+import './bootstrap';
+import { routeTree } from './routeTree.gen';
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -18,66 +20,12 @@ const queryClient = new QueryClient({
     },
 });
 
-const rootRoute = createRootRoute({
-    component: AppLayout,
-});
-
-const indexRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/',
-    component: HomePage,
-});
-
-const searchRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/posts/search',
-    component: () => null,
-});
-
-const linksRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/links',
-    component: () => null,
-});
-
-const feedbackRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/feedback',
-    component: () => null,
-});
-
-const adminLoginRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/admin/login',
-    component: () => null,
-});
-
-const postDetailRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/posts/$id',
-    component: () => null,
-});
-
-const tagDetailRoute = createRoute({
-    getParentRoute: () => rootRoute,
-    path: '/tags/$id',
-    component: () => null,
-});
-
-const routeTree = rootRoute.addChildren([
-    indexRoute,
-    searchRoute,
-    linksRoute,
-    feedbackRoute,
-    adminLoginRoute,
-    postDetailRoute,
-    tagDetailRoute,
-]);
-
 const router = createRouter({
     routeTree,
     defaultPreload: 'intent',
 });
+
+NProgress.configure({ showSpinner: false });
 
 router.subscribe('onBeforeLoad', () => {
     NProgress.start();
