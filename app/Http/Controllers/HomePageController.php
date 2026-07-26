@@ -32,7 +32,7 @@ class HomePageController extends Controller
             'siteName' => $initialData['siteName'],
             'ogTitle' => $initialData['title'],
             'ogDescription' => $initialData['description'],
-            'ogImage' => url('/images/DummyImage.png'),
+            'ogImage' => url('/public/images/banner.png'),
             'ogUrl' => $request->url(),
             'jsonLd' => $jsonLd,
             'initialData' => $initialData
@@ -52,8 +52,8 @@ class HomePageController extends Controller
         $sections = ImportantSection::orderBy('order_number')->get();
 
         return [
-            'title' => 'Portal Informasi - Program Studi Sarjana Informatika',
-            'description' => 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan berbagai informasi perkuliahan.',
+            'title' => 'Beranda - Portal Informasi Sarjana Informatika',
+            'description' => 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan informasi perkuliahan.',
             'siteName' => 'Telkom University',
             'tags' => TagResource::collection($tags)->resolve(),
             'posts' => PostResource::collection($posts)->resolve(),
