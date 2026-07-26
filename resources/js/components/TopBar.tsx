@@ -9,7 +9,7 @@ import { Input } from './ui/input';
 export function TopBar() {
     return (
         <nav className="flex w-full items-center justify-between bg-white px-6 py-3 shadow-md">
-            <Link to="/" className="flex items-center gap-2 transition-colors hover:bg-gray-100">
+            <Link to="/" className="flex items-center gap-2">
                 <img src="/images/logo.svg" alt="Logo" className="h-16 w-auto object-contain" />
             </Link>
 
