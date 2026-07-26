@@ -2,9 +2,8 @@ import { Link } from '@tanstack/react-router';
 
 import { Search } from 'lucide-react';
 
-import { cn } from '../lib/utils';
 import { PrimaryButton } from './PrimaryButton';
-import { buttonVariants } from './ui/button';
+import { TopBarLink } from './TopBarLink';
 import { Input } from './ui/input';
 
 export function TopBar() {
@@ -16,33 +15,9 @@ export function TopBar() {
 
             <div className="flex items-center gap-8">
                 <div className="flex items-center gap-4">
-                    <Link
-                        to="/"
-                        className={cn(
-                            buttonVariants({ variant: 'ghost' }),
-                            'h-auto border-none px-3 py-1.5 text-base font-bold transition-colors hover:bg-gray-100'
-                        )}
-                    >
-                        Informasi
-                    </Link>
-                    <Link
-                        to="/"
-                        className={cn(
-                            buttonVariants({ variant: 'ghost' }),
-                            'h-auto border-none px-3 py-1.5 text-base font-bold transition-colors hover:bg-gray-100'
-                        )}
-                    >
-                        Link Penting
-                    </Link>
-                    <Link
-                        to="/"
-                        className={cn(
-                            buttonVariants({ variant: 'ghost' }),
-                            'h-auto border-none px-3 py-1.5 text-base font-bold transition-colors hover:bg-gray-100'
-                        )}
-                    >
-                        Masukan
-                    </Link>
+                    <TopBarLink to="/">Informasi</TopBarLink>
+                    <TopBarLink to="/">Link Penting</TopBarLink>
+                    <TopBarLink to="/">Masukan</TopBarLink>
                 </div>
 
                 <div className="flex items-center gap-3">
