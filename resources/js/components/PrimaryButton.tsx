@@ -16,7 +16,7 @@ export function PrimaryButton({
             {...props}
             className={cn(
                 buttonVariants(),
-                'h-auto rounded-none border-none px-3 py-1.5 text-base font-bold',
+                'h-auto border-none px-1 py-1 text-xs font-bold sm:px-2 md:text-sm lg:px-3 lg:py-1.5 lg:text-base',
                 className
             )}
         />
