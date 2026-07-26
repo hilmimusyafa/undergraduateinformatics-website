@@ -16,7 +16,7 @@ export function PrimaryButton({
             {...props}
             className={cn(
                 buttonVariants(),
-                'bg-brand h-auto rounded-none border-none px-3 py-1.5 text-base font-bold text-white transition-colors hover:bg-red-900',
+                'h-auto rounded-none border-none px-3 py-1.5 text-base font-bold',
                 className
             )}
         />
