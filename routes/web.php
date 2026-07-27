@@ -9,26 +9,13 @@ use App\Http\Controllers\SectionController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\FeedbackController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::get('/', [HomePageController::class, 'index'])->name('home');
 
-
-    
-Route::get('/tag/{id}', [TagController::class, 'show'])->name('viewTag');
-Route::get('/post/{id}', [PostController::class, 'show'])->name('viewPost');
+Route::get('/tags/{id}', [TagController::class, 'show'])->name('viewTag');
+Route::get('/posts/{id}', [PostController::class, 'show'])->name('viewPost');
 Route::get('/links', [LinkController::class, 'index_home'])->name('home.links');
 Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search');
-Route::get('feedback', [FeedbackController::class, 'show'])->name('viewFeedback');
+Route::get('/feedback', [FeedbackController::class, 'show'])->name('viewFeedback');
 
 Route::prefix('admin')->group(function () {
     Route::group(['middleware' => ['guest']], function() {
@@ -36,7 +23,6 @@ Route::prefix('admin')->group(function () {
         Route::post('login', [AdminController::class, 'login'])->name('loginAttempt');   
     });
 
-    //Routes for password recovery
     Route::get('forgot-password', [AdminController::class, 'forgotForm'])->name('forgotPassword');
     Route::post('submit-email-recovery', [AdminController::class, 'submitEmailRecovery'])->name('submitEmailRecovery');
     Route::get('question-form', [AdminController::class, 'questionForm'])->name('questionForm');
