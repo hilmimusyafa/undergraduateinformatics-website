@@ -1,8 +1,10 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "nprogress/nprogress.css";
-@import "@fontsource-variable/urbanist";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import 'nprogress/nprogress.css';
+@import '@fontsource-variable/urbanist';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
 
 #nprogress .bar {
     @apply bg-primary h-1;
@@ -10,8 +12,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+    --color-brand-50: oklch(0.968 0.013 17.52);
+    --color-brand-100: oklch(0.935 0.026 17.7);
+    --color-brand-200: oklch(0.86 0.06 18.41);
+    --color-brand-300: oklch(0.796 0.094 19.37);
+    --color-brand-400: oklch(0.724 0.14 20.59);
+    --color-brand-500: oklch(0.661 0.186 23.37);
+    --color-brand-600: oklch(0.594 0.207 25.73);
+    --color-brand-700: oklch(0.514 0.179 25.64);
+    --color-brand-800: oklch(0.44 0.154 25.54);
+    --color-brand-900: oklch(0.288 0.101 25.11);
+    --color-brand-950: oklch(0.216 0.076 25.15);
+}
+
 @theme inline {
-    --color-brand: #9F1521;
     --font-heading: var(--font-sans);
     --font-sans: 'Urbanist Variable', sans-serif;
     --color-sidebar-ring: var(--sidebar-ring);
@@ -61,10 +76,10 @@
     --card-foreground: oklch(0.145 0 0);
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.145 0 0);
-    --primary: var(--color-brand);
-    --primary-foreground: oklch(0.971 0.013 17.38);
-    --secondary: oklch(0.967 0.001 286.375);
-    --secondary-foreground: oklch(0.21 0.006 285.885);
+    --primary: oklch(0.4521 0.1701 24.11);
+    --primary-foreground: oklch(0.985 0 0);
+    --secondary: oklch(0.97 0 0);
+    --secondary-foreground: oklch(0.205 0 0);
     --muted: oklch(0.97 0 0);
     --muted-foreground: oklch(0.556 0 0);
     --accent: oklch(0.97 0 0);
@@ -73,16 +88,16 @@
     --border: oklch(0.922 0 0);
     --input: oklch(0.922 0 0);
     --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.808 0.114 19.571);
-    --chart-2: oklch(0.637 0.237 25.331);
-    --chart-3: oklch(0.577 0.245 27.325);
-    --chart-4: oklch(0.505 0.213 27.518);
-    --chart-5: oklch(0.444 0.177 26.899);
-    --radius: 0.625rem;
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
+    --radius: 0;
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: var(--color-brand);
-    --sidebar-primary-foreground: oklch(0.971 0.013 17.38);
+    --sidebar-primary: oklch(0.4521 0.1701 24.11);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
     --sidebar-accent: oklch(0.97 0 0);
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
@@ -96,9 +111,9 @@
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
-    --primary: var(--color-brand);
-    --primary-foreground: oklch(0.971 0.013 17.38);
-    --secondary: oklch(0.274 0.006 286.033);
+    --primary: oklch(0.922 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
     --secondary-foreground: oklch(0.985 0 0);
     --muted: oklch(0.269 0 0);
     --muted-foreground: oklch(0.708 0 0);
@@ -108,15 +123,15 @@
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.808 0.114 19.571);
-    --chart-2: oklch(0.637 0.237 25.331);
-    --chart-3: oklch(0.577 0.245 27.325);
-    --chart-4: oklch(0.505 0.213 27.518);
-    --chart-5: oklch(0.444 0.177 26.899);
+    --chart-1: oklch(0.87 0 0);
+    --chart-2: oklch(0.556 0 0);
+    --chart-3: oklch(0.439 0 0);
+    --chart-4: oklch(0.371 0 0);
+    --chart-5: oklch(0.269 0 0);
     --sidebar: oklch(0.205 0 0);
     --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: var(--color-brand);
-    --sidebar-primary-foreground: oklch(0.971 0.013 17.38);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
     --sidebar-accent: oklch(0.269 0 0);
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border: oklch(1 0 0 / 10%);
@@ -124,13 +139,13 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+    body {
+        @apply bg-background text-foreground;
     }
-  html {
-    @apply font-sans;
+    html {
+        @apply font-sans;
     }
 }
