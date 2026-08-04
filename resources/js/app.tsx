@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { HelmetProvider } from 'react-helmet-async';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
@@ -44,13 +43,14 @@ declare module '@tanstack/react-router' {
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
+    // Remove server-rendered meta tags to let React 19 manage them without duplication
+    document.head.querySelectorAll('[data-ssr="true"]').forEach((el) => el.remove());
+
     ReactDOM.createRoot(rootElement).render(
         <React.StrictMode>
-            <HelmetProvider>
-                <QueryClientProvider client={queryClient}>
-                    <RouterProvider router={router} />
-                </QueryClientProvider>
-            </HelmetProvider>
+            <QueryClientProvider client={queryClient}>
+                <RouterProvider router={router} />
+            </QueryClientProvider>
         </React.StrictMode>
     );
 }

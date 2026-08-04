@@ -1,5 +1,3 @@
-import { Helmet } from 'react-helmet-async';
-
 import { createFileRoute } from '@tanstack/react-router';
 
 import { usePageData } from '../../hooks/usePageData';
@@ -22,10 +20,10 @@ function HomePage() {
     return (
         <div className="space-y-4">
             {data && (
-                <Helmet>
+                <>
                     {data.title && <title>{data.title}</title>}
                     {data.description && <meta name="description" content={data.description} />}
-                </Helmet>
+                </>
             )}
             <h1 className="text-primary text-4xl font-extrabold">Hello World</h1>
         </div>

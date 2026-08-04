@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title ?? 'Portal Informasi Sarjana Informatika' }}</title>
-    <meta name="description" content="{{ $description ?? 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan berbagai informasi perkuliahan.' }}">
-    <meta property="og:title" content="{{ $ogTitle ?? 'Portal Informasi Sarjana Informatika' }}">
-    <meta property="og:description" content="{{ $ogDescription ?? 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan berbagai informasi perkuliahan.' }}">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="{{ $siteName ?? 'Telkom University' }}">
-    <meta property="og:image" content="{{ $ogImage ?? '/public/images/banner.png' }}">
-    <meta property="og:url" content="{{ $ogUrl ?? url('/') }}">
+    <title data-ssr="true">{{ $title ?? 'Portal Informasi Sarjana Informatika' }}</title>
+    <meta data-ssr="true" name="description" content="{{ $description ?? 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan berbagai informasi perkuliahan.' }}">
+    <meta data-ssr="true" property="og:title" content="{{ $ogTitle ?? 'Portal Informasi Sarjana Informatika' }}">
+    <meta data-ssr="true" property="og:description" content="{{ $ogDescription ?? 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan berbagai informasi perkuliahan.' }}">
+    <meta data-ssr="true" property="og:type" content="website">
+    <meta data-ssr="true" property="og:site_name" content="{{ $siteName ?? 'Telkom University' }}">
+    <meta data-ssr="true" property="og:image" content="{{ $ogImage ?? '/public/images/banner.png' }}">
+    <meta data-ssr="true" property="og:url" content="{{ $ogUrl ?? url('/') }}">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.ico" />
