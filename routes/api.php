@@ -12,6 +12,8 @@ use App\Http\Controllers\ApiImportantSectionController;
 use App\Http\Controllers\ApiPasswordRecoveryController;
 use App\Http\Controllers\ApiEditPasswordRecoveryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ApiReservationScheduleController;
+use App\Http\Controllers\ApiReservationLinkController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -39,8 +41,14 @@ Route::apiResource('importantSection', ApiImportantSectionController::class)->mi
 Route::apiResource('importantLink', ApiImportantLinkController::class)->middleware('auth:sanctum');
 Route::apiResource('passwordRecovery', ApiPasswordRecoveryController::class);
 Route::apiResource('editPasswordRecovery', ApiEditPasswordRecoveryController::class)->middleware('auth:sanctum');
-Route::apiResource('editPasswordRecovery', ApiEditPasswordRecoveryController::class)->middleware('auth:sanctum');
 Route::apiResource('feedbackLink', ApiFeedbackLinkController::class)->middleware('auth:sanctum');
+Route::prefix('reservation')->group(function () {
+    Route::apiResource('link', ApiReservationLinkController::class);
+        // ->middleware('auth:sanctum');
+    Route::apiResource('schedule', ApiReservationScheduleController::class);
+        // ->middleware('auth:sanctum');
+});
+    
 Route::prefix('dashboard')->group(function () {
     Route::get('/', [DashboardController::class, 'fetch']);
     Route::delete('/cleardata', [DashboardController::class, 'cleardata']);
