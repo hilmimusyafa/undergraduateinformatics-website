@@ -1,0 +1,10 @@
+public
+bootstrap
+storage
+vendor
+node_modules
+/resources/js/routeTree.gen.ts
+**/routeTree.gen.ts
+routeTree.gen.ts
+/resources/js/components/ui
+package-lock.json
