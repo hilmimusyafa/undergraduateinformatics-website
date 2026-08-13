@@ -17,32 +17,37 @@ Route::get('/links', [LinkController::class, 'index_home'])->name('home.links');
 Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search');
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('viewFeedback');
 
-Route::prefix('admin')->group(function () {
-    Route::group(['middleware' => ['guest']], function() {
-        Route::get('login', [AdminController::class, 'loginForm'])->name('login');
-        Route::post('login', [AdminController::class, 'login'])->name('loginAttempt');   
-    });
+// Route::prefix('admin')->group(function () {
+//     Route::group(['middleware' => ['guest']], function() {
+//         Route::get('login', [AdminController::class, 'loginForm'])->name('login');
+//         Route::post('login', [AdminController::class, 'login'])->name('loginAttempt');   
+//     });
+// 
+//     Route::get('forgot-password', [AdminController::class, 'forgotForm'])->name('forgotPassword');
+//     Route::post('submit-email-recovery', [AdminController::class, 'submitEmailRecovery'])->name('submitEmailRecovery');
+//     Route::get('question-form', [AdminController::class, 'questionForm'])->name('questionForm');
+//     Route::post('submit-answer-recovery', [AdminController::class, 'submitAnswerRecovery'])->name('submitAnswerRecovery');
+//     Route::get('password-recovery-form', [AdminController::class, 'passwordRecoveryForm'])->name('passwordRecoveryForm');
+//     Route::post('submit-password-recovery', [AdminController::class, 'submitPasswordRecovery'])->name('submitPasswordRecovery');
+// 
+//     Route::group(['middleware' => ['auth']], function() {
+//         Route::get('logout', [AdminController::class, 'logout'])->name('logout');
+//         Route::resource('posts', PostController::class)->except(['show']);
+//         Route::resource('links', LinkController::class)->except(['show']);
+//         Route::resource('tags', TagController::class)->except(['show']);
+//         Route::resource('sections', SectionController::class)->except(['show']);
+// 
+//         Route::get('sections/change-order', [SectionController::class, 'changeOrder'])->name('sections.changeOrder');
+//         Route::post('sections/update-order', [SectionController::class, 'updateOrder'])->name('sections.updateOrder');
+// 
+//         Route::resource('feedback', FeedbackController::class)->only(['index', 'edit', 'update']);
+//         Route::get('edit-password-recovery-questions', [AdminController::class, 'editPasswordRecoveryQuestion'])->name('editPasswordRecoveryQuestion');
+//         Route::post('update-password-recovery-questions', [AdminController::class, 'updatePasswordRecoveryQuestion'])->name('updatePasswordRecoveryQuestion');
+//         Route::redirect('/', route('posts.index'));
+//     });
+// });
 
-    Route::get('forgot-password', [AdminController::class, 'forgotForm'])->name('forgotPassword');
-    Route::post('submit-email-recovery', [AdminController::class, 'submitEmailRecovery'])->name('submitEmailRecovery');
-    Route::get('question-form', [AdminController::class, 'questionForm'])->name('questionForm');
-    Route::post('submit-answer-recovery', [AdminController::class, 'submitAnswerRecovery'])->name('submitAnswerRecovery');
-    Route::get('password-recovery-form', [AdminController::class, 'passwordRecoveryForm'])->name('passwordRecoveryForm');
-    Route::post('submit-password-recovery', [AdminController::class, 'submitPasswordRecovery'])->name('submitPasswordRecovery');
-
-    Route::group(['middleware' => ['auth']], function() {
-        Route::get('logout', [AdminController::class, 'logout'])->name('logout');
-        Route::resource('posts', PostController::class)->except(['show']);
-        Route::resource('links', LinkController::class)->except(['show']);
-        Route::resource('tags', TagController::class)->except(['show']);
-        Route::resource('sections', SectionController::class)->except(['show']);
-
-        Route::get('sections/change-order', [SectionController::class, 'changeOrder'])->name('sections.changeOrder');
-        Route::post('sections/update-order', [SectionController::class, 'updateOrder'])->name('sections.updateOrder');
-
-        Route::resource('feedback', FeedbackController::class)->only(['index', 'edit', 'update']);
-        Route::get('edit-password-recovery-questions', [AdminController::class, 'editPasswordRecoveryQuestion'])->name('editPasswordRecoveryQuestion');
-        Route::post('update-password-recovery-questions', [AdminController::class, 'updatePasswordRecoveryQuestion'])->name('updatePasswordRecoveryQuestion');
-        Route::redirect('/', route('posts.index'));
-    });
-});
+// Serve React App for all admin routes
+Route::get('/admin/{any?}', function () {
+    return view('app');
+})->where('any', '.*');
