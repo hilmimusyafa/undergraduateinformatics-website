@@ -32,7 +32,7 @@ class HomePageController extends Controller
             'siteName' => $initialData['siteName'],
             'ogTitle' => $initialData['title'],
             'ogDescription' => $initialData['description'],
-            'ogImage' => url('/public/images/banner.png'),
+            'ogImage' => url('/images/banner.png'),
             'ogUrl' => $request->url(),
             'jsonLd' => $jsonLd,
             'initialData' => $initialData

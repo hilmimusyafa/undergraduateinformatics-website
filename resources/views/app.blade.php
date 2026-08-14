@@ -9,7 +9,7 @@
     <meta data-ssr="true" property="og:description" content="{{ $ogDescription ?? 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan berbagai informasi perkuliahan.' }}">
     <meta data-ssr="true" property="og:type" content="website">
     <meta data-ssr="true" property="og:site_name" content="{{ $siteName ?? 'Telkom University' }}">
-    <meta data-ssr="true" property="og:image" content="{{ $ogImage ?? '/public/images/banner.png' }}">
+    <meta data-ssr="true" property="og:image" content="{{ $ogImage ?? url('/images/banner.png') }}">
     <meta data-ssr="true" property="og:url" content="{{ $ogUrl ?? url('/') }}">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

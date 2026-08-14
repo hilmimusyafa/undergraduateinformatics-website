@@ -43,8 +43,9 @@ declare module '@tanstack/react-router' {
 const rootElement = document.getElementById('root');
 
 if (rootElement) {
-    // Remove server-rendered meta tags to let React 19 manage them without duplication
-    document.head.querySelectorAll('[data-ssr="true"]').forEach((el) => el.remove());
+    document.head
+        .querySelectorAll('[data-ssr="true"]:not([property^="og:"])')
+        .forEach((el) => el.remove());
 
     ReactDOM.createRoot(rootElement).render(
         <React.StrictMode>
