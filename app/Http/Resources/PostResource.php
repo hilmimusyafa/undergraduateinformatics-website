@@ -16,6 +16,7 @@ class PostResource extends JsonResource
             'body' => $this->body,
             'image' => $this->image,
             'tags' => TagResource::collection($this->whenLoaded('tags')),
+            'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
 }
