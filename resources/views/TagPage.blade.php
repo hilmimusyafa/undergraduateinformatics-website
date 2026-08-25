@@ -11,7 +11,7 @@
         </div>
         <div class="post-deskripsi">
             <div class="row deskripsi-gambar d-flex justify-content-center">
-                <img src="/images/DummyImage.png" alt="{{ $tag->name }}">
+                <img src="/images/placeholder.png" alt="{{ $tag->name }}">
             </div>
             <div class="row deskripsi-text d-flex">
                 <p>{{ $tag->description }}</p>

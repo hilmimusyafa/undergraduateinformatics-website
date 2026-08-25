@@ -48,6 +48,6 @@ class Post extends Model
      */
     public function hasImage()
     {
-        return $this->image != "images/DummyImage.png";
+        return $this->image != "images/placeholder.png";
     }
 }
