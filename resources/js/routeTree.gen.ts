@@ -12,6 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SiteRouteImport } from './routes/_site'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as SiteIndexRouteImport } from './routes/_site/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminFeedbackRouteImport } from './routes/admin/feedback'
+import { Route as AdminInformasiRouteImport } from './routes/admin/informasi'
+import { Route as AdminReservationRouteImport } from './routes/admin/reservation'
+import { Route as AdminUploadRouteImport } from './routes/admin/upload'
 
 const SiteRoute = SiteRouteImport.update({
   id: '/_site',
@@ -27,31 +32,92 @@ const SiteIndexRoute = SiteIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SiteRoute,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminFeedbackRoute = AdminFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminInformasiRoute = AdminInformasiRouteImport.update({
+  id: '/informasi',
+  path: '/informasi',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminReservationRoute = AdminReservationRouteImport.update({
+  id: '/reservation',
+  path: '/reservation',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminUploadRoute = AdminUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/admin': typeof AdminRouteRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/': typeof SiteIndexRoute
+  '/admin/feedback': typeof AdminFeedbackRoute
+  '/admin/informasi': typeof AdminInformasiRoute
+  '/admin/reservation': typeof AdminReservationRoute
+  '/admin/upload': typeof AdminUploadRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
-  '/admin': typeof AdminRouteRoute
+  '/admin/feedback': typeof AdminFeedbackRoute
+  '/admin/informasi': typeof AdminInformasiRoute
+  '/admin/reservation': typeof AdminReservationRoute
+  '/admin/upload': typeof AdminUploadRoute
   '/': typeof SiteIndexRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/admin': typeof AdminRouteRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/_site': typeof SiteRouteWithChildren
+  '/admin/feedback': typeof AdminFeedbackRoute
+  '/admin/informasi': typeof AdminInformasiRoute
+  '/admin/reservation': typeof AdminReservationRoute
+  '/admin/upload': typeof AdminUploadRoute
   '/_site/': typeof SiteIndexRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/admin' | '/'
+  fullPaths:
+    | '/admin'
+    | '/'
+    | '/admin/feedback'
+    | '/admin/informasi'
+    | '/admin/reservation'
+    | '/admin/upload'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/admin' | '/'
-  id: '__root__' | '/admin' | '/_site' | '/_site/'
+  to:
+    | '/admin/feedback'
+    | '/admin/informasi'
+    | '/admin/reservation'
+    | '/admin/upload'
+    | '/'
+    | '/admin'
+  id:
+    | '__root__'
+    | '/admin'
+    | '/_site'
+    | '/admin/feedback'
+    | '/admin/informasi'
+    | '/admin/reservation'
+    | '/admin/upload'
+    | '/_site/'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AdminRouteRoute: typeof AdminRouteRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   SiteRoute: typeof SiteRouteWithChildren
 }
 
@@ -78,8 +144,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteIndexRouteImport
       parentRoute: typeof SiteRoute
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/feedback': {
+      id: '/admin/feedback'
+      path: '/feedback'
+      fullPath: '/admin/feedback'
+      preLoaderRoute: typeof AdminFeedbackRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/informasi': {
+      id: '/admin/informasi'
+      path: '/informasi'
+      fullPath: '/admin/informasi'
+      preLoaderRoute: typeof AdminInformasiRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/reservation': {
+      id: '/admin/reservation'
+      path: '/reservation'
+      fullPath: '/admin/reservation'
+      preLoaderRoute: typeof AdminReservationRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/upload': {
+      id: '/admin/upload'
+      path: '/upload'
+      fullPath: '/admin/upload'
+      preLoaderRoute: typeof AdminUploadRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
   }
 }
+
+interface AdminRouteRouteChildren {
+  AdminFeedbackRoute: typeof AdminFeedbackRoute
+  AdminInformasiRoute: typeof AdminInformasiRoute
+  AdminReservationRoute: typeof AdminReservationRoute
+  AdminUploadRoute: typeof AdminUploadRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminFeedbackRoute: AdminFeedbackRoute,
+  AdminInformasiRoute: AdminInformasiRoute,
+  AdminReservationRoute: AdminReservationRoute,
+  AdminUploadRoute: AdminUploadRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
 
 interface SiteRouteChildren {
   SiteIndexRoute: typeof SiteIndexRoute
@@ -92,7 +213,7 @@ const SiteRouteChildren: SiteRouteChildren = {
 const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  AdminRouteRoute: AdminRouteRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   SiteRoute: SiteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
