@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-ssr="true">{{ $title ?? 'Portal Informasi Sarjana Informatika' }}</title>
-    <meta data-ssr="true" name="description" content="{{ $description ?? 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan berbagai informasi perkuliahan.' }}">
+    <meta data-ssr="true" name="description" content="{{ $description ?? 'Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik' }}">
     <meta data-ssr="true" property="og:title" content="{{ $ogTitle ?? 'Portal Informasi Sarjana Informatika' }}">
-    <meta data-ssr="true" property="og:description" content="{{ $ogDescription ?? 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan berbagai informasi perkuliahan.' }}">
+    <meta data-ssr="true" property="og:description" content="{{ $ogDescription ?? 'Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik' }}">
     <meta data-ssr="true" property="og:type" content="website">
     <meta data-ssr="true" property="og:site_name" content="{{ $siteName ?? 'Telkom University' }}">
     <meta data-ssr="true" property="og:image" content="{{ $ogImage ?? url('/images/banner.png') }}">

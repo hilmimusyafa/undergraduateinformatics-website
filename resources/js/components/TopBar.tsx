@@ -1,47 +1,65 @@
 import { Link } from '@tanstack/react-router';
 
-import { Search } from 'lucide-react';
+import { IconListSearch } from '@tabler/icons-react';
+import { X } from 'lucide-react';
 
-import { PrimaryButton } from './PrimaryButton';
-import { TopBarLink } from './TopBarLink';
-import { Input } from './ui/input';
+import { cn } from '../lib/utils';
+import { NavigationLink } from './NavigationLink';
+import { SearchBar } from './SearchBar';
+import { Button, buttonVariants } from './ui/button';
 
-export function TopBar() {
+interface TopBarProps {
+    isSidebarOpen: boolean;
+    onToggleSidebar: () => void;
+}
+
+export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
     return (
-        <nav className="flex w-full items-center justify-between bg-white px-3 py-1.5 shadow-md md:px-3 md:py-1.5 lg:px-4 lg:py-2">
-            <Link to="/">
-                <img
-                    src="/images/icon.png"
-                    alt="Logo"
-                    className="block h-10 w-auto object-contain py-1.5 sm:hidden"
-                />
+        <nav
+            className={`sticky top-0 z-50 h-full max-h-18 w-full bg-white transition-shadow duration-300 ${isSidebarOpen ? 'shadow-none' : 'shadow-md'}`}
+        >
+            <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 py-3">
+                <Link to="/">
+                    <img
+                        src="/images/logo.png"
+                        alt="Logo"
+                        className="h-full max-h-12 object-contain"
+                    />
+                </Link>
 
-                <img
-                    src="/images/logo.png"
-                    alt="Logo"
-                    className="hidden h-10 w-auto object-contain sm:block md:h-12 lg:h-14"
-                />
-            </Link>
-
-            <div className="flex items-center gap-1 md:gap-3 lg:gap-6">
-                <div className="flex items-center gap-1 lg:gap-3">
-                    <TopBarLink to="/">Informasi</TopBarLink>
-                    <TopBarLink to="/">Tautan</TopBarLink>
-                    <TopBarLink to="/">Masukan</TopBarLink>
-                    <TopBarLink to="/">Pertemuan</TopBarLink>
-                </div>
-
-                <div className="flex items-center gap-1 md:gap-3">
-                    <div className="relative flex w-18 items-center bg-gray-100 px-2 py-1 text-sm sm:w-24 md:w-36 lg:w-48 lg:px-3 lg:py-1.5 lg:text-base">
-                        <Input
-                            type="text"
-                            placeholder="Cari..."
-                            className="h-auto w-full border-none bg-transparent p-0 pr-8 text-xs md:text-sm lg:text-base"
-                        />
-                        <Search className="absolute top-1/2 right-3 size-3 -translate-y-1/2 text-gray-400 lg:size-4" />
+                <div className="hidden items-center gap-6 lg:flex">
+                    <div className="flex items-center gap-3">
+                        <NavigationLink to="/">Beranda</NavigationLink>
+                        <NavigationLink to="/explore">Informasi</NavigationLink>
+                        <NavigationLink to="/link">Tautan</NavigationLink>
+                        <NavigationLink to="/masukan">Masukan</NavigationLink>
+                        <NavigationLink to="/reservation">Pertemuan</NavigationLink>
+                        <SearchBar />
+                        <Link
+                            to="/"
+                            className={cn(
+                                buttonVariants({ variant: 'default' }),
+                                'h-auto px-3 py-1.5 text-base font-bold'
+                            )}
+                        >
+                            Masuk
+                        </Link>
                     </div>
-                    <PrimaryButton to="/">Admin</PrimaryButton>
                 </div>
+
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="-mr-2 size-10 text-gray-600 lg:hidden"
+                    onClick={onToggleSidebar}
+                    aria-label="Toggle navigation menu"
+                >
+                    {isSidebarOpen ? (
+                        <X className="size-7" strokeWidth={1.5} />
+                    ) : (
+                        <IconListSearch className="size-7" strokeWidth={1.5} />
+                    )}
+                </Button>
             </div>
         </nav>
     );

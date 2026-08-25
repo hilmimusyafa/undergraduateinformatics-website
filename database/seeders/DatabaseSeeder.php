@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel Proposal 1',
         //     'subtitle' => 'Dummy subtitle artikel proposal 1',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -91,7 +91,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel Proposal 2',
         //     'subtitle' => 'Dummy subtitle artikel proposal 2',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -113,7 +113,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel Proposal 3',
         //     'subtitle' => 'Dummy subtitle artikel proposal 3',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -135,7 +135,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel Proposal 4',
         //     'subtitle' => 'Dummy subtitle artikel proposal 4',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -157,7 +157,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel Proposal 5',
         //     'subtitle' => 'Dummy subtitle artikel proposal 5',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -179,7 +179,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel MBKM 1',
         //     'subtitle' => 'Dummy subtitle artikel MBKM 1',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -201,7 +201,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel MBKM 2',
         //     'subtitle' => 'Dummy subtitle artikel MBKM 2',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -223,7 +223,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel MBKM 3',
         //     'subtitle' => 'Dummy subtitle artikel MBKM 3',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -245,7 +245,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel MBKM 4',
         //     'subtitle' => 'Dummy subtitle artikel MBKM 4',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -267,7 +267,7 @@ class DatabaseSeeder extends Seeder
         //     'title' => 'Dummy Judul Artikel MBKM 5',
         //     'subtitle' => 'Dummy subtitle artikel MBKM 5',
         //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
+        //     'image' => 'images/placeholder.png'
         // ]);
 
         // PostTag::create([
@@ -373,6 +373,5 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Angkatan 2020',
         //     'link' => 'http://bit.ly/TA2020'
         // ]);
-
     }
 }

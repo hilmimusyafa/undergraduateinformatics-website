@@ -63,7 +63,7 @@ class TagController extends Controller
         //     $request->image->move(public_path('images/posts'), $imageName);
         //     $post->image = "images/posts/".$imageName;
         // } else {
-        //     $post->image = "images/DummyImage.png";
+        //     $post->image = "images/placeholder.png";
         // }
 
         // $post->save();
@@ -147,7 +147,7 @@ class TagController extends Controller
         //     $request->image->move(public_path('images/posts'), $imageName);
         //     $post->image = "images/posts/".$imageName;
         // } else {
-        //     $post->image = "images/DummyImage.png";
+        //     $post->image = "images/placeholder.png";
         // }
 
         // Update tag data in the database
