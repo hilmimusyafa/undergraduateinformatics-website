@@ -18,7 +18,7 @@ export function NavigationLink({ className, activeClassName, ...props }: Navigat
             {...props}
             className={cn(
                 buttonVariants({ variant: 'link' }),
-                'h-auto border-none px-3 py-1.5 text-base font-bold hover:text-gray-800',
+                'h-auto border-none px-3 py-1.5 text-base font-semibold hover:text-gray-800',
                 isActive ? `text-foreground ${activeClassName ?? ''}` : 'text-gray-600',
                 className
             )}
