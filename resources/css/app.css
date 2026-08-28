@@ -2,8 +2,19 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @import 'nprogress/nprogress.css';
+@import './typeset.css';
 @import '@fontsource-variable/urbanist';
 @import '@fontsource-variable/plus-jakarta-sans';
+@import '@fontsource-variable/jetbrains-mono';
+
+.typeset-article {
+    --typeset-font-body: 'Plus Jakarta Sans Variable', sans-serif;
+    --typeset-font-heading: 'Plus Jakarta Sans Variable', sans-serif;
+    --typeset-font-mono: 'JetBrains Mono Variable', monospace;
+    --typeset-size: 16px;
+    --typeset-leading: 1.75;
+    --typeset-flow: 1.25em;
+}
 
 #nprogress .bar {
     @apply bg-primary h-1;
