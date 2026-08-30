@@ -11,14 +11,8 @@ function AdminLayout() {
         <div className="flex h-screen bg-gray-50">
             {/* Sidebar */}
             <div className="w-64 bg-[#9F1521] text-white flex flex-col shadow-xl z-10">
-                <a href="/" title="Kembali ke Homepage" className="p-6 border-b border-red-800 tracking-wide flex items-center gap-3 hover:bg-red-800 transition-colors group">
-                    <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center flex-shrink-0">
-                        <span className="text-[#9F1521] font-black text-lg">U</span>
-                    </div>
-                    <div>
-                        <p className="text-xl font-bold leading-tight">Info-BIF</p>
-                        <p className="text-xs text-red-200 group-hover:text-white transition-colors">← Kembali ke Homepage</p>
-                    </div>
+                <a href="/" title="Kembali ke Homepage" className="p-6 border-b border-red-800 flex justify-center hover:bg-white/10 transition-colors">
+                    <img src="/images/logo4.png" alt="Logo Telkom" className="h-10 w-auto object-contain drop-shadow-[0_0_12px_rgba(255,255,255,0.6)]" />
                 </a>
                 <nav className="flex-1 p-4 space-y-2 mt-2 overflow-y-auto">
                     <SidebarLink to="/admin" icon={<LayoutDashboard size={20} />} label="Dashboard Statistik" exact />
@@ -28,7 +22,7 @@ function AdminLayout() {
                     <SidebarLink to="/admin/reservation" icon={<Calendar size={20} />} label="Approval Reservasi" />
                 </nav>
                 <div className="p-4 border-t border-red-800 space-y-1">
-                    <a href="/admin/logout" className="w-full flex items-center gap-3 p-3 rounded-lg transition-colors hover:bg-red-800 text-red-100 hover:text-white">
+                    <a href="/admin/logout" className="w-full flex items-center gap-3 p-3 rounded-lg transition-colors hover:bg-white/10 text-red-100 hover:text-white">
                         <LogOut size={20} />
                         <span className="font-medium">Logout</span>
                     </a>
@@ -67,9 +61,9 @@ function SidebarLink({ to, icon, label, exact = false }: { to: string; icon: Rea
         <Link 
             to={to}
             activeOptions={{ exact }}
-            className="w-full flex items-center gap-3 p-3 rounded-lg transition-colors hover:bg-red-800"
-            activeProps={{ className: 'bg-red-800 shadow-sm font-semibold' }}
-            inactiveProps={{ className: 'font-medium opacity-90 hover:opacity-100' }}
+            className="w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 hover:bg-white/10"
+            activeProps={{ className: 'bg-white/20 shadow-md font-semibold text-white' }}
+            inactiveProps={{ className: 'font-medium text-white/80 hover:text-white' }}
         >
             {icon}
             <span>{label}</span>
