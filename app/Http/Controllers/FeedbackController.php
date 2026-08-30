@@ -3,54 +3,48 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeedbackLink;
+use App\Services\MsForms\FormDefinitionService;
+use App\Services\MsForms\MsFormsException;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class FeedbackController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function show(Request $request): View
     {
-        // Return admin feedback link page
-        return view('AdminFeedback.AdminPageFeedback', ['feedbackLink' => FeedbackLink::all()->first()]);
-    }
+        $feedbackLink = FeedbackLink::configured()->first();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show()
-    {
-        // Return feedback link for users
-        return view('FeedbackPage', ['feedbackLink' => FeedbackLink::all()->first()]);
-    }
+        $initialData = null;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit()
-    {
-        // Return form for changing feedback link
-        return view('AdminFeedback.AdminPageEditFeedback', ['feedbackLink' => FeedbackLink::all()->first()]);
-    }
+        if ($feedbackLink) {
+            try {
+                $initialData = app(FormDefinitionService::class)->resolve($feedbackLink);
+            } catch (MsFormsException) {
+                $initialData = null;
+            }
+        }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request)
-    {
-        // Check if input URL is valid
-        $validatedData = $request->validate([
-            'new_feedback_link' => 'required | url | active_url',
+        if ($initialData === null) {
+            $initialData = ['link' => $feedbackLink?->link];
+        }
+
+        $title = 'Masukan - Portal Informasi Sarjana Informatika';
+        $description = 'Sampaikan masukan Anda melalui formulir umpan balik Program Studi Sarjana Informatika Telkom University.';
+
+        $jsonLd = [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebPage',
+            'name' => $title,
+            'url' => $request->url(),
+            'description' => $description,
+        ];
+
+        return view('app', [
+            'title' => $title,
+            'description' => $description,
+            'ogUrl' => $request->url(),
+            'jsonLd' => $jsonLd,
+            'initialData' => $initialData,
         ]);
-
-        // Update feedback URL
-        $feedbackLink = FeedbackLink::all()->first();
-        $feedbackLink->link = $validatedData['new_feedback_link'];
-        $feedbackLink->save();
-
-        // Redirect to admin feedback link page
-        request()->session()->flash('success', 'Feedback link updated successfully!');
-        return redirect()->route('feedback.index');
     }
 }
