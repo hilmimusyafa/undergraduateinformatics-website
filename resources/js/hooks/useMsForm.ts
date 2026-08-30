@@ -1,0 +1,17 @@
+import { type MsFormPayload } from '../types/ms-forms';
+import { usePageData } from './usePageData';
+
+export interface MsFormData extends MsFormPayload {
+    isValid: boolean;
+}
+
+const selectMsForm = (data: MsFormPayload): MsFormData => ({
+    ...data,
+    isValid: data?.link != null && (data?.questions?.length ?? 0) > 0,
+});
+
+export function useMsForm(apiEndpoint: string) {
+    return usePageData<MsFormPayload, MsFormData>(apiEndpoint, {
+        select: selectMsForm,
+    });
+}
