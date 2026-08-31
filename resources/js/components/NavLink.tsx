@@ -1,25 +1,19 @@
 import { type ComponentProps } from 'react';
 
-import { Link, useLinkProps } from '@tanstack/react-router';
+import { Link } from '@tanstack/react-router';
 
 import { cn } from '../lib/utils';
 import { buttonVariants } from './ui/button';
 
-interface NavigationLinkProps extends ComponentProps<typeof Link> {
-    activeClassName?: string;
-}
+type NavLinkProps = ComponentProps<typeof Link>;
 
-export function NavigationLink({ className, activeClassName, ...props }: NavigationLinkProps) {
-    const linkProps = useLinkProps(props as any) as { 'data-status'?: string };
-    const isActive = linkProps['data-status'] === 'active';
-
+export function NavLink({ className, ...props }: NavLinkProps) {
     return (
         <Link
             {...props}
             className={cn(
                 buttonVariants({ variant: 'link' }),
-                'h-auto border-none px-3 py-1.5 text-base font-semibold hover:text-gray-800',
-                isActive ? `text-foreground ${activeClassName ?? ''}` : 'text-gray-600',
+                'text-muted-foreground hover:text-foreground data-[status=active]:text-foreground h-auto border-none px-3 py-1.5 text-base font-semibold',
                 className
             )}
         />
