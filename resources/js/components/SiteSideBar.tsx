@@ -1,4 +1,4 @@
-import { NavigationLink } from './NavigationLink';
+import { NavButton } from './NavButton';
 import { SearchBar } from './SearchBar';
 
 interface SiteSideBarProps {
@@ -14,71 +14,41 @@ export function SiteSideBar({ isOpen, onClose }: SiteSideBarProps) {
             }`}
         >
             <div className="flex flex-col gap-4">
-                <div className="px-6 pt-6">
+                <div className="mx-6 mt-6">
                     <SearchBar className="w-full px-4 py-2" />
                 </div>
 
                 <div className="flex flex-col">
-                    <div className="px-3 py-0.5">
-                        <NavigationLink
-                            to="/"
-                            onClick={onClose}
-                            className="active:bg-muted w-full justify-start py-3.5 pr-0 pl-3"
-                            activeClassName="bg-muted"
-                        >
+                    <div className="mx-3 my-px">
+                        <NavButton to="/" onClick={onClose}>
                             Beranda
-                        </NavigationLink>
+                        </NavButton>
                     </div>
-                    <div className="px-3 py-px">
-                        <NavigationLink
-                            to="/explore"
-                            onClick={onClose}
-                            className="active:bg-muted w-full justify-start py-3.5 pr-0 pl-3"
-                            activeClassName="bg-muted"
-                        >
+                    <div className="mx-3 my-px">
+                        <NavButton to="/explore" onClick={onClose}>
                             Informasi
-                        </NavigationLink>
+                        </NavButton>
                     </div>
-                    <div className="px-3 py-px">
-                        <NavigationLink
-                            to="/links"
-                            onClick={onClose}
-                            className="active:bg-muted w-full justify-start py-3.5 pr-0 pl-3"
-                            activeClassName="bg-muted"
-                        >
+                    <div className="mx-3 my-px">
+                        <NavButton to="/links" onClick={onClose}>
                             Tautan
-                        </NavigationLink>
+                        </NavButton>
                     </div>
-                    <div className="px-3 py-px">
-                        <NavigationLink
-                            to="/feedback"
-                            onClick={onClose}
-                            className="active:bg-muted w-full justify-start py-3.5 pr-0 pl-3"
-                            activeClassName="bg-muted"
-                        >
+                    <div className="mx-3 my-px">
+                        <NavButton to="/feedback" onClick={onClose}>
                             Masukan
-                        </NavigationLink>
+                        </NavButton>
                     </div>
-                    <div className="px-3 py-px">
-                        <NavigationLink
-                            to="/reservation"
-                            onClick={onClose}
-                            className="active:bg-muted w-full justify-start py-3.5 pr-0 pl-3"
-                            activeClassName="bg-muted"
-                        >
+                    <div className="mx-3 my-px">
+                        <NavButton to="/reservation" onClick={onClose}>
                             Pertemuan
-                        </NavigationLink>
+                        </NavButton>
                     </div>
-                    <hr className="mx-6 my-2 border-t border-gray-300" />
-                    <div className="px-3 py-px">
-                        <NavigationLink
-                            to="/reservation"
-                            onClick={onClose}
-                            className="active:bg-muted w-full justify-start py-3.5 pr-0 pl-3"
-                            activeClassName="bg-muted"
-                        >
+                    <hr className="border-border mx-6 my-2 border-t" />
+                    <div className="mx-3 my-px">
+                        <NavButton to="/reservation" onClick={onClose}>
                             Masuk
-                        </NavigationLink>
+                        </NavButton>
                     </div>
                 </div>
             </div>
