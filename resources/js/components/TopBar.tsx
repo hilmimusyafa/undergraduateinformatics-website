@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { IconListSearch } from '@tabler/icons-react';
 import { X } from 'lucide-react';
 
-import { NavigationLink } from './NavigationLink';
+import { NavLink } from './NavLink';
 import { PrimaryButton } from './PrimaryButton';
 import { SearchBar } from './SearchBar';
 import { Button } from './ui/button';
@@ -29,13 +29,17 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
 
                 <div className="hidden items-center gap-6 lg:flex">
                     <div className="flex items-center gap-3">
-                        <NavigationLink to="/">Beranda</NavigationLink>
-                        <NavigationLink to="/explore">Informasi</NavigationLink>
-                        <NavigationLink to="/link">Tautan</NavigationLink>
-                        <NavigationLink to="/feedback">Masukan</NavigationLink>
-                        <NavigationLink to="/reservation">Pertemuan</NavigationLink>
+                        <NavLink to="/">Beranda</NavLink>
+                        <NavLink to="/explore">Informasi</NavLink>
+                        <NavLink to="/link">Tautan</NavLink>
+                        <NavLink to="/feedback">Masukan</NavLink>
+                        <NavLink to="/reservation">Pertemuan</NavLink>
                         <SearchBar />
-                        <PrimaryButton render={<Link to="/" />} className="font-semibold">
+                        <PrimaryButton
+                            nativeButton={false}
+                            render={<Link to="/" />}
+                            className="font-semibold"
+                        >
                             Masuk
                         </PrimaryButton>
                     </div>
