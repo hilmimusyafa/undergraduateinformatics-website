@@ -66,14 +66,16 @@ export function MsFormSuccess({ onReset }: MsFormSuccessProps) {
         <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
             <h1>Terima kasih!</h1>
             <p className="text-muted-foreground">Formulir Anda telah berhasil dikirim.</p>
-            <Button
-                type="button"
-                variant="link"
-                onClick={onReset}
-                className="p-0 text-base text-blue-600 underline"
-            >
-                <p>Isi Formulir Lagi</p>
-            </Button>
+            <div className="mt-4.5 md:mt-4">
+                <Button
+                    type="button"
+                    variant="link"
+                    onClick={onReset}
+                    className="p-0 text-base text-blue-600 underline"
+                >
+                    Isi Formulir Lagi
+                </Button>
+            </div>
         </div>
     );
 }
