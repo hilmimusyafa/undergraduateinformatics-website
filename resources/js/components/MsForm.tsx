@@ -21,6 +21,7 @@ import { MsFormField } from './MsFormField';
 import { MsFormSuccess } from './MsFormStates';
 import { PrimaryButton } from './PrimaryButton';
 import { SecondaryButton } from './SecondaryButton';
+import { FieldDescription, FieldGroup } from './ui/field';
 
 interface MsFormProps {
     questions: MsFormQuestion[];
@@ -166,12 +167,12 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                                 </span>
                             )}
                         </h3>
-                        {question.subtitle && (
-                            <p className="text-muted-foreground">{question.subtitle}</p>
-                        )}
-                        <p>
+                        <FieldGroup>
+                            {question.subtitle && (
+                                <FieldDescription>{question.subtitle}</FieldDescription>
+                            )}
                             <MsFormField question={question} control={control} />
-                        </p>
+                        </FieldGroup>
                     </section>
                 ))}
 
