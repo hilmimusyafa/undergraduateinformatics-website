@@ -5,9 +5,10 @@ import userEvent from '@testing-library/user-event';
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { type ApiSuccessResponse } from '../../types/api';
-import { type MsFormPayload } from '../../types/ms-forms';
-import { FeedbackPage } from './feedback';
+import { type ApiSuccessResponse } from '@/types/api';
+import { type MsFormPayload } from '@/types/ms-forms';
+
+import { FeedbackPage } from './FeedbackPage';
 
 vi.mock('axios', async () => {
     const actual = await vi.importActual<typeof import('axios')>('axios');
