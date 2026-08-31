@@ -44,7 +44,10 @@ class FeedbackController extends Controller
             'description' => $description,
             'ogUrl' => $request->url(),
             'jsonLd' => $jsonLd,
-            'initialData' => $initialData,
+            'initialData' => [
+                'status' => 'success',
+                'data' => $initialData,
+            ],
         ]);
     }
 }

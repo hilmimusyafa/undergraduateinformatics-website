@@ -10,6 +10,7 @@ use App\Services\MsForms\MsFormsException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class FeedbackController extends Controller
 {
@@ -18,32 +19,51 @@ class FeedbackController extends Controller
         $feedbackLink = FeedbackLink::configured()->first();
 
         if (!$feedbackLink) {
-            return response()->json(['message' => 'Feedback form is unavailable.'], 404);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Feedback form is unavailable.',
+            ], 404);
         }
 
         try {
             $payload = app(FormDefinitionService::class)->resolve($feedbackLink);
 
-            return response()->json($payload);
+            return response()->json([
+                'status' => 'success',
+                'data' => $payload,
+            ]);
         } catch (MsFormsException $e) {
             Log::error('Feedback form load failed: ' . $e->getMessage());
 
-            return response()->json(['message' => 'Failed to load the form. Please try again later.'], 422);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to load the form. Please try again later.',
+            ], 422);
         }
     }
 
     public function store(Request $request): JsonResponse
     {
-        $validated = $request->validate([
+        $validator = Validator::make($request->all(), [
             'answers' => ['required', 'array', 'min:1'],
             'answers.*.questionId' => ['required', 'string'],
             'answers.*.answer' => ['required'],
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
         $feedbackLink = FeedbackLink::configured()->first();
 
         if (!$feedbackLink) {
-            return response()->json(['message' => 'Feedback form is unavailable.'], 404);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Feedback form is unavailable.',
+            ], 404);
         }
 
         try {
@@ -57,17 +77,23 @@ class FeedbackController extends Controller
                         ? json_encode($answer['answer'])
                         : (string) $answer['answer'],
                 ],
-                $validated['answers']
+                $validator->validated()['answers']
             );
 
             $now = now()->toIso8601String();
             $client->submitAnswers($target, $msAnswers, $now);
 
-            return response()->json(['success' => true]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Feedback submitted successfully.',
+            ]);
         } catch (MsFormsException $e) {
             Log::error('Feedback form submit failed: ' . $e->getMessage());
 
-            return response()->json(['message' => 'Failed to submit the form. Please try again later.'], 422);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to submit the form. Please try again later.',
+            ], 422);
         }
     }
 }

@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { type ApiSuccessResponse } from '../../types/api';
 import { type MsFormPayload } from '../../types/ms-forms';
 import { FeedbackPage } from './feedback';
 
@@ -145,8 +146,12 @@ function renderSection() {
 
 describe('FeedbackPage', () => {
     beforeEach(() => {
-        vi.mocked(axios.get).mockResolvedValue({ data: formPayload });
-        vi.mocked(axios.post).mockResolvedValue({ data: { success: true } });
+        vi.mocked(axios.get).mockResolvedValue({
+            data: { status: 'success', data: formPayload },
+        });
+        vi.mocked(axios.post).mockResolvedValue({
+            data: { status: 'success', message: 'Feedback submitted successfully.' },
+        });
         delete (window as any).__INITIAL_DATA__;
     });
 
@@ -350,7 +355,8 @@ describe('FeedbackPage', () => {
     });
 
     it('renders a skeleton while the form data is loading', async () => {
-        let resolveGet: (value: { data: MsFormPayload }) => void = () => undefined;
+        let resolveGet: (value: { data: ApiSuccessResponse<MsFormPayload> }) => void = () =>
+            undefined;
         vi.mocked(axios.get).mockReturnValue(
             new Promise((resolve) => {
                 resolveGet = resolve;
@@ -361,13 +367,16 @@ describe('FeedbackPage', () => {
 
         expect(screen.getByRole('status', { name: /Memuat formulir/ })).toBeInTheDocument();
 
-        resolveGet({ data: formPayload });
+        resolveGet({ data: { status: 'success', data: formPayload } });
 
         expect(await screen.findByText('Form Umpan Balik Test')).toBeInTheDocument();
     });
 
     it('shows a message when the link is set but questions are unavailable', async () => {
-        (window as any).__INITIAL_DATA__ = { link: 'https://forms.office.com/r/abc123' };
+        (window as any).__INITIAL_DATA__ = {
+            status: 'success',
+            data: { link: 'https://forms.office.com/r/abc123' },
+        };
 
         renderSection();
 
@@ -396,7 +405,9 @@ describe('FeedbackPage', () => {
     });
 
     it('submits multiple-choice selections as an array', async () => {
-        vi.mocked(axios.get).mockResolvedValue({ data: formWithExtraTypes });
+        vi.mocked(axios.get).mockResolvedValue({
+            data: { status: 'success', data: formWithExtraTypes },
+        });
         renderSection();
 
         await screen.findByText('Form Tipe Lengkap');
@@ -418,7 +429,9 @@ describe('FeedbackPage', () => {
     });
 
     it('normalizes a typed date to the yyyy-MM-dd format before submitting', async () => {
-        vi.mocked(axios.get).mockResolvedValue({ data: formWithExtraTypes });
+        vi.mocked(axios.get).mockResolvedValue({
+            data: { status: 'success', data: formWithExtraTypes },
+        });
         renderSection();
 
         await screen.findByText('Form Tipe Lengkap');

@@ -26,27 +26,30 @@ class FeedbackFormApiTest extends TestCase
         $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(200);
+        $response->assertJsonPath('status', 'success');
         $response->assertJsonStructure([
-            'link',
-            'title',
-            'description',
-            'sections' => [
-                '*' => ['id', 'title', 'subtitle', 'questionIds'],
-            ],
-            'questions' => [
-                '*' => ['id', 'title', 'type', 'required', 'multiple', 'choices'],
+            'data' => [
+                'link',
+                'title',
+                'description',
+                'sections' => [
+                    '*' => ['id', 'title', 'subtitle', 'questionIds'],
+                ],
+                'questions' => [
+                    '*' => ['id', 'title', 'type', 'required', 'multiple', 'choices'],
+                ],
             ],
         ]);
-        $response->assertJsonPath('title', 'this is form title');
-        $response->assertJsonPath('description', 'this is form subtitle');
-        $response->assertJsonPath('questions.0.type', 'text');
-        $response->assertJsonPath('questions.1.type', 'date');
-        $response->assertJsonPath('questions.2.type', 'choice');
-        $response->assertJsonPath('sections.0.id', 'r5ea034e6b67a462ba2a1ff857fad2490');
-        $response->assertJsonPath('sections.0.questionIds', ['rd7645a06d5f94664917ff0617f123de3']);
-        $response->assertJsonPath('sections.0.subtitle', 'this is section subtitle');
-        $response->assertJsonPath('sections.1.questionIds', ['rb38b17fd578e4dfbb6b32d32f4dfc885']);
-        $response->assertJsonPath('questions.2.choices.0.branchTargetId', null);
+        $response->assertJsonPath('data.title', 'this is form title');
+        $response->assertJsonPath('data.description', 'this is form subtitle');
+        $response->assertJsonPath('data.questions.0.type', 'text');
+        $response->assertJsonPath('data.questions.1.type', 'date');
+        $response->assertJsonPath('data.questions.2.type', 'choice');
+        $response->assertJsonPath('data.sections.0.id', 'r5ea034e6b67a462ba2a1ff857fad2490');
+        $response->assertJsonPath('data.sections.0.questionIds', ['rd7645a06d5f94664917ff0617f123de3']);
+        $response->assertJsonPath('data.sections.0.subtitle', 'this is section subtitle');
+        $response->assertJsonPath('data.sections.1.questionIds', ['rb38b17fd578e4dfbb6b32d32f4dfc885']);
+        $response->assertJsonPath('data.questions.2.choices.0.branchTargetId', null);
     }
 
     public function test_form_returns_branching_definition(): void
@@ -57,10 +60,11 @@ class FeedbackFormApiTest extends TestCase
         $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(200);
-        $response->assertJsonPath('sections.0.id', 'p1');
-        $response->assertJsonPath('sections.0.questionIds', ['q1']);
-        $response->assertJsonPath('questions.0.choices.0.branchTargetId', 'end');
-        $response->assertJsonPath('questions.0.choices.1.branchTargetId', 'q2');
+        $response->assertJsonPath('status', 'success');
+        $response->assertJsonPath('data.sections.0.id', 'p1');
+        $response->assertJsonPath('data.sections.0.questionIds', ['q1']);
+        $response->assertJsonPath('data.questions.0.choices.0.branchTargetId', 'end');
+        $response->assertJsonPath('data.questions.0.choices.1.branchTargetId', 'q2');
     }
 
     public function test_form_resolves_short_link_when_stored(): void
@@ -71,8 +75,9 @@ class FeedbackFormApiTest extends TestCase
         $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(200);
-        $response->assertJsonPath('link', 'https://forms.office.com/r/abc123');
-        $response->assertJsonPath('title', 'this is form title');
+        $response->assertJsonPath('status', 'success');
+        $response->assertJsonPath('data.link', 'https://forms.office.com/r/abc123');
+        $response->assertJsonPath('data.title', 'this is form title');
     }
 
     public function test_submit_forwards_answers_to_microsoft(): void
@@ -85,7 +90,7 @@ class FeedbackFormApiTest extends TestCase
         ]);
 
         $response->assertStatus(200);
-        $response->assertJson(['success' => true]);
+        $response->assertJsonPath('status', 'success');
 
         Http::assertSent(function ($request) {
             return str_contains($request->url(), '/responses')
@@ -101,6 +106,7 @@ class FeedbackFormApiTest extends TestCase
         $response = $this->postJson('/api/feedback', []);
 
         $response->assertStatus(422);
+        $response->assertJsonPath('status', 'error');
     }
 
     public function test_submit_rejects_answer_without_value(): void
@@ -112,6 +118,7 @@ class FeedbackFormApiTest extends TestCase
         ]);
 
         $response->assertStatus(422);
+        $response->assertJsonPath('status', 'error');
     }
 
     public function test_form_returns_422_when_microsoft_unreachable(): void
@@ -122,6 +129,7 @@ class FeedbackFormApiTest extends TestCase
         $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(422);
+        $response->assertJsonPath('status', 'error');
     }
 
     public function test_form_returns_404_when_no_link_configured(): void
@@ -131,6 +139,7 @@ class FeedbackFormApiTest extends TestCase
         $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(404);
+        $response->assertJsonPath('status', 'error');
     }
 
     public function test_form_returns_422_for_malformed_link(): void
@@ -141,6 +150,7 @@ class FeedbackFormApiTest extends TestCase
         $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(422);
+        $response->assertJsonPath('status', 'error');
     }
 
     public function test_form_returns_422_for_non_microsoft_link(): void
@@ -151,5 +161,6 @@ class FeedbackFormApiTest extends TestCase
         $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(422);
+        $response->assertJsonPath('status', 'error');
     }
 }
