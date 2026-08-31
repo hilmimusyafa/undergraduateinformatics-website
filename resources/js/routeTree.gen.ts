@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SiteRouteImport } from './routes/_site'
 import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as SiteIndexRouteImport } from './routes/_site/index'
+import { Route as SiteFeedbackRouteImport } from './routes/_site/feedback'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminFeedbackRouteImport } from './routes/admin/feedback'
 import { Route as AdminInformasiRouteImport } from './routes/admin/informasi'
@@ -30,6 +31,11 @@ const AdminRouteRoute = AdminRouteRouteImport.update({
 const SiteIndexRoute = SiteIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteFeedbackRoute = SiteFeedbackRouteImport.update({
+  id: '/feedback',
+  path: '/feedback',
   getParentRoute: () => SiteRoute,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -61,6 +67,7 @@ const AdminUploadRoute = AdminUploadRouteImport.update({
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
   '/': typeof SiteIndexRoute
+  '/feedback': typeof SiteFeedbackRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
@@ -68,6 +75,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
+  '/feedback': typeof SiteFeedbackRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/admin': typeof AdminRouteRouteWithChildren
   '/_site': typeof SiteRouteWithChildren
+  '/_site/feedback': typeof SiteFeedbackRoute
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/admin'
     | '/'
+    | '/feedback'
     | '/admin/feedback'
     | '/admin/informasi'
     | '/admin/reservation'
@@ -98,6 +108,7 @@ export interface FileRouteTypes {
     | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/feedback'
     | '/admin/feedback'
     | '/admin/informasi'
     | '/admin/reservation'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/admin'
     | '/_site'
+    | '/_site/feedback'
     | '/admin/feedback'
     | '/admin/informasi'
     | '/admin/reservation'
@@ -142,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof SiteIndexRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/feedback': {
+      id: '/_site/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof SiteFeedbackRouteImport
       parentRoute: typeof SiteRoute
     }
     '/admin/': {
@@ -203,10 +222,12 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 )
 
 interface SiteRouteChildren {
+  SiteFeedbackRoute: typeof SiteFeedbackRoute
   SiteIndexRoute: typeof SiteIndexRoute
 }
 
 const SiteRouteChildren: SiteRouteChildren = {
+  SiteFeedbackRoute: SiteFeedbackRoute,
   SiteIndexRoute: SiteIndexRoute,
 }
 

@@ -3,10 +3,10 @@ import { Link } from '@tanstack/react-router';
 import { IconListSearch } from '@tabler/icons-react';
 import { X } from 'lucide-react';
 
-import { cn } from '../lib/utils';
 import { NavigationLink } from './NavigationLink';
+import { PrimaryButton } from './PrimaryButton';
 import { SearchBar } from './SearchBar';
-import { Button, buttonVariants } from './ui/button';
+import { Button } from './ui/button';
 
 interface TopBarProps {
     isSidebarOpen: boolean;
@@ -32,18 +32,12 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
                         <NavigationLink to="/">Beranda</NavigationLink>
                         <NavigationLink to="/explore">Informasi</NavigationLink>
                         <NavigationLink to="/link">Tautan</NavigationLink>
-                        <NavigationLink to="/masukan">Masukan</NavigationLink>
+                        <NavigationLink to="/feedback">Masukan</NavigationLink>
                         <NavigationLink to="/reservation">Pertemuan</NavigationLink>
                         <SearchBar />
-                        <Link
-                            to="/"
-                            className={cn(
-                                buttonVariants({ variant: 'default' }),
-                                'h-auto px-3 py-1.5 text-base font-semibold'
-                            )}
-                        >
+                        <PrimaryButton render={<Link to="/" />} className="font-semibold">
                             Masuk
-                        </Link>
+                        </PrimaryButton>
                     </div>
                 </div>
 

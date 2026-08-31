@@ -14,6 +14,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\ApiReservationScheduleController;
 use App\Http\Controllers\ApiReservationLinkController;
+use App\Http\Controllers\Api\FeedbackController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,6 +31,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/home', [HomePageController::class, 'apiIndex']);
+
+Route::get('/feedback', [FeedbackController::class, 'show']);
+Route::post('/feedback', [FeedbackController::class, 'store']);
 
 Route::post('/login',[ApiAuthController::class,'login'])->name('login');
 Route::post('/logout',[ApiAuthController::class,'logout'])->middleware('auth:sanctum');

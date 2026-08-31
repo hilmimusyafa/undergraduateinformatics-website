@@ -1,0 +1,16 @@
+import { type ComponentProps } from 'react';
+
+import { cn } from '../lib/utils';
+import { Button } from './ui/button';
+
+type PrimaryButtonProps = ComponentProps<typeof Button>;
+
+export function PrimaryButton({ className, ...props }: PrimaryButtonProps) {
+    return (
+        <Button
+            variant="default"
+            className={cn('h-auto px-3 py-1.5 text-base', className)}
+            {...props}
+        />
+    );
+}

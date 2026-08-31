@@ -15,6 +15,11 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 });
 
+Object.defineProperty(window, 'scrollTo', {
+    writable: true,
+    value: vi.fn(),
+});
+
 class MockIntersectionObserver {
     observe() {}
     unobserve() {}
@@ -37,4 +42,29 @@ Object.defineProperty(window, 'ResizeObserver', {
     writable: true,
     configurable: true,
     value: MockResizeObserver,
+});
+
+class MockPointerEvent extends MouseEvent {
+    pointerId: number;
+    pointerType: string;
+    isPrimary: boolean;
+    width: number;
+    height: number;
+    pressure: number;
+
+    constructor(type: string, params: PointerEventInit = {}) {
+        super(type, params);
+        this.pointerId = params.pointerId ?? 1;
+        this.pointerType = params.pointerType ?? 'mouse';
+        this.isPrimary = params.isPrimary ?? true;
+        this.width = params.width ?? 1;
+        this.height = params.height ?? 1;
+        this.pressure = params.pressure ?? 0.5;
+    }
+}
+
+Object.defineProperty(window, 'PointerEvent', {
+    writable: true,
+    configurable: true,
+    value: MockPointerEvent,
 });
