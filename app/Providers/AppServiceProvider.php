@@ -5,7 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Tag;
 use Illuminate\Support\Facades\View;
-use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,9 +22,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        View::composer('navbars.HomeNavbar', function ($view) {
-            $tags = Tag::all()->slice(0,8);
-            View::share('tags_navbar', $tags);
+        View::composer('*', function ($view) {
+            try {
+                if (Schema::hasTable('tags')) {
+                    $tags_navbar = Tag::where('name', '!=', 'S1 Informatika')->orderBy('name', 'asc')->get();
+                    $view->with('tags_navbar', $tags_navbar);
+                } else {
+                    $view->with('tags_navbar', collect());
+                }
+            } catch (\Exception $e) {
+                $view->with('tags_navbar', collect());
+            }
         });
     }
 }

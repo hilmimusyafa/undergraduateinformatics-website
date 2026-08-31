@@ -1,67 +1,89 @@
-<div class="side-bar col-md-3 sticky-top">
-    <div class="d-flex">
-        <a href="{{ route('home') }}"><img class="img-fluid logo" src="/images/Logo2.png" alt="LogoSideBar"></a>
-    </div>
-    <div class="atas">
-        <ul>
-            <div class="side-items">
-                <a href="{{ route('home') }}">
-                    <li><i class="fa-solid fa-arrow-left"></i>Kembali</li>
-                </a>
+<aside class="admin-sidebar">
+    <!-- Brand Logo Section -->
+    <div class="sidebar-brand-wrapper">
+        <a href="{{ route('posts.index') }}" class="d-flex align-items-center gap-2 text-decoration-none">
+            <img class="sidebar-logo" src="/images/Logo2.png" alt="Logo S1 Informatika Telkom University" onerror="this.onerror=null; this.src='/images/Logo.png';">
+            <div class="sidebar-brand-info">
+                <span class="sidebar-brand-title">Admin Portal</span>
+                <span class="sidebar-brand-sub">S1 Informatika</span>
             </div>
+        </a>
+    </div>
+
+    <!-- Navigation Groups -->
+    <div class="sidebar-nav-container">
+        <!-- Group: Manajemen Konten -->
+        <div class="sidebar-nav-group-title">Manajemen Konten</div>
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item">
+                <a href="{{ route('posts.index') }}" class="sidebar-nav-link {{ Route::is('posts.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-newspaper"></i>
+                    <span>Informasi & Berita</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="{{ route('tags.index') }}" class="sidebar-nav-link {{ Route::is('tags.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-tags"></i>
+                    <span>Kategori / Tag</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="{{ route('sections.index') }}" class="sidebar-nav-link {{ Route::is('sections.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span>Section Link</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="{{ route('links.index') }}" class="sidebar-nav-link {{ Route::is('links.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-link"></i>
+                    <span>Link Penting</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="{{ route('feedback.index') }}" class="sidebar-nav-link {{ Route::is('feedback.*') ? 'active' : '' }}">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Feedback & Aspirasi</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Group: Pengaturan Akun -->
+        <div class="sidebar-nav-group-title">Pengaturan & Keamanan</div>
+        <ul class="sidebar-nav-list">
+            <li class="sidebar-nav-item">
+                <a href="{{ route('forgotPassword') }}" class="sidebar-nav-link">
+                    <i class="fa-solid fa-key"></i>
+                    <span>Ganti Password</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="{{ route('editPasswordRecoveryQuestion') }}" class="sidebar-nav-link {{ Route::is('editPasswordRecoveryQuestion') ? 'active' : '' }}">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span>Pertanyaan Keamanan</span>
+                </a>
+            </li>
+            <li class="sidebar-nav-item">
+                <a href="{{ route('home') }}" class="sidebar-nav-link" target="_blank">
+                    <i class="fa-solid fa-globe"></i>
+                    <span>Kunjungi Portal Publik</span>
+                </a>
+            </li>
         </ul>
     </div>
-    <div class="tengah">
-        <ul>
-            <div class="side-items {{ Route::is('posts.index', 'posts.create', 'posts.edit') ? 'active' : '' }}">
-                <a href="{{ route('posts.index') }}">
-                    <li><i class="fa-solid fa-circle-info"></i>Informasi</li>
-                </a>
+
+    <!-- Sidebar User Footer -->
+    <div class="sidebar-footer-wrapper">
+        <div class="admin-user-profile">
+            <div class="user-avatar-circle">
+                <i class="fa-solid fa-user-shield"></i>
             </div>
-            <div class="side-items {{ Route::is('tags.index', 'tags.create', 'tags.edit') ? 'active' : '' }}">
-                <a href="{{ route('tags.index') }}">
-                    <li><i class="fa-solid fa-tag"></i>Tag</li>
-                </a>
+            <div class="user-profile-info">
+                <div class="user-profile-name">{{ Auth::user()->email ?? 'Administrator' }}</div>
+                <div class="user-profile-role">Admin Prodi S1 IF</div>
             </div>
-            <div class="side-items {{ Route::is('sections.index', 'sections.create', 'sections.edit') ? 'active' : '' }}">
-                <a href="{{ route('sections.index') }}">
-                    <li><i class="fa-solid fa-list"></i></i>Section Link</li>
-                </a>
-            </div>
-            <div class="side-items {{ Route::is('links.index', 'links.create', 'links.edit') ? 'active' : '' }}">
-                <a href="{{ route('links.index') }}">
-                    <li><i class="fa-solid fa-link"></i>Link Penting</li>
-                </a>
-            </div>
-            <div class="side-items {{ Route::is('feedback.index', 'feedback.edit') ? 'active' : '' }}">
-                <a href="{{ route('feedback.index') }}">
-                    <li><i class="fa-solid fa-comment"></i>Feedback</li>
-                </a>
-            </div>
-            <!-- <div class="side-items {{ Route::is('bookmark') ? 'active' : '' }}">
-                <a href="#">
-                    <li><i class="fa-solid fa-bookmark"></i>Bookmark</li>
-                </a>
-            </div> -->
-        </ul>
+            <a href="{{ route('logout') }}" class="text-danger p-2" title="Keluar">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </a>
+        </div>
     </div>
-    <div class="bawah">
-        <ul>
-            <div class="side-items">
-                <a href="{{ route('forgotPassword') }}">
-                    <li><i class="fa-solid fa-key"></i>Ganti Password</li>
-                </a>
-            </div>
-            <div class="side-items {{ Route::is('editPasswordRecoveryQuestion') ? 'active' : '' }}">
-                <a href="{{ route('editPasswordRecoveryQuestion') }}">
-                    <li><i class="fa-solid fa-question"></i>Ganti Pertanyaan</li>
-                </a>
-            </div>
-            <div class="side-items">
-                <a href="{{ route('logout') }}">
-                    <li><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</li>
-                </a>
-            </div>
-        </ul>
-    </div>
-</div>
+</aside>

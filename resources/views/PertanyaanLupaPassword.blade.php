@@ -1,33 +1,51 @@
 @extends('layouts.authlayout')
 
-@section('title', 'Ganti Password')
+@section('title', 'Pertanyaan Keamanan')
 
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            <h3 class="text-center">Lupa Password</h3>
-        </div>
-        <div class="card-body">
-            <div class="back">
-                <a href="{{ route('forgotPassword') }}"><i class="fa-solid fa-arrow-left fa-lg"></i>Kembali</a>
-            </div>
-            <form method="POST" action="{{ route('submitAnswerRecovery') }}">
-                @csrf
-                <div class="pertanyaan-field">
-                    <label for="pertanyaan1" class="form-label">{{ $first_question }}</label>
-                    <input type="text" class="form-control" name="first_answer" id="pertanyaan1"
-                        placeholder="Masukkan Jawaban" required>
-                </div>
-                <div class="pertanyaan-field">
-                    <label for="pertanyaan1" class="form-label">{{ $second_question }}</label>
-                    <input type="text" class="form-control" name="second_answer" id="pertanyaan2"
-                        placeholder="Masukkan Jawaban" required>
-                </div>
-                <div class="bawah d-flex justify-content-end">
-                    <input type="hidden" name="user_id" value="{{ $user_id }}" placeholder="Masukkan Jawaban">
-                    <button type="submit" class="btn btn-danger">Submit</button>
-                </div>
-            </form>
+<div class="auth-header">
+    <a href="{{ route('home') }}">
+        <img class="auth-logo" src="/images/Logo2.png" alt="Logo S1 Informatika Telkom University" onerror="this.onerror=null; this.src='/images/Logo.png';">
+    </a>
+    <h2 class="auth-title">Pertanyaan Keamanan</h2>
+    <p class="auth-subtitle">Jawab pertanyaan pemulihan untuk memverifikasi identitas Anda</p>
+</div>
+
+<form method="POST" action="{{ route('submitAnswerRecovery') }}" class="auth-form">
+    @csrf
+
+    <div class="form-group">
+        <label for="pertanyaan1" class="auth-label text-dark fw-bold">
+            <i class="fa-solid fa-circle-question text-danger me-1"></i>
+            {{ $first_question }}
+        </label>
+        <div class="auth-input-group">
+            <i class="fa-solid fa-key auth-input-icon"></i>
+            <input type="text" class="auth-input" name="first_answer" id="pertanyaan1" placeholder="Masukkan jawaban pertama" required autocomplete="off">
         </div>
     </div>
+
+    <div class="form-group">
+        <label for="pertanyaan2" class="auth-label text-dark fw-bold">
+            <i class="fa-solid fa-circle-question text-danger me-1"></i>
+            {{ $second_question }}
+        </label>
+        <div class="auth-input-group">
+            <i class="fa-solid fa-key auth-input-icon"></i>
+            <input type="text" class="auth-input" name="second_answer" id="pertanyaan2" placeholder="Masukkan jawaban kedua" required autocomplete="off">
+        </div>
+    </div>
+
+    <input type="hidden" name="user_id" value="{{ $user_id }}">
+
+    <button type="submit" class="btn-auth-submit mt-4">
+        <span>Verifikasi Jawaban</span>
+        <i class="fa-solid fa-shield-check"></i>
+    </button>
+</form>
+
+<a href="{{ route('forgotPassword') }}" class="auth-back-link">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Kembali ke Langkah Sebelumnya</span>
+</a>
 @endsection

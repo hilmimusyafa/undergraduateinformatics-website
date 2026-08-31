@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use App\Models\FeedbackLink;
 use App\Models\ImportantLink;
 use App\Models\ImportantSection;
@@ -21,358 +19,181 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // Admin User
+        $user = User::firstOrCreate(
+            ['email' => 'bif@telkomuniversity.ac.id'],
+            [
+                'password_recovery_id' => 1,
+                'password' => bcrypt('akunadmin')
+            ]
+        );
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Password Recovery
+        PasswordRecovery::firstOrCreate(
+            ['user_id' => $user->id],
+            [
+                'first_question' => "Pertanyaan pertama adalah?",
+                'second_question' => "Pertanyaan kedua adalah?",
+                'first_answer' => "jawaban satu",
+                'second_answer' => "jawaban dua"
+            ]
+        );
 
-        User::create([
-            'email' => 'bif@telkomuniversity.ac.id',
-            'password_recovery_id' => '1',
-            'password' => bcrypt('akunadmin')
-        ]);
+        // Feedback Link
+        FeedbackLink::firstOrCreate(
+            ['id' => 1],
+            [
+                'link' => 'https://forms.office.com/pages/responsepage.aspx?id=D_6vkKPCCEG7mGzrTpTvFc9ujqZdH91MtXpfw-rWy2hUNFA5NUhUMlYwNU5RSE5TVDlWUzI1WUZTRi4u'
+            ]
+        );
 
-        PasswordRecovery::create([
-            'user_id' => '1',
-            'first_question' => "Pertanyaan pertama adalah?",
-            'second_question' => "Pertanyaan kedua adalah?",
-            'first_answer' => "jawaban satu",
-            'second_answer' => "jawaban dua"
-        ]);
+        // Default Tags
+        $tagDefault = Tag::firstOrCreate(
+            ['name' => 'S1 Informatika'],
+            ['description' => 'Tag utama untuk seluruh informasi resmi Program Studi S1 Informatika Telkom University.']
+        );
 
-        // User::create([
-        //     'email' => 'admin2@gmail.com',
-        //     'password_recovery_id' => '2',
-        //     'password' => bcrypt('akundummy')
-        // ]);
+        $tagAkademik = Tag::firstOrCreate(
+            ['name' => 'Akademik'],
+            ['description' => 'Informasi seputar kalender akademik, registrasi mata kuliah, jadwal ujian, dan perkuliahan.']
+        );
 
-        // PasswordRecovery::create([
-        //     'user_id' => '2',
-        //     'first_question' => "pertanyaan 1",
-        //     'second_question' => "pertanyaan 2",
-        //     'first_answer' => "jawaban 1",
-        //     'second_answer' => "jawaban 2"
-        // ]);
+        $tagMbkm = Tag::firstOrCreate(
+            ['name' => 'MBKM'],
+            ['description' => 'Program Merdeka Belajar Kampus Merdeka, magang bersertifikat, studi independen, dan pertukaran mahasiswa.']
+        );
 
-        // FeedbackLink::create([
-        //     'link' => 'https://forms.office.com/pages/responsepage.aspx?id=D_6vkKPCCEG7mGzrTpTvFc9ujqZdH91MtXpfw-rWy2hUNFA5NUhUMlYwNU5RSE5TVDlWUzI1WUZTRi4u'
-        // ]);
+        $tagTa = Tag::firstOrCreate(
+            ['name' => 'Tugas Akhir'],
+            ['description' => 'Panduan pengajuan proposal, bimbingan, seminar proposal, dan sidang yudisium Tugas Akhir.']
+        );
 
-        Tag::create([
-            'name' => 'S1 Informatika',
-            'description' => 'deskripsi tag S1 Informatika'
-        ]);
+        $tagKemahasiswaan = Tag::firstOrCreate(
+            ['name' => 'Kemahasiswaan'],
+            ['description' => 'Kegiatan himpunan, organisasi mahasiswa, beasiswa, dan pengembangan soft skills.']
+        );
 
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel Proposal 1',
-        //     'subtitle' => 'Dummy subtitle artikel proposal 1',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
+        $tagLomba = Tag::firstOrCreate(
+            ['name' => 'Kompetisi & Prestasi'],
+            ['description' => 'Informasi lomba tingkat nasional & internasional, hackathon, dan pendanaan karya inovasi.']
+        );
 
-        // PostTag::create([
-        //     'post_id' => '1',
-        //     'tag_id' => '1',
-        // ]);
+        // Sample Posts if none exist
+        if (Post::count() == 0) {
+            $post1 = Post::create([
+                'title' => 'Panduan Registrasi Mata Kuliah dan Pengisian FRS Semester Ganjil',
+                'subtitle' => 'Petunjuk teknis pengisian FRS, jadwal pembimbingan akademik, dan batas akhir persetujuan dosen wali.',
+                'body' => '<p>Diberitahukan kepada seluruh mahasiswa Program Studi Sarjana Informatika bahwa periode registrasi mata kuliah dan pengisian Formulir Rencana Studi (FRS) telah dibuka. Mahasiswa diwajibkan untuk memperhatikan alur dan syarat berikut:</p><ul><li>Melakukan konsultasi dengan dosen wali masing-masing sebelum memilih mata kuliah pilihan.</li><li>Memastikan tidak ada prasyarat mata kuliah yang belum terpenuhi.</li><li>Menyelesaikan pembayaran BPP tepat waktu sesuai batas yang ditentukan di portal akademik.</li></ul><p>Informasi lebih lanjut dapat menghubungi bagian layanan akademik Program Studi.</p>',
+                'image' => 'images/DummyImage.png'
+            ]);
+            PostTag::create(['post_id' => $post1->id, 'tag_id' => $tagDefault->id]);
+            PostTag::create(['post_id' => $post1->id, 'tag_id' => $tagAkademik->id]);
 
-        // PostTag::create([
-        //     'post_id' => '1',
-        //     'tag_id' => '2',
-        // ]);
+            $post2 = Post::create([
+                'title' => 'Sosialisasi Program Magang & Studi Independen Bersertifikat (MSIB)',
+                'subtitle' => 'Peluang konversi 20 SKS untuk program magang industri dan studi independen di perusahaan mitra.',
+                'body' => '<p>Program Studi S1 Informatika memfasilitasi mahasiswa yang ingin mengikuti program MSIB Kemendikbudristek. Mahasiswa minimal semester 5 dengan IPK di atas 3.00 berkesempatan magang di berbagai perusahaan teknologi terkemuka.</p><p>Pendaftaran dan surat rekomendasi prodi dapat diakses melalui portal layanan terpadu sebelum batas akhir pengumpulan berkas.</p>',
+                'image' => 'images/DummyImage.png'
+            ]);
+            PostTag::create(['post_id' => $post2->id, 'tag_id' => $tagDefault->id]);
+            PostTag::create(['post_id' => $post2->id, 'tag_id' => $tagMbkm->id]);
 
-        // PostTag::create([
-        //     'post_id' => '1',
-        //     'tag_id' => '3',
-        // ]);
+            $post3 = Post::create([
+                'title' => 'Jadwal Pendaftaran Seminar Proposal dan Sidang Tugas Akhir Periode Terbaru',
+                'subtitle' => 'Ketentuan berkas kelengkapan, format penulisan dokumen, dan mekanisme pelaksanaan sidang.',
+                'body' => '<p>Pendaftaran sidang tugas akhir dan seminar proposal telah dibuka. Mahasiswa yang telah memenuhi syarat bimbingan minimum dan disetujui oleh kedua pembimbing diharapkan segera mengunggah naskah dan syarat administrasi pada sistem informasi tugas akhir.</p><p>Pastikan cek plagiarisme dengan Turnitin di bawah batas toleransi 20%.</p>',
+                'image' => 'images/DummyImage.png'
+            ]);
+            PostTag::create(['post_id' => $post3->id, 'tag_id' => $tagDefault->id]);
+            PostTag::create(['post_id' => $post3->id, 'tag_id' => $tagTa->id]);
 
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel Proposal 2',
-        //     'subtitle' => 'Dummy subtitle artikel proposal 2',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
+            $post4 = Post::create([
+                'title' => 'Open Call: Kompetisi Inovasi Teknologi dan Hackathon Nasional',
+                'subtitle' => 'Dukungan pendanaan dan bimbingan dosen untuk tim mahasiswa yang mengikuti kompetisi bergengsi.',
+                'body' => '<p>Prodi mendukung penuh mahasiswa S1 Informatika yang ingin berkompetisi di tingkat nasional maupun internasional dalam bidang Artificial Intelligence, Cyber Security, Software Engineering, dan Data Science. Fasilitas bimbingan intensif dan insentif prestasi telah disiapkan.</p>',
+                'image' => 'images/DummyImage.png'
+            ]);
+            PostTag::create(['post_id' => $post4->id, 'tag_id' => $tagDefault->id]);
+            PostTag::create(['post_id' => $post4->id, 'tag_id' => $tagLomba->id]);
+            PostTag::create(['post_id' => $post4->id, 'tag_id' => $tagKemahasiswaan->id]);
+        }
 
-        // PostTag::create([
-        //     'post_id' => '2',
-        //     'tag_id' => '1',
-        // ]);
+        // Sample Important Sections and Links if none exist
+        if (ImportantSection::count() == 0) {
+            $secMbkm = ImportantSection::create([
+                'name' => 'Kumpulan Link MBKM',
+                'order_number' => 1
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secMbkm->id,
+                'name' => 'Portal Resmi Kampus Merdeka Kemendikbud',
+                'link' => 'https://kampusmerdeka.kemdikbud.go.id'
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secMbkm->id,
+                'name' => 'Form Pengajuan Surat Rekomendasi MBKM Prodi IF',
+                'link' => 'https://bit.ly/RekomendasiMBKM-IF'
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secMbkm->id,
+                'name' => 'Panduan Konversi SKS Magang & Studi Independen',
+                'link' => 'https://bit.ly/PanduanKonversiMBKM-IF'
+            ]);
 
-        // PostTag::create([
-        //     'post_id' => '2',
-        //     'tag_id' => '2',
-        // ]);
+            $secKuliah = ImportantSection::create([
+                'name' => 'Kumpulan Link Kelas Perkuliahan & LMS',
+                'order_number' => 2
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secKuliah->id,
+                'name' => 'CeLOE Learning Management System (LMS Tel-U)',
+                'link' => 'https://celoe.telkomuniversity.ac.id'
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secKuliah->id,
+                'name' => 'i-Gracias Telkom University Portal',
+                'link' => 'https://igracias.telkomuniversity.ac.id'
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secKuliah->id,
+                'name' => 'Silabus dan Rencana Pembelajaran Semester (RPS)',
+                'link' => 'https://bit.ly/RPS-S1Informatika'
+            ]);
 
-        // PostTag::create([
-        //     'post_id' => '2',
-        //     'tag_id' => '3',
-        // ]);
+            $secTa = ImportantSection::create([
+                'name' => 'Kumpulan Link Tugas Akhir & Proposal',
+                'order_number' => 3
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secTa->id,
+                'name' => 'Sistem Pendaftaran & Monitoring Tugas Akhir',
+                'link' => 'https://sit-v2.telkomuniversity.ac.id'
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secTa->id,
+                'name' => 'Template Naskah & Buku Panduan Tugas Akhir IF',
+                'link' => 'https://bit.ly/TemplateTA-Informatika'
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secTa->id,
+                'name' => 'Jadwal Pendaftaran Sidang Periode Berjalan',
+                'link' => 'https://bit.ly/JadwalSidangTA-IF'
+            ]);
 
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel Proposal 3',
-        //     'subtitle' => 'Dummy subtitle artikel proposal 3',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '3',
-        //     'tag_id' => '1',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '3',
-        //     'tag_id' => '2',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '3',
-        //     'tag_id' => '3',
-        // ]);
-        
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel Proposal 4',
-        //     'subtitle' => 'Dummy subtitle artikel proposal 4',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '4',
-        //     'tag_id' => '1',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '4',
-        //     'tag_id' => '2',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '4',
-        //     'tag_id' => '3',
-        // ]);
-        
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel Proposal 5',
-        //     'subtitle' => 'Dummy subtitle artikel proposal 5',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '5',
-        //     'tag_id' => '1',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '5',
-        //     'tag_id' => '2',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '5',
-        //     'tag_id' => '3',
-        // ]);
-
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel MBKM 1',
-        //     'subtitle' => 'Dummy subtitle artikel MBKM 1',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '6',
-        //     'tag_id' => '1',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '6',
-        //     'tag_id' => '2',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '6',
-        //     'tag_id' => '4',
-        // ]);
-
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel MBKM 2',
-        //     'subtitle' => 'Dummy subtitle artikel MBKM 2',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '7',
-        //     'tag_id' => '1',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '7',
-        //     'tag_id' => '2',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '7',
-        //     'tag_id' => '4',
-        // ]);
-
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel MBKM 3',
-        //     'subtitle' => 'Dummy subtitle artikel MBKM 3',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '8',
-        //     'tag_id' => '1',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '8',
-        //     'tag_id' => '2',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '8',
-        //     'tag_id' => '4',
-        // ]);
-
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel MBKM 4',
-        //     'subtitle' => 'Dummy subtitle artikel MBKM 4',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '9',
-        //     'tag_id' => '1',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '9',
-        //     'tag_id' => '2',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '9',
-        //     'tag_id' => '4',
-        // ]);
-
-        // Post::create([
-        //     'title' => 'Dummy Judul Artikel MBKM 5',
-        //     'subtitle' => 'Dummy subtitle artikel MBKM 5',
-        //     'body' => 'Nullam nec tincidunt massa, sit amet dapibus diam. Etiam dictum elit mi, et condimentum metus luctus quis. Duis a ultrices orci. Nullam a odio condimentum, laoreet nunc vel, maximus turpis. Morbi convallis, eros placerat accumsan venenatis, mauris tellus luctus tellus, eu ultrices purus orci et eros. Suspendisse pharetra, ligula in consectetur luctus, libero neque viverra neque, aliquet tincidunt lectus ligula tristique felis. Integer mattis ultricies velit id tempus. Aenean fringilla libero sed lorem tempus bibendum. Aenean in dui ac orci auctor pharetra. Quisque faucibus lorem eget ante posuere placerat. Morbi et accumsan tortor.',
-        //     'image' => 'images/DummyImage.png'
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '10',
-        //     'tag_id' => '1',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '10',
-        //     'tag_id' => '2',
-        // ]);
-
-        // PostTag::create([
-        //     'post_id' => '10',
-        //     'tag_id' => '4',
-        // ]);
-
-        // ImportantSection::create([
-        //     'name' => 'Kumpulan Link MBKM'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '1',
-        //     'name' => 'Angkatan 2018',
-        //     'link' => 'http://bit.ly/MBKM2018'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '1',
-        //     'name' => 'Angkatan 2019',
-        //     'link' => 'http://bit.ly/MBKM2019'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '1',
-        //     'name' => 'Angkatan 2020',
-        //     'link' => 'http://bit.ly/MBKM2020'
-        // ]);
-
-        // ImportantSection::create([
-        //     'name' => 'Kumpulan Link Kelas Mata Kuliah'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '2',
-        //     'name' => 'Angkatan 2018',
-        //     'link' => 'http://bit.ly/KelasReguler2018'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '2',
-        //     'name' => 'Angkatan 2019',
-        //     'link' => 'http://bit.ly/KelasReguler2019'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '2',
-        //     'name' => 'Angkatan 2020',
-        //     'link' => 'http://bit.ly/KelasReguler2020'
-        // ]);
-
-        // ImportantSection::create([
-        //     'name' => 'Kumpulan Link Kelas Proposal'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '3',
-        //     'name' => 'Angkatan 2018',
-        //     'link' => 'http://bit.ly/Proposal2018'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '3',
-        //     'name' => 'Angkatan 2019',
-        //     'link' => 'http://bit.ly/Proposal2019'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '3',
-        //     'name' => 'Angkatan 2020',
-        //     'link' => 'http://bit.ly/Proposal2020'
-        // ]);
-
-
-        // ImportantSection::create([
-        //     'name' => 'Kumpulan Link Tugas Akhir'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '4',
-        //     'name' => 'Angkatan 2018',
-        //     'link' => 'http://bit.ly/TA2018'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '4',
-        //     'name' => 'Angkatan 2019',
-        //     'link' => 'http://bit.ly/TA2019'
-        // ]);
-
-        // ImportantLink::create([
-        //     'important_section_id' => '4',
-        //     'name' => 'Angkatan 2020',
-        //     'link' => 'http://bit.ly/TA2020'
-        // ]);
-
+            $secLayanan = ImportantSection::create([
+                'name' => 'Layanan & Dokumen Akademik',
+                'order_number' => 4
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secLayanan->id,
+                'name' => 'Layanan Surat Keterangan Aktif Kuliah',
+                'link' => 'https://igracias.telkomuniversity.ac.id'
+            ]);
+            ImportantLink::create([
+                'important_section_id' => $secLayanan->id,
+                'name' => 'Helpdesk Layanan Terpadu Fakultas Informatika',
+                'link' => 'https://fif.telkomuniversity.ac.id/helpdesk'
+            ]);
+        }
     }
 }
