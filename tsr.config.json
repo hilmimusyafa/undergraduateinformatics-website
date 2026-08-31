@@ -1,4 +1,5 @@
 {
   "routesDirectory": "./resources/js/routes",
-  "generatedRouteTree": "./resources/js/routeTree.gen.ts"
+  "generatedRouteTree": "./resources/js/routeTree.gen.ts",
+  "routeFileIgnorePattern": "\\.test\\.(ts|tsx)$"
 }

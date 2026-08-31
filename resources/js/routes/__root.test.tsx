@@ -6,7 +6,7 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { render, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { routeTree } from '../../../resources/js/routeTree.gen';
+import { routeTree } from '../routeTree.gen';
 
 vi.mock('axios');
 

@@ -6,7 +6,7 @@ import { renderHook, waitFor } from '@testing-library/react';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { usePageData } from '../../../resources/js/hooks/usePageData';
+import { usePageData } from './usePageData';
 
 vi.mock('axios');
 

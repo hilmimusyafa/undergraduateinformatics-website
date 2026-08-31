@@ -1,0 +1,54 @@
+{
+    "title": "Form Umpan Balik Test",
+    "description": "Deskripsi formulir pengujian",
+    "descriptiveQuestions": [
+        {
+            "id": "p1",
+            "type": "Question.ColumnGroup",
+            "title": "Kerahasiaan Identitas",
+            "subtitle": "Pilih cara Anda menyampaikan masukan.",
+            "order": 500500
+        },
+        {
+            "id": "p2",
+            "type": "Question.ColumnGroup",
+            "title": "IDENTITAS",
+            "subtitle": "Isi identitas agar dapat ditindaklanjuti.",
+            "order": 1000500
+        },
+        {
+            "id": "p3",
+            "type": "Question.ColumnGroup",
+            "title": "PENGADUAN",
+            "subtitle": "Sampaikan masukan Anda di sini.",
+            "order": 2000500
+        }
+    ],
+    "questions": [
+        {
+            "id": "q1",
+            "type": "Question.Choice",
+            "title": "Rahasiakan identitas?",
+            "required": true,
+            "allowMultipleValues": null,
+            "order": 750500,
+            "questionInfo": "{\"Choices\":[{\"Description\":\"Ya\",\"BranchInfo\":{\"ToTheEnd\":true}},{\"Description\":\"Tidak\",\"BranchInfo\":{\"TargetQuestionId\":\"p2\"}}]}"
+        },
+        {
+            "id": "q2",
+            "type": "Question.TextField",
+            "title": "Nama Lengkap",
+            "required": true,
+            "order": 1500500,
+            "questionInfo": null
+        },
+        {
+            "id": "q3",
+            "type": "Question.Choice",
+            "title": "Jenis Masukan",
+            "required": true,
+            "order": 2500500,
+            "questionInfo": "{\"Choices\":[{\"Description\":\"Saran\"},{\"Description\":\"Keluhan\"}]}"
+        }
+    ]
+}

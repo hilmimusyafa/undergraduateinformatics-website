@@ -1,53 +1,50 @@
 import { useEffect, useState } from 'react';
 
-import { type UseQueryResult, useQuery } from '@tanstack/react-query';
+import { type UseQueryOptions, type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import axios from 'axios';
 import NProgress from 'nprogress';
 
-export function usePageData<T = any>(apiEndpoint: string): UseQueryResult<T, Error> {
-    const [initialState] = useState<{ data: T | null; endpoint: string | null }>(() => {
-        const globalInitialData = (window as any).__INITIAL_DATA__;
-        if (globalInitialData !== undefined && globalInitialData !== null) {
-            (window as any).__INITIAL_DATA__ = null;
-            return {
-                data: globalInitialData as T,
-                endpoint: apiEndpoint,
-            };
+interface PageInitialData {
+    data: unknown;
+    endpoint: string | null;
+}
+
+export function usePageData<TQueryFnData = unknown, TData = TQueryFnData>(
+    apiEndpoint: string,
+    queryOptions: Omit<UseQueryOptions<TQueryFnData, Error, TData>, 'queryKey'> = {}
+): UseQueryResult<TData, Error> {
+    const [initialState] = useState<PageInitialData>(() => {
+        const globalInitialData = (window as { __INITIAL_DATA__?: unknown }).__INITIAL_DATA__;
+
+        if (globalInitialData === undefined || globalInitialData === null) {
+            return { data: null, endpoint: null };
         }
-        return {
-            data: null,
-            endpoint: null,
-        };
+
+        return { data: globalInitialData, endpoint: apiEndpoint };
     });
 
-    const hasValidInitialData =
-        initialState.data !== null &&
-        initialState.data !== undefined &&
-        initialState.endpoint === apiEndpoint;
+    useEffect(() => {
+        (window as { __INITIAL_DATA__?: unknown }).__INITIAL_DATA__ = null;
+    }, []);
 
-    const query = useQuery<T, Error>({
+    const hasValidInitialData = initialState.data !== null && initialState.endpoint === apiEndpoint;
+
+    return useQuery<TQueryFnData, Error, TData>({
         queryKey: [apiEndpoint],
         queryFn: async () => {
             NProgress.start();
+
             try {
                 const response = await axios.get(apiEndpoint);
-                return response.data as T;
+                return response.data as TQueryFnData;
             } finally {
                 NProgress.done();
             }
         },
-        initialData: hasValidInitialData ? (initialState.data as T) : undefined,
+        initialData: hasValidInitialData ? (initialState.data as TQueryFnData) : undefined,
         staleTime: 30000,
+        ...queryOptions,
+        retry: queryOptions.retry ?? 1,
     });
-
-    useEffect(() => {
-        if (query.isFetching && !hasValidInitialData) {
-            NProgress.start();
-        } else if (!query.isFetching) {
-            NProgress.done();
-        }
-    }, [query.isFetching, hasValidInitialData]);
-
-    return query;
 }
