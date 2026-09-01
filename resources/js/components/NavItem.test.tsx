@@ -32,7 +32,8 @@ describe('NavItem', () => {
         const link = screen.getByRole('link', { name: 'Masukan' });
         expect(link).toHaveAttribute('href', '/feedback');
         expect(link.className).toContain('px-3');
-        expect(link.className).toContain('underline-offset-4');
+        expect(link.className).toContain('underline-offset-10');
+        expect(link.className).toContain('data-[status=active]:underline');
     });
 
     it('renders a link with the side variant styling', () => {
