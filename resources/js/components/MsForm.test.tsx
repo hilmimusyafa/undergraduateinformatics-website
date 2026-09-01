@@ -128,6 +128,21 @@ describe('MsForm', () => {
         expect(screen.queryByRole('button', { name: /Lanjut/ })).not.toBeInTheDocument();
     });
 
+    it('disables the submit button when no answer has been provided', async () => {
+        renderForm(toFormProps(simplePayload));
+
+        expect(screen.getByRole('button', { name: /Kirim/ })).toBeDisabled();
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+
+    it('enables the submit button once an answer has been provided', async () => {
+        renderForm(toFormProps(simplePayload));
+
+        await userEvent.type(screen.getByRole('textbox'), 'Masukan saya');
+
+        expect(screen.getByRole('button', { name: /Kirim/ })).toBeEnabled();
+    });
+
     it('submits answers and shows the success state', async () => {
         renderForm(toFormProps(simplePayload));
 

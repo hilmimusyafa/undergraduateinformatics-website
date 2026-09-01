@@ -16,7 +16,12 @@ import {
     resolveNextSectionId,
 } from '../lib/ms-form-branching';
 import { buildMsFormDefaultValues, buildMsFormSchema } from '../schemas/ms-forms';
-import { type MsFormQuestion, type MsFormSection, type MsFormValues } from '../types/ms-forms';
+import {
+    type MsFormAnswer,
+    type MsFormQuestion,
+    type MsFormSection,
+    type MsFormValues,
+} from '../types/ms-forms';
 import { MsFormField } from './MsFormField';
 import { MsFormSuccess } from './MsFormStates';
 import { PrimaryButton } from './PrimaryButton';
@@ -55,6 +60,16 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     const nextSectionId = resolveNextSectionId(sections, questions, values, currentSectionId);
     const hasNextSection = nextSectionId !== null;
     const isFirstStep = history.length === 1;
+
+    const reachableIds = useMemo(
+        () => computeReachableIds(sections, questions, values),
+        [sections, questions, values]
+    );
+    const hasAnswer = (value: MsFormAnswer | undefined) =>
+        Array.isArray(value) ? value.length > 0 : (value ?? '').trim() !== '';
+    const hasAnyAnswer = flat.some(
+        (question) => reachableIds.has(question.id) && hasAnswer(values[question.id])
+    );
 
     const clearHiddenAnswers = () => {
         const reachable = computeReachableIds(sections, questions, getValues());
@@ -204,7 +219,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                         <PrimaryButton
                             type="button"
                             onClick={() => void handleValidSubmit()}
-                            disabled={submitForm.isPending}
+                            disabled={submitForm.isPending || !hasAnyAnswer}
                             className="flex-1 md:flex-none"
                         >
                             {submitForm.isPending ? <Loader2 className="animate-spin" /> : null}
