@@ -88,10 +88,25 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const scrollToFirstInvalid = (questions: MsFormQuestion[]) => {
+        const result = buildMsFormSchema(questions).safeParse(getValues());
+        const invalidIds = new Set(
+            result.success ? [] : result.error.issues.map((issue) => issue.path[0])
+        );
+        const invalidId = questions.find((question) => invalidIds.has(question.id))?.id;
+
+        if (invalidId) {
+            document
+                .querySelector(`[data-question-id="${invalidId}"]`)
+                ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
+
     const handleNext = async () => {
         const valid = await form.trigger(visibleQuestions.map((question) => question.id));
 
         if (!valid) {
+            scrollToFirstInvalid(visibleQuestions);
             return;
         }
 
@@ -125,6 +140,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
         );
 
         if (!valid) {
+            scrollToFirstInvalid(visibleQuestions);
             return;
         }
 
@@ -161,7 +177,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                 )}
 
                 {visibleQuestions.map((question) => (
-                    <section key={question.id}>
+                    <section key={question.id} data-question-id={question.id}>
                         <h3>
                             {question.title}
                             {question.required && (

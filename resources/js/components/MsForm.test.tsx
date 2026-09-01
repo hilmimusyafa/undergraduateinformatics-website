@@ -115,6 +115,20 @@ describe('MsForm', () => {
         expect(axios.post).not.toHaveBeenCalled();
     });
 
+    it('scrolls to the first invalid question when Lanjut fails', async () => {
+        const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
+        scrollIntoView.mockClear();
+
+        renderForm(toFormProps(branchingPayload));
+        await userEvent.click(screen.getByRole('button', { name: /Lanjut/ }));
+
+        await screen.findAllByText(/wajib diisi/);
+        expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' });
+        expect(scrollIntoView.mock.instances[0]).toBe(
+            document.querySelector('[data-question-id="jenis"]')
+        );
+    });
+
     it('shows the submit button on the final section', async () => {
         renderForm(toFormProps(branchingPayload));
 
@@ -137,6 +151,20 @@ describe('MsForm', () => {
 
         expect(await screen.findAllByText('Pertanyaan ini wajib diisi')).toHaveLength(2);
         expect(axios.post).not.toHaveBeenCalled();
+    });
+
+    it('scrolls to the first invalid question when Kirim fails', async () => {
+        const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
+        scrollIntoView.mockClear();
+
+        renderForm(toFormProps(richPayload));
+        await userEvent.click(screen.getByRole('button', { name: /Kirim/ }));
+
+        await screen.findAllByText(/wajib diisi/);
+        expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth', block: 'center' });
+        expect(scrollIntoView.mock.instances[0]).toBe(
+            document.querySelector('[data-question-id="jenis"]')
+        );
     });
 
     it('shows required-field errors when submitting an empty required form', async () => {
@@ -184,6 +212,18 @@ describe('MsForm', () => {
         });
 
         expect(await screen.findByText('Terima kasih!')).toBeInTheDocument();
+    });
+
+    it('does not scroll to a question when validation passes', async () => {
+        const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
+        scrollIntoView.mockClear();
+
+        renderForm(toFormProps(simplePayload));
+        await userEvent.type(screen.getByRole('textbox'), 'Masukan saya');
+        await userEvent.click(screen.getByRole('button', { name: /Kirim/ }));
+
+        await screen.findByText('Terima kasih!');
+        expect(scrollIntoView).not.toHaveBeenCalled();
     });
 
     it('resets the form after filling it again', async () => {
