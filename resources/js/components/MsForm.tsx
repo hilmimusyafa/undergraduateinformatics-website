@@ -46,6 +46,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
         [sections, questions]
     );
     const [history, setHistory] = useState<string[]>([sectionIds[0]]);
+    const [emptySubmitTried, setEmptySubmitTried] = useState(false);
 
     const { submitForm, submitError, resetSubmitError } = useMsFormSubmission(
         submitUrl,
@@ -104,12 +105,14 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
 
         setHistory((current) => [...current, nextId]);
         resetSubmitError();
+        setEmptySubmitTried(false);
         scrollToTop();
     };
 
     const handlePrevious = () => {
         setHistory((current) => current.slice(0, -1));
         resetSubmitError();
+        setEmptySubmitTried(false);
         scrollToTop();
     };
 
@@ -125,6 +128,11 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
             return;
         }
 
+        if (buildMsFormAnswers(sections, questions, getValues()).length === 0) {
+            setEmptySubmitTried(true);
+            return;
+        }
+
         clearHiddenAnswers();
         submitForm.mutate(getValues());
     };
@@ -133,6 +141,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
         form.reset(buildMsFormDefaultValues(questions));
         setHistory([sectionIds[0]]);
         resetSubmitError();
+        setEmptySubmitTried(false);
         submitForm.reset();
         scrollToTop();
     };
@@ -176,6 +185,12 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                     </p>
                 )}
 
+                {emptySubmitTried && !hasAnyAnswer && (
+                    <p role="alert" className="text-destructive">
+                        Isi minimal satu jawaban terlebih dahulu.
+                    </p>
+                )}
+
                 <div className="mt-10 flex items-center gap-2 md:mt-9">
                     {!isFirstStep && (
                         <SecondaryButton
@@ -198,7 +213,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                         <PrimaryButton
                             type="button"
                             onClick={() => void handleValidSubmit()}
-                            disabled={submitForm.isPending || !hasAnyAnswer}
+                            disabled={submitForm.isPending}
                             className="flex-1 md:flex-none"
                         >
                             {submitForm.isPending ? <Loader2 className="animate-spin" /> : null}

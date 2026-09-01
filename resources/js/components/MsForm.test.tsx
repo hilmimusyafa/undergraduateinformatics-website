@@ -9,6 +9,7 @@ import { MsForm } from './MsForm';
 import {
     SUBMIT_URL,
     branchingPayload,
+    optionalPayload,
     richPayload,
     simplePayload,
     toFormProps,
@@ -128,19 +129,46 @@ describe('MsForm', () => {
         expect(screen.queryByRole('button', { name: /Lanjut/ })).not.toBeInTheDocument();
     });
 
-    it('disables the submit button when no answer has been provided', async () => {
-        renderForm(toFormProps(simplePayload));
+    it('blocks submit until all reachable required questions are answered', async () => {
+        renderForm(toFormProps(richPayload));
 
-        expect(screen.getByRole('button', { name: /Kirim/ })).toBeDisabled();
+        await userEvent.click(screen.getByRole('radio', { name: 'Saran' }));
+        await userEvent.click(screen.getByRole('button', { name: /Kirim/ }));
+
+        expect(await screen.findAllByText('Pertanyaan ini wajib diisi')).toHaveLength(2);
         expect(axios.post).not.toHaveBeenCalled();
     });
 
-    it('enables the submit button once an answer has been provided', async () => {
+    it('shows required-field errors when submitting an empty required form', async () => {
         renderForm(toFormProps(simplePayload));
 
-        await userEvent.type(screen.getByRole('textbox'), 'Masukan saya');
-
         expect(screen.getByRole('button', { name: /Kirim/ })).toBeEnabled();
+        await userEvent.click(screen.getByRole('button', { name: /Kirim/ }));
+
+        expect(await screen.findByText('Pertanyaan ini wajib diisi')).toBeInTheDocument();
+        expect(axios.post).not.toHaveBeenCalled();
+    });
+
+    it('rejects submitting a fully empty form with a message', async () => {
+        renderForm(toFormProps(optionalPayload));
+
+        await userEvent.click(screen.getByRole('button', { name: /Kirim/ }));
+
+        expect(
+            await screen.findByText('Isi minimal satu jawaban terlebih dahulu.')
+        ).toBeInTheDocument();
+        expect(axios.post).not.toHaveBeenCalled();
+
+        await userEvent.type(screen.getByRole('textbox'), 'Pesan saya');
+
+        expect(
+            screen.queryByText('Isi minimal satu jawaban terlebih dahulu.')
+        ).not.toBeInTheDocument();
+        await userEvent.click(screen.getByRole('button', { name: /Kirim/ }));
+
+        await waitFor(() => {
+            expect(axios.post).toHaveBeenCalled();
+        });
     });
 
     it('submits answers and shows the success state', async () => {
