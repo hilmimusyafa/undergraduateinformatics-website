@@ -3,10 +3,10 @@ import { Link } from '@tanstack/react-router';
 import { IconListSearch } from '@tabler/icons-react';
 import { X } from 'lucide-react';
 
-import { NavLink } from './NavLink';
-import { PrimaryButton } from './PrimaryButton';
+import { cn } from '../lib/utils';
+import { NavItem } from './NavItem';
 import { SearchBar } from './SearchBar';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 
 interface TopBarProps {
     isSidebarOpen: boolean;
@@ -29,19 +29,31 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
 
                 <div className="hidden items-center gap-6 lg:flex">
                     <div className="flex items-center gap-3">
-                        <NavLink to="/">Beranda</NavLink>
-                        <NavLink to="/explore">Informasi</NavLink>
-                        <NavLink to="/link">Tautan</NavLink>
-                        <NavLink to="/feedback">Masukan</NavLink>
-                        <NavLink to="/reservation">Pertemuan</NavLink>
+                        <NavItem variant="top" to="/">
+                            Beranda
+                        </NavItem>
+                        <NavItem variant="top" to="/explore">
+                            Informasi
+                        </NavItem>
+                        <NavItem variant="top" to="/link">
+                            Tautan
+                        </NavItem>
+                        <NavItem variant="top" to="/feedback">
+                            Masukan
+                        </NavItem>
+                        <NavItem variant="top" to="/reservation">
+                            Pertemuan
+                        </NavItem>
                         <SearchBar />
-                        <PrimaryButton
-                            nativeButton={false}
-                            render={<Link to="/" />}
-                            className="font-semibold"
+                        <Link
+                            to="/"
+                            className={cn(
+                                buttonVariants({ variant: 'default' }),
+                                'h-auto px-3 py-1.5 text-base font-semibold'
+                            )}
                         >
                             Masuk
-                        </PrimaryButton>
+                        </Link>
                     </div>
                 </div>
 

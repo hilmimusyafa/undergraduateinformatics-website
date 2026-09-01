@@ -1,4 +1,4 @@
-import { NavButton } from './NavButton';
+import { NavItem } from './NavItem';
 import { SearchBar } from './SearchBar';
 
 interface SiteSideBarProps {
@@ -20,35 +20,35 @@ export function SiteSideBar({ isOpen, onClose }: SiteSideBarProps) {
 
                 <div className="flex flex-col">
                     <div className="mx-3 my-px">
-                        <NavButton to="/" onClick={onClose}>
+                        <NavItem variant="side" to="/" onClick={onClose}>
                             Beranda
-                        </NavButton>
+                        </NavItem>
                     </div>
                     <div className="mx-3 my-px">
-                        <NavButton to="/explore" onClick={onClose}>
+                        <NavItem variant="side" to="/explore" onClick={onClose}>
                             Informasi
-                        </NavButton>
+                        </NavItem>
                     </div>
                     <div className="mx-3 my-px">
-                        <NavButton to="/links" onClick={onClose}>
+                        <NavItem variant="side" to="/links" onClick={onClose}>
                             Tautan
-                        </NavButton>
+                        </NavItem>
                     </div>
                     <div className="mx-3 my-px">
-                        <NavButton to="/feedback" onClick={onClose}>
+                        <NavItem variant="side" to="/feedback" onClick={onClose}>
                             Masukan
-                        </NavButton>
+                        </NavItem>
                     </div>
                     <div className="mx-3 my-px">
-                        <NavButton to="/reservation" onClick={onClose}>
+                        <NavItem variant="side" to="/reservation" onClick={onClose}>
                             Pertemuan
-                        </NavButton>
+                        </NavItem>
                     </div>
                     <hr className="border-border mx-6 my-2 border-t" />
                     <div className="mx-3 my-px">
-                        <NavButton to="/reservation" onClick={onClose}>
+                        <NavItem variant="side" to="/reservation" onClick={onClose}>
                             Masuk
-                        </NavButton>
+                        </NavItem>
                     </div>
                 </div>
             </div>
