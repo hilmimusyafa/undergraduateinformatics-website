@@ -1,13 +1,11 @@
 import { useMemo, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
-import { useMutation } from '@tanstack/react-query';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 
-import { buildMsFormAnswers } from '../lib/ms-form-answers';
+import { useMsFormSubmission } from '../hooks/useMsFormSubmission';
+import { buildMsFormAnswers, isEmptyAnswer } from '../lib/ms-form-answers';
 import {
     computeReachableIds,
     flattenQuestions,
@@ -16,12 +14,7 @@ import {
     resolveNextSectionId,
 } from '../lib/ms-form-branching';
 import { buildMsFormDefaultValues, buildMsFormSchema } from '../schemas/ms-forms';
-import {
-    type MsFormAnswer,
-    type MsFormQuestion,
-    type MsFormSection,
-    type MsFormValues,
-} from '../types/ms-forms';
+import { type MsFormQuestion, type MsFormSection, type MsFormValues } from '../types/ms-forms';
 import { MsFormField } from './MsFormField';
 import { MsFormSuccess } from './MsFormStates';
 import { PrimaryButton } from './PrimaryButton';
@@ -48,9 +41,17 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     const { control, getValues, setValue } = form;
 
     const sectionIds = useMemo(() => getSectionIds(sections), [sections]);
-    const flat = useMemo(() => flattenQuestions(sections, questions), [sections, questions]);
+    const allQuestions = useMemo(
+        () => flattenQuestions(sections, questions),
+        [sections, questions]
+    );
     const [history, setHistory] = useState<string[]>([sectionIds[0]]);
-    const [submitError, setSubmitError] = useState<string | null>(null);
+
+    const { submitForm, submitError, resetSubmitError } = useMsFormSubmission(
+        submitUrl,
+        sections,
+        questions
+    );
 
     const values = useWatch({ control }) as MsFormValues;
 
@@ -61,27 +62,22 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     const hasNextSection = nextSectionId !== null;
     const isFirstStep = history.length === 1;
 
-    const reachableIds = useMemo(
-        () => computeReachableIds(sections, questions, values),
+    const hasAnyAnswer = useMemo(
+        () => buildMsFormAnswers(sections, questions, values).length > 0,
         [sections, questions, values]
-    );
-    const hasAnswer = (value: MsFormAnswer | undefined) =>
-        Array.isArray(value) ? value.length > 0 : (value ?? '').trim() !== '';
-    const hasAnyAnswer = flat.some(
-        (question) => reachableIds.has(question.id) && hasAnswer(values[question.id])
     );
 
     const clearHiddenAnswers = () => {
         const reachable = computeReachableIds(sections, questions, getValues());
 
-        for (const question of flat) {
+        for (const question of allQuestions) {
             if (reachable.has(question.id)) {
                 continue;
             }
 
             const value = getValues(question.id);
 
-            if (Array.isArray(value) ? value.length > 0 : value !== '') {
+            if (!isEmptyAnswer(value)) {
                 setValue(question.id, question.multiple ? [] : '', { shouldDirty: true });
             }
         }
@@ -107,32 +103,15 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
         }
 
         setHistory((current) => [...current, nextId]);
-        setSubmitError(null);
+        resetSubmitError();
         scrollToTop();
     };
 
     const handlePrevious = () => {
         setHistory((current) => current.slice(0, -1));
-        setSubmitError(null);
+        resetSubmitError();
         scrollToTop();
     };
-
-    const submitForm = useMutation({
-        mutationFn: async (values: MsFormValues) => {
-            await axios.post(submitUrl, {
-                answers: buildMsFormAnswers(sections, questions, values),
-            });
-        },
-        onError: (error) => {
-            const status = axios.isAxiosError(error) ? error.response?.status : undefined;
-
-            setSubmitError(
-                status === 404
-                    ? 'Formulir sedang tidak tersedia.'
-                    : 'Gagal mengirim jawaban. Silakan coba beberapa saat lagi.'
-            );
-        },
-    });
 
     const handleValidSubmit = async () => {
         const reachable = computeReachableIds(sections, questions, getValues());
@@ -153,7 +132,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     const handleReset = () => {
         form.reset(buildMsFormDefaultValues(questions));
         setHistory([sectionIds[0]]);
-        setSubmitError(null);
+        resetSubmitError();
         submitForm.reset();
         scrollToTop();
     };
