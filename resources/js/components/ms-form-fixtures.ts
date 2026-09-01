@@ -172,6 +172,31 @@ export const simplePayload: MsFormPayload = {
     ],
 };
 
+export const optionalPayload: MsFormPayload = {
+    link: 'https://forms.office.com/r/opt999',
+    title: 'Form Umpan Balik',
+    description: null,
+    sections: [
+        {
+            id: 'section-1',
+            title: null,
+            subtitle: null,
+            questionIds: ['pesan'],
+        },
+    ],
+    questions: [
+        {
+            id: 'pesan',
+            title: 'Pesan Anda',
+            subtitle: null,
+            type: 'text',
+            required: false,
+            multiple: false,
+            choices: [],
+        },
+    ],
+};
+
 export function toFormProps(payload: MsFormPayload) {
     return {
         title: payload.title,
