@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { TextButton } from '@/components/TextButton';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function MsFormSkeleton() {
@@ -67,14 +67,9 @@ export function MsFormSuccess({ onReset }: MsFormSuccessProps) {
             <h1>Terima kasih!</h1>
             <p className="text-muted-foreground">Formulir Anda telah berhasil dikirim.</p>
             <div className="mt-4.5 md:mt-4">
-                <Button
-                    type="button"
-                    variant="link"
-                    onClick={onReset}
-                    className="p-0 text-base text-blue-600 underline"
-                >
+                <TextButton variant="underline" className="text-blue-600" onClick={onReset}>
                     Isi Formulir Lagi
-                </Button>
+                </TextButton>
             </div>
         </div>
     );
