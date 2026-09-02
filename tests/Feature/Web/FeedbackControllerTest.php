@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Site;
+namespace Tests\Feature\Web;
 
 use App\Models\FeedbackLink;
 use Illuminate\Foundation\Testing\RefreshDatabase;
