@@ -33,10 +33,10 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
                             <NavItem variant="top" to="/">
                                 Beranda
                             </NavItem>
-                            <NavItem variant="top" to="/explore">
+                            <NavItem variant="top" to="/tags">
                                 Informasi
                             </NavItem>
-                            <NavItem variant="top" to="/link">
+                            <NavItem variant="top" to="/links">
                                 Tautan
                             </NavItem>
                             <NavItem variant="top" to="/feedback">

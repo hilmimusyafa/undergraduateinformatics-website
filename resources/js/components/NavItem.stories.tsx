@@ -13,7 +13,7 @@ export const Top: Story = () => (
             <NavItem variant="top" to="/">
                 Beranda
             </NavItem>
-            <NavItem variant="top" to="/explore">
+            <NavItem variant="top" to="/tags">
                 Informasi
             </NavItem>
             <NavItem variant="top" to="/feedback">
@@ -29,7 +29,7 @@ export const Side: Story = () => (
             <NavItem variant="side" to="/">
                 Beranda
             </NavItem>
-            <NavItem variant="side" to="/explore">
+            <NavItem variant="side" to="/tags">
                 Informasi
             </NavItem>
             <NavItem variant="side" to="/feedback">

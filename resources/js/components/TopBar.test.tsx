@@ -26,8 +26,8 @@ describe('TopBar', () => {
         render(<TopBar isSidebarOpen={false} onToggleSidebar={() => undefined} />);
 
         expect(screen.getByRole('link', { name: 'Beranda' })).toHaveAttribute('href', '/');
-        expect(screen.getByRole('link', { name: 'Informasi' })).toHaveAttribute('href', '/explore');
-        expect(screen.getByRole('link', { name: 'Tautan' })).toHaveAttribute('href', '/link');
+        expect(screen.getByRole('link', { name: 'Informasi' })).toHaveAttribute('href', '/tags');
+        expect(screen.getByRole('link', { name: 'Tautan' })).toHaveAttribute('href', '/links');
         expect(screen.getByRole('link', { name: 'Masukan' })).toHaveAttribute('href', '/feedback');
         expect(screen.getByRole('link', { name: 'Pertemuan' })).toHaveAttribute(
             'href',
