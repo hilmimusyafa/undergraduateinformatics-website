@@ -9,11 +9,10 @@ vi.mock('@tanstack/react-router', async () => {
 
     return {
         ...actual,
-        Link: ({ to, onClick, className, children }: any) => (
-            <a href={to} onClick={onClick} className={className}>
-                {children}
-            </a>
-        ),
+        createLink: (Comp: any) =>
+            function MockedLink({ to, ...props }: any) {
+                return <Comp href={to} {...props} />;
+            },
     };
 });
 
@@ -26,7 +25,7 @@ describe('SiteSideBar', () => {
         render(<SiteSideBar isOpen onClose={() => undefined} />);
 
         expect(screen.getByRole('link', { name: 'Beranda' })).toHaveAttribute('href', '/');
-        expect(screen.getByRole('link', { name: 'Informasi' })).toHaveAttribute('href', '/explore');
+        expect(screen.getByRole('link', { name: 'Informasi' })).toHaveAttribute('href', '/tags');
         expect(screen.getByRole('link', { name: 'Tautan' })).toHaveAttribute('href', '/links');
         expect(screen.getByRole('link', { name: 'Masukan' })).toHaveAttribute('href', '/feedback');
         expect(screen.getByRole('link', { name: 'Pertemuan' })).toHaveAttribute(

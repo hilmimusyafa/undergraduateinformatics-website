@@ -14,6 +14,10 @@ vi.mock('@tanstack/react-router', async () => {
                 {children}
             </a>
         ),
+        createLink: (Comp: any) =>
+            function MockedLink({ to, ...props }: any) {
+                return <Comp href={to} {...props} />;
+            },
     };
 });
 

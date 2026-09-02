@@ -25,7 +25,7 @@ export function SiteSideBar({ isOpen, onClose }: SiteSideBarProps) {
                         </NavItem>
                     </div>
                     <div className="mx-3 my-px">
-                        <NavItem variant="side" to="/explore" onClick={onClose}>
+                        <NavItem variant="side" to="/tags" onClick={onClose}>
                             Informasi
                         </NavItem>
                     </div>

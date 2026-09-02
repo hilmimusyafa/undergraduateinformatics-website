@@ -9,11 +9,10 @@ vi.mock('@tanstack/react-router', async () => {
 
     return {
         ...actual,
-        Link: ({ to, className, children }: any) => (
-            <a href={to} className={className}>
-                {children}
-            </a>
-        ),
+        createLink: (Comp: any) =>
+            function MockedLink({ to, ...props }: any) {
+                return <Comp href={to} {...props} />;
+            },
     };
 });
 
@@ -51,13 +50,13 @@ describe('NavItem', () => {
 
     it('passes extra props and className through to the link', () => {
         render(
-            <NavItem variant="side" to="/explore" className="custom-class" data-testid="nav">
+            <NavItem variant="side" to="/tags" className="custom-class" data-testid="nav">
                 Informasi
             </NavItem>
         );
 
         const link = screen.getByRole('link', { name: 'Informasi' });
-        expect(link).toHaveAttribute('href', '/explore');
+        expect(link).toHaveAttribute('href', '/tags');
         expect(link).toHaveClass('custom-class');
     });
 });

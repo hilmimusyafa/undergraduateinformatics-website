@@ -1,15 +1,18 @@
-import { type ComponentProps } from 'react';
+import { type ComponentProps, forwardRef } from 'react';
 
-import { Link } from '@tanstack/react-router';
+import { createLink } from '@tanstack/react-router';
 
 import { cn } from '../lib/utils';
 import { buttonVariants } from './ui/button';
 
-type NavItemProps = ComponentProps<typeof Link> & {
+type NavItemBaseProps = ComponentProps<'a'> & {
     variant: 'top' | 'side';
 };
 
-export function NavItem({ variant, className, ...linkProps }: NavItemProps) {
+const NavItemBase = forwardRef<HTMLAnchorElement, NavItemBaseProps>(function NavItemBase(
+    { variant, className, ...props },
+    ref
+) {
     const variantClass =
         variant === 'side'
             ? buttonVariants({ variant: 'ghost' })
@@ -20,5 +23,7 @@ export function NavItem({ variant, className, ...linkProps }: NavItemProps) {
             ? 'text-muted-foreground data-[status=active]:text-foreground active:bg-muted data-[status=active]:bg-muted h-auto w-full justify-start py-3.5 pr-0 pl-3 text-base font-semibold'
             : 'text-muted-foreground hover:text-foreground data-[status=active]:text-foreground data-[status=active]:underline underline-offset-10 h-auto border-none px-0 py-1.5 text-base font-semibold';
 
-    return <Link {...linkProps} className={cn(variantClass, layoutClass, className)} />;
-}
+    return <a ref={ref} className={cn(variantClass, layoutClass, className)} {...props} />;
+});
+
+export const NavItem = createLink(NavItemBase);
