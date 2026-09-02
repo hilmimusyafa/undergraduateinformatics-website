@@ -55,5 +55,5 @@ Route::get('/admin/{any?}', function () {
 // Fallback to the React app for any unmatched URL, with a 404 status so the
 // client-side NotFoundPage renders without misreporting the resource as found.
 Route::fallback(function () {
-    return view('app', [], 404);
+    return response()->view('app', [], 404);
 });
