@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api;
 
 use App\Models\FeedbackLink;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Tests\Concerns\FakesMicrosoftForms;
 use Tests\TestCase;
 
-class FeedbackFormApiTest extends TestCase
+class FeedbackControllerTest extends TestCase
 {
     use FakesMicrosoftForms;
     use RefreshDatabase;
