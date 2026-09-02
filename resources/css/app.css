@@ -22,6 +22,12 @@
     @apply bg-primary h-1;
 }
 
+#nprogress .peg {
+    box-shadow:
+        0 0 10px var(--primary),
+        0 0 5px var(--primary);
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -165,7 +171,9 @@
     html {
         @apply font-sans;
     }
-    .active\:not-aria-\[haspopup\]\:translate-y-px:active:not([aria-haspopup]):not(.allow-translate) {
+    .active\:not-aria-\[haspopup\]\:translate-y-px:active:not([aria-haspopup]):not(
+            .allow-translate
+        ) {
         --tw-translate-y: 0px !important;
     }
 }
