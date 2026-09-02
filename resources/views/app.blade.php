@@ -25,10 +25,13 @@
     <script>
         window.__INITIAL_DATA__ = {!! json_encode($initialData ?? null) !!};
     </script>
-    @viteReactRefresh
+@viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.tsx'])
+    <link rel="stylesheet" href="/css/initial-loader.css">
 </head>
 <body>
-    <div id="root"></div>
+    <div id="root">
+        @include('partials.initial-loader')
+    </div>
 </body>
 </html>

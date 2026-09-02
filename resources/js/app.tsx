@@ -8,6 +8,8 @@ import NProgress from 'nprogress';
 
 import '../css/app.css';
 import './bootstrap';
+import { ErrorPage } from './components/ErrorPage';
+import { NotFoundPage } from './components/NotFoundPage';
 import { routeTree } from './routeTree.gen';
 
 const queryClient = new QueryClient({
@@ -22,6 +24,9 @@ const queryClient = new QueryClient({
 const router = createRouter({
     routeTree,
     defaultPreload: 'intent',
+    notFoundMode: 'root',
+    defaultNotFoundComponent: NotFoundPage,
+    defaultErrorComponent: ErrorPage,
 });
 
 NProgress.configure({ showSpinner: false });
