@@ -4,7 +4,14 @@ import { FeedbackPage } from '@/features/feedback/FeedbackPage';
 
 export const Route = createFileRoute('/_site/feedback')({
     head: () => ({
-        meta: [{ title: 'Masukan - Portal Informasi Sarjana Informatika' }],
+        meta: [
+            { title: 'Masukan - Portal Informasi Sarjana Informatika' },
+            {
+                name: 'description',
+                content:
+                    'Berikan masukan dan evaluasi layanan untuk Program Studi Sarjana Informatika Telkom University melalui formulir.',
+            },
+        ],
     }),
     component: FeedbackPage,
 });
