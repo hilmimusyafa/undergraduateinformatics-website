@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { SiteSideBar } from './SiteSideBar';
+import { SideBar } from './SideBar';
 
 vi.mock('@tanstack/react-router', async () => {
     const actual =
@@ -16,13 +16,13 @@ vi.mock('@tanstack/react-router', async () => {
     };
 });
 
-describe('SiteSideBar', () => {
+describe('SideBar', () => {
     beforeEach(() => {
         vi.clearAllMocks();
     });
 
     it('renders navigation links', () => {
-        render(<SiteSideBar isOpen onClose={() => undefined} />);
+        render(<SideBar isOpen onClose={() => undefined} />);
 
         expect(screen.getByRole('link', { name: 'Beranda' })).toHaveAttribute('href', '/');
         expect(screen.getByRole('link', { name: 'Informasi' })).toHaveAttribute('href', '/tags');
@@ -36,13 +36,13 @@ describe('SiteSideBar', () => {
     });
 
     it('renders a search bar', () => {
-        render(<SiteSideBar isOpen onClose={() => undefined} />);
+        render(<SideBar isOpen onClose={() => undefined} />);
 
         expect(screen.getByPlaceholderText('Cari...')).toBeInTheDocument();
     });
 
     it('is translated off-screen when closed', () => {
-        const { container } = render(<SiteSideBar isOpen={false} onClose={() => undefined} />);
+        const { container } = render(<SideBar isOpen={false} onClose={() => undefined} />);
 
         expect(container.querySelector('aside')?.className).toContain('-translate-x-full');
     });
@@ -50,7 +50,7 @@ describe('SiteSideBar', () => {
     it('calls onClose when a nav link is clicked', () => {
         const onClose = vi.fn();
 
-        render(<SiteSideBar isOpen onClose={onClose} />);
+        render(<SideBar isOpen onClose={onClose} />);
 
         screen.getByRole('link', { name: 'Beranda' }).click();
 

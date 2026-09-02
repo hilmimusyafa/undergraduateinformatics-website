@@ -1,12 +1,12 @@
 import { NavItem } from './NavItem';
 import { SearchBar } from './SearchBar';
 
-interface SiteSideBarProps {
+interface SideBarProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-export function SiteSideBar({ isOpen, onClose }: SiteSideBarProps) {
+export function SideBar({ isOpen, onClose }: SideBarProps) {
     return (
         <aside
             className={`bg-background fixed top-18 bottom-0 left-0 z-50 mr-16 w-full max-w-xs scrollbar-none overflow-y-auto transition-transform duration-300 ease-in-out lg:hidden ${
