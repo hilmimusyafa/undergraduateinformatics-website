@@ -4,6 +4,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Loader2 } from 'lucide-react';
 
+import { ArticleContainer } from '../components/ArticleContainer';
 import { useMsFormSubmission } from '../hooks/useMsFormSubmission';
 import { buildMsFormAnswers, isEmptyAnswer } from '../lib/ms-form-answers';
 import {
@@ -167,7 +168,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     }
 
     return (
-        <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
+        <ArticleContainer>
             <form noValidate>
                 <h1>{title}</h1>
                 {description && <p className="text-muted-foreground">{description}</p>}
@@ -238,6 +239,6 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                     )}
                 </div>
             </form>
-        </div>
+        </ArticleContainer>
     );
 }

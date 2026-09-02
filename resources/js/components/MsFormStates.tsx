@@ -1,13 +1,10 @@
+import { ArticleContainer } from '@/components/ArticleContainer';
 import { TextButton } from '@/components/TextButton';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function MsFormSkeleton() {
     return (
-        <div
-            role="status"
-            aria-label="Memuat formulir"
-            className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9"
-        >
+        <ArticleContainer role="status" aria-label="Memuat formulir">
             <h1>
                 <Skeleton className="h-9 w-2/3" />
             </h1>
@@ -33,27 +30,27 @@ export function MsFormSkeleton() {
             <div className="mt-10 flex items-center gap-2 md:mt-9">
                 <Skeleton className="h-9 w-24" />
             </div>
-        </div>
+        </ArticleContainer>
     );
 }
 
 export function MsFormUnavailable() {
     return (
-        <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
+        <ArticleContainer>
             <p role="status" className="text-muted-foreground">
                 Formulir sedang tidak tersedia. Silakan coba beberapa saat lagi.
             </p>
-        </div>
+        </ArticleContainer>
     );
 }
 
 export function MsFormError() {
     return (
-        <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
+        <ArticleContainer>
             <p role="alert" className="text-muted-foreground">
                 Terjadi kesalahan saat memuat formulir. Silakan coba lagi.
             </p>
-        </div>
+        </ArticleContainer>
     );
 }
 
@@ -63,7 +60,7 @@ interface MsFormSuccessProps {
 
 export function MsFormSuccess({ onReset }: MsFormSuccessProps) {
     return (
-        <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
+        <ArticleContainer>
             <h1>Terima kasih!</h1>
             <p className="text-muted-foreground">Formulir Anda telah berhasil dikirim.</p>
             <div className="mt-4.5 md:mt-4">
@@ -71,6 +68,6 @@ export function MsFormSuccess({ onReset }: MsFormSuccessProps) {
                     Isi Formulir Lagi
                 </TextButton>
             </div>
-        </div>
+        </ArticleContainer>
     );
 }
