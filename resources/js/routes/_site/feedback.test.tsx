@@ -22,7 +22,7 @@ describe('feedback route', () => {
         const result = head({});
         const description = result.meta?.find((entry) => entry.name === 'description');
         expect(description?.content).toBe(
-            'Berikan masukan dan evaluasi layanan Program Studi Sarjana Informatika Telkom University melalui formulir umpan balik.'
+            'Berikan masukan dan evaluasi layanan untuk Program Studi Sarjana Informatika Telkom University melalui formulir.'
         );
     });
 
