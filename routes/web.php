@@ -7,7 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\HomePageController;
-use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\Site\FeedbackController;
 
 Route::get('/', [HomePageController::class, 'index'])->name('home');
 

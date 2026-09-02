@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Site;
 
+use App\Http\Controllers\Controller;
 use App\Models\FeedbackLink;
 use App\Services\MsForms\FormDefinitionService;
 use App\Services\MsForms\MsFormsException;
