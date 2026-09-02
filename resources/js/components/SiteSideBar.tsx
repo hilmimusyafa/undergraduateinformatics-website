@@ -19,33 +19,33 @@ export function SiteSideBar({ isOpen, onClose }: SiteSideBarProps) {
                 </div>
 
                 <div className="flex flex-col">
-                    <div className="mx-3 my-px">
+                    <div className="mx-3 my-0.5">
                         <NavItem variant="side" to="/" onClick={onClose}>
                             Beranda
                         </NavItem>
                     </div>
-                    <div className="mx-3 my-px">
+                    <div className="mx-3 my-0.5">
                         <NavItem variant="side" to="/tags" onClick={onClose}>
                             Informasi
                         </NavItem>
                     </div>
-                    <div className="mx-3 my-px">
+                    <div className="mx-3 my-0.5">
                         <NavItem variant="side" to="/links" onClick={onClose}>
                             Tautan
                         </NavItem>
                     </div>
-                    <div className="mx-3 my-px">
+                    <div className="mx-3 my-0.5">
                         <NavItem variant="side" to="/feedback" onClick={onClose}>
                             Masukan
                         </NavItem>
                     </div>
-                    <div className="mx-3 my-px">
+                    <div className="mx-3 my-0.5">
                         <NavItem variant="side" to="/reservation" onClick={onClose}>
                             Pertemuan
                         </NavItem>
                     </div>
                     <hr className="border-border mx-6 my-2 border-t" />
-                    <div className="mx-3 my-px">
+                    <div className="mx-3 my-0.5">
                         <NavItem variant="side" to="/reservation" onClick={onClose}>
                             Masuk
                         </NavItem>
