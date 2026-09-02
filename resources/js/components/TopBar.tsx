@@ -27,29 +27,31 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
                     />
                 </Link>
 
-                <div className="hidden items-center gap-6 lg:flex">
-                    <div className="flex items-center gap-3">
-                        <NavItem variant="top" to="/">
-                            Beranda
-                        </NavItem>
-                        <NavItem variant="top" to="/explore">
-                            Informasi
-                        </NavItem>
-                        <NavItem variant="top" to="/link">
-                            Tautan
-                        </NavItem>
-                        <NavItem variant="top" to="/feedback">
-                            Masukan
-                        </NavItem>
-                        <NavItem variant="top" to="/reservation">
-                            Pertemuan
-                        </NavItem>
-                        <SearchBar />
+                <div className="hidden items-center lg:flex">
+                    <div className="flex items-center">
+                        <div className="ml-8 flex items-center gap-8">
+                            <NavItem variant="top" to="/">
+                                Beranda
+                            </NavItem>
+                            <NavItem variant="top" to="/explore">
+                                Informasi
+                            </NavItem>
+                            <NavItem variant="top" to="/link">
+                                Tautan
+                            </NavItem>
+                            <NavItem variant="top" to="/feedback">
+                                Masukan
+                            </NavItem>
+                            <NavItem variant="top" to="/reservation">
+                                Pertemuan
+                            </NavItem>
+                            <SearchBar />
+                        </div>
                         <Link
                             to="/"
                             className={cn(
                                 buttonVariants({ variant: 'default' }),
-                                'h-auto px-3 py-1.5 text-base font-semibold'
+                                'ml-3 h-auto px-3 py-1.5 text-base font-semibold'
                             )}
                         >
                             Masuk

@@ -31,7 +31,7 @@ describe('NavItem', () => {
 
         const link = screen.getByRole('link', { name: 'Masukan' });
         expect(link).toHaveAttribute('href', '/feedback');
-        expect(link.className).toContain('px-3');
+        expect(link.className).toContain('py-1.5');
         expect(link.className).toContain('underline-offset-10');
         expect(link.className).toContain('data-[status=active]:underline');
     });

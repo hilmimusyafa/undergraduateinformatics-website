@@ -18,7 +18,7 @@ export function NavItem({ variant, className, ...linkProps }: NavItemProps) {
     const layoutClass =
         variant === 'side'
             ? 'text-muted-foreground data-[status=active]:text-foreground active:bg-muted data-[status=active]:bg-muted h-auto w-full justify-start py-3.5 pr-0 pl-3 text-base font-semibold'
-            : 'text-muted-foreground hover:text-foreground data-[status=active]:text-foreground data-[status=active]:underline underline-offset-10 h-auto border-none px-3 py-1.5 text-base font-semibold';
+            : 'text-muted-foreground hover:text-foreground data-[status=active]:text-foreground data-[status=active]:underline underline-offset-10 h-auto border-none px-0 py-1.5 text-base font-semibold';
 
     return <Link {...linkProps} className={cn(variantClass, layoutClass, className)} />;
 }
