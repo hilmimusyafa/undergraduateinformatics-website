@@ -1,19 +1,21 @@
 import type { Story, StoryDefault } from '@ladle/react';
 import { msw } from '@ladle/react';
 
-import { branchingPayload, richPayload } from '../../components/ms-form-fixtures';
+import { branchingPayload, richPayload, submitOk } from '../../components/ms-form-fixtures';
 import { FeedbackPage } from './FeedbackPage';
 
 const formHandlers = [
     msw.http.get('/api/feedback', () =>
         msw.HttpResponse.json({ status: 'success', data: richPayload })
     ),
+    ...submitOk,
 ];
 
 const branchingHandlers = [
     msw.http.get('/api/feedback', () =>
         msw.HttpResponse.json({ status: 'success', data: branchingPayload })
     ),
+    ...submitOk,
 ];
 
 export default {
