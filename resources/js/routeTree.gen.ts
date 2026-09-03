@@ -60,27 +60,33 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AdminRouteRoute,
-} as any)
+} as any).lazy(() => import('./routes/admin/index.lazy').then((d) => d.Route))
 const AdminFeedbackRoute = AdminFeedbackRouteImport.update({
   id: '/feedback',
   path: '/feedback',
   getParentRoute: () => AdminRouteRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/admin/feedback.lazy').then((d) => d.Route),
+)
 const AdminInformasiRoute = AdminInformasiRouteImport.update({
   id: '/informasi',
   path: '/informasi',
   getParentRoute: () => AdminRouteRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/admin/informasi.lazy').then((d) => d.Route),
+)
 const AdminReservationRoute = AdminReservationRouteImport.update({
   id: '/reservation',
   path: '/reservation',
   getParentRoute: () => AdminRouteRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/admin/reservation.lazy').then((d) => d.Route),
+)
 const AdminUploadRoute = AdminUploadRouteImport.update({
   id: '/upload',
   path: '/upload',
   getParentRoute: () => AdminRouteRoute,
-} as any)
+} as any).lazy(() => import('./routes/admin/upload.lazy').then((d) => d.Route))
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
