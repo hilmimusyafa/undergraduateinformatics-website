@@ -2,25 +2,29 @@ import { ArticleContainer } from '@/components/ArticleContainer';
 import { TextButton } from '@/components/TextButton';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export function MsFormSkeleton() {
+interface MsFormSkeletonProps {
+    questions: number;
+}
+
+export function MsFormSkeleton({ questions }: MsFormSkeletonProps) {
     return (
         <ArticleContainer role="status" aria-label="Memuat formulir">
             <h1>
-                <Skeleton className="h-9 w-2/3" />
+                <Skeleton className="h-9 w-full" />
             </h1>
             <div>
                 <Skeleton className="h-7 w-full" />
             </div>
             <h2>
-                <Skeleton className="h-7 w-1/2" />
+                <Skeleton className="h-7 w-full" />
             </h2>
             <div>
-                <Skeleton className="h-7 w-3/4" />
+                <Skeleton className="h-7 w-full" />
             </div>
-            {[0, 1].map((index) => (
+            {Array.from({ length: questions }).map((_, index) => (
                 <section key={index}>
                     <h3>
-                        <Skeleton className="h-7 w-1/3" />
+                        <Skeleton className="h-7 w-full" />
                     </h3>
                     <div>
                         <Skeleton className="h-16 w-full" />
@@ -28,7 +32,7 @@ export function MsFormSkeleton() {
                 </section>
             ))}
             <div className="mt-10 flex items-center gap-2 md:mt-9">
-                <Skeleton className="h-9 w-24" />
+                <Skeleton className="h-9 w-full" />
             </div>
         </ArticleContainer>
     );

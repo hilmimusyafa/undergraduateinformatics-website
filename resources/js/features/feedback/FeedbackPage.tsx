@@ -6,7 +6,7 @@ export function FeedbackPage() {
     const query = useMsForm('/api/feedback');
 
     if (query.isPending) {
-        return <MsFormSkeleton />;
+        return <MsFormSkeleton questions={2} />;
     }
 
     if (query.isError) {

@@ -5,9 +5,15 @@ import { MsFormError, MsFormSkeleton, MsFormSuccess, MsFormUnavailable } from '.
 
 describe('MsFormSkeleton', () => {
     it('renders a loading status region', () => {
-        render(<MsFormSkeleton />);
+        render(<MsFormSkeleton questions={2} />);
 
         expect(screen.getByRole('status', { name: /Memuat formulir/ })).toBeInTheDocument();
+    });
+
+    it('renders the requested number of question sections', () => {
+        const { container } = render(<MsFormSkeleton questions={4} />);
+
+        expect(container.querySelectorAll('section')).toHaveLength(4);
     });
 });
 

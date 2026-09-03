@@ -78,7 +78,7 @@ Form.msw = submitOk;
 export const Branching: Story = () => <MsForm {...toFormProps(branchingPayload)} />;
 Branching.msw = submitOk;
 
-export const Loading: Story = () => <MsFormSkeleton />;
+export const Loading: Story = () => <MsFormSkeleton questions={2} />;
 
 export const LoadError: Story = () => <MsFormError />;
 
