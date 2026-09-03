@@ -2,7 +2,7 @@ import { ArticleContainer } from '@/components/ArticleContainer';
 
 import { type Tag } from './types';
 
-export function TagsList({ tags }: { tags: Tag[] }) {
+export function TagsContent({ tags }: { tags: Tag[] }) {
     return (
         <ArticleContainer>
             <h1>Daftar Label</h1>

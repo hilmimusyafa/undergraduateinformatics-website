@@ -1,6 +1,6 @@
 import type { Story, StoryDefault } from '@ladle/react';
 
-import { TagsList } from './TagsList';
+import { TagsContent } from './TagsContent';
 import { type Tag } from './types';
 
 const tagsFixture: Tag[] = [
@@ -32,4 +32,4 @@ export default {
     title: 'Tags',
 } satisfies StoryDefault;
 
-export const List: Story = () => <TagsList tags={tagsFixture} />;
+export const List: Story = () => <TagsContent tags={tagsFixture} />;

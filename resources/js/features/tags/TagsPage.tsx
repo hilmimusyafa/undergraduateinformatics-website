@@ -1,4 +1,4 @@
-import { TagsList } from './TagsList';
+import { TagsContent } from './TagsContent';
 import { TagsEmpty, TagsError, TagsSkeleton } from './TagsStates';
 import { useTags } from './useTags';
 
@@ -19,5 +19,5 @@ export function TagsPage() {
         return <TagsEmpty />;
     }
 
-    return <TagsList tags={tags} />;
+    return <TagsContent tags={tags} />;
 }
