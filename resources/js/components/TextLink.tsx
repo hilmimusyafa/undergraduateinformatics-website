@@ -3,10 +3,11 @@ import { type ComponentProps, forwardRef } from 'react';
 import { createLink } from '@tanstack/react-router';
 
 import { cn } from '../lib/utils';
+import { type TextVariant, textButtonVariant } from './text-variants';
 import { buttonVariants } from './ui/button';
 
 type TextLinkBaseProps = ComponentProps<'a'> & {
-    variant: 'fade' | 'underline';
+    variant: TextVariant;
 };
 
 const TextLinkBase = forwardRef<HTMLAnchorElement, TextLinkBaseProps>(function TextLinkBase(
@@ -18,7 +19,7 @@ const TextLinkBase = forwardRef<HTMLAnchorElement, TextLinkBaseProps>(function T
             ref={ref}
             className={cn(
                 buttonVariants({
-                    variant: variant === 'underline' ? 'link' : 'ghost',
+                    variant: textButtonVariant[variant],
                 }),
                 'h-auto p-0 text-base',
                 variant === 'fade' &&
