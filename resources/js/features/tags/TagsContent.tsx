@@ -1,4 +1,5 @@
 import { ArticleContainer } from '@/components/ArticleContainer';
+import { TextLink } from '@/components/TextLink';
 
 import { type Tag } from './types';
 
@@ -13,9 +14,14 @@ export function TagsContent({ tags }: { tags: Tag[] }) {
             <ul>
                 {tags.map((tag) => (
                     <li key={tag.id}>
-                        <a href={`/tags/${tag.slug}`} className="text-blue-600 no-underline">
+                        <TextLink
+                            variant="underline"
+                            className="no-underline"
+                            to="/tags/$slug"
+                            params={{ slug: tag.slug }}
+                        >
                             {tag.name} ({tag.posts_count})
-                        </a>
+                        </TextLink>
                         {tag.description && (
                             <p className="text-muted-foreground">{tag.description}</p>
                         )}

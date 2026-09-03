@@ -1,5 +1,7 @@
 import type { Story, StoryDefault } from '@ladle/react';
 
+import { RouterHarness } from '@/components/RouterHarness';
+
 import { TagsContent } from './TagsContent';
 import { type Tag } from './types';
 
@@ -32,4 +34,8 @@ export default {
     title: 'Tags',
 } satisfies StoryDefault;
 
-export const List: Story = () => <TagsContent tags={tagsFixture} />;
+export const List: Story = () => (
+    <RouterHarness>
+        <TagsContent tags={tagsFixture} />
+    </RouterHarness>
+);

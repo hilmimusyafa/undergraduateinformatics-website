@@ -19,6 +19,24 @@ vi.mock('axios', async () => {
     };
 });
 
+vi.mock('@tanstack/react-router', async () => {
+    const actual =
+        await vi.importActual<typeof import('@tanstack/react-router')>('@tanstack/react-router');
+
+    return {
+        ...actual,
+        createLink: (Comp: any) =>
+            function MockedLink({ to, params, ...props }: any) {
+                const href =
+                    typeof to === 'string' && params
+                        ? to.replace(/\$[^/]+/g, (key: string) => params[key.slice(1)] ?? key)
+                        : to;
+
+                return <Comp href={href} {...props} />;
+            },
+    };
+});
+
 function axiosError(status: number, message?: string) {
     const error = new AxiosError(message ?? 'Request failed');
     error.response = {
@@ -88,10 +106,9 @@ describe('TagsPage', () => {
 
         await screen.findByRole('heading', { name: 'Daftar Label' });
 
-        expect(screen.getByRole('link', { name: 'Academic (3)' })).toHaveAttribute(
-            'href',
-            '/tags/academic'
-        );
+        const academic = screen.getByRole('link', { name: 'Academic (3)' });
+        expect(academic).toHaveAttribute('href', '/tags/academic');
+        expect(academic).toHaveClass('text-blue-600', 'no-underline');
         expect(screen.getByRole('link', { name: 'Beasiswa (0)' })).toHaveAttribute(
             'href',
             '/tags/beasiswa'

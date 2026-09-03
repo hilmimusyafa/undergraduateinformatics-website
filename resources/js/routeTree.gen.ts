@@ -21,6 +21,7 @@ import { Route as AdminFeedbackRouteImport } from './routes/admin/feedback'
 import { Route as AdminInformasiRouteImport } from './routes/admin/informasi'
 import { Route as AdminReservationRouteImport } from './routes/admin/reservation'
 import { Route as AdminUploadRouteImport } from './routes/admin/upload'
+import { Route as SiteTagsSlugRouteImport } from './routes/_site/tags.$slug'
 
 const SiteRoute = SiteRouteImport.update({
   id: '/_site',
@@ -89,6 +90,11 @@ const AdminUploadRoute = AdminUploadRouteImport.update({
   path: '/upload',
   getParentRoute: () => AdminRouteRoute,
 } as any).lazy(() => import('./routes/admin/upload.lazy').then((d) => d.Route))
+const SiteTagsSlugRoute = SiteTagsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => SiteTagsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteRouteWithChildren
@@ -96,24 +102,26 @@ export interface FileRoutesByFullPath {
   '/feedback': typeof SiteFeedbackRoute
   '/links': typeof SiteLinksRoute
   '/reservation': typeof SiteReservationRoute
-  '/tags': typeof SiteTagsRoute
+  '/tags': typeof SiteTagsRouteWithChildren
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
   '/admin/upload': typeof AdminUploadRoute
   '/admin/': typeof AdminIndexRoute
+  '/tags/$slug': typeof SiteTagsSlugRoute
 }
 export interface FileRoutesByTo {
   '/feedback': typeof SiteFeedbackRoute
   '/links': typeof SiteLinksRoute
   '/reservation': typeof SiteReservationRoute
-  '/tags': typeof SiteTagsRoute
+  '/tags': typeof SiteTagsRouteWithChildren
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
   '/admin/upload': typeof AdminUploadRoute
   '/': typeof SiteIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/tags/$slug': typeof SiteTagsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -122,13 +130,14 @@ export interface FileRoutesById {
   '/_site/feedback': typeof SiteFeedbackRoute
   '/_site/links': typeof SiteLinksRoute
   '/_site/reservation': typeof SiteReservationRoute
-  '/_site/tags': typeof SiteTagsRoute
+  '/_site/tags': typeof SiteTagsRouteWithChildren
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
   '/admin/upload': typeof AdminUploadRoute
   '/_site/': typeof SiteIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/_site/tags/$slug': typeof SiteTagsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/admin/reservation'
     | '/admin/upload'
     | '/admin/'
+    | '/tags/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/feedback'
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
     | '/admin/upload'
     | '/'
     | '/admin'
+    | '/tags/$slug'
   id:
     | '__root__'
     | '/admin'
@@ -170,6 +181,7 @@ export interface FileRouteTypes {
     | '/admin/upload'
     | '/_site/'
     | '/admin/'
+    | '/_site/tags/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -263,6 +275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUploadRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_site/tags/$slug': {
+      id: '/_site/tags/$slug'
+      path: '/$slug'
+      fullPath: '/tags/$slug'
+      preLoaderRoute: typeof SiteTagsSlugRouteImport
+      parentRoute: typeof SiteTagsRoute
+    }
   }
 }
 
@@ -286,11 +305,23 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
+interface SiteTagsRouteChildren {
+  SiteTagsSlugRoute: typeof SiteTagsSlugRoute
+}
+
+const SiteTagsRouteChildren: SiteTagsRouteChildren = {
+  SiteTagsSlugRoute: SiteTagsSlugRoute,
+}
+
+const SiteTagsRouteWithChildren = SiteTagsRoute._addFileChildren(
+  SiteTagsRouteChildren,
+)
+
 interface SiteRouteChildren {
   SiteFeedbackRoute: typeof SiteFeedbackRoute
   SiteLinksRoute: typeof SiteLinksRoute
   SiteReservationRoute: typeof SiteReservationRoute
-  SiteTagsRoute: typeof SiteTagsRoute
+  SiteTagsRoute: typeof SiteTagsRouteWithChildren
   SiteIndexRoute: typeof SiteIndexRoute
 }
 
@@ -298,7 +329,7 @@ const SiteRouteChildren: SiteRouteChildren = {
   SiteFeedbackRoute: SiteFeedbackRoute,
   SiteLinksRoute: SiteLinksRoute,
   SiteReservationRoute: SiteReservationRoute,
-  SiteTagsRoute: SiteTagsRoute,
+  SiteTagsRoute: SiteTagsRouteWithChildren,
   SiteIndexRoute: SiteIndexRoute,
 }
 
