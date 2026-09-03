@@ -15,6 +15,7 @@ use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\ApiReservationScheduleController;
 use App\Http\Controllers\ApiReservationLinkController;
 use App\Http\Controllers\Api\FeedbackController;
+use App\Http\Controllers\Web\TagController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,6 +32,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/home', [HomePageController::class, 'apiIndex']);
+
+Route::get('/tags', [TagController::class, 'apiIndex']);
 
 Route::get('/feedback', [FeedbackController::class, 'show']);
 Route::post('/feedback', [FeedbackController::class, 'store']);

@@ -10,7 +10,6 @@ use App\Models\ImportantSection;
 use App\Models\PasswordRecovery;
 use App\Models\Post;
 use App\Models\PostTag;
-use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -60,10 +59,7 @@ class DatabaseSeeder extends Seeder
         //     'link' => 'https://forms.office.com/pages/responsepage.aspx?id=D_6vkKPCCEG7mGzrTpTvFc9ujqZdH91MtXpfw-rWy2hUNFA5NUhUMlYwNU5RSE5TVDlWUzI1WUZTRi4u'
         // ]);
 
-        Tag::create([
-            'name' => 'S1 Informatika',
-            'description' => 'deskripsi tag S1 Informatika'
-        ]);
+        $this->call(TagSeeder::class);
 
         // Post::create([
         //     'title' => 'Dummy Judul Artikel Proposal 1',
