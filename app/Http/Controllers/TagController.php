@@ -85,10 +85,10 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
         // Fetch targeted tag data
-        $tag = Tag::findOrFail($id);
+        $tag = Tag::whereSlugOrId($slug)->firstOrFail();
 
         // Return tag details view with data
         return view("TagPage", [
