@@ -187,7 +187,7 @@
 }
 
 @utility content-grid {
-    @apply grid grid-cols-[1fr_min(100%-2rem,80rem)_1fr] [&>*]:col-start-2;
+    @apply grid grid-cols-[1fr_min(100%-3rem,80rem)_1fr] [&>*]:col-start-2;
 }
 
 @utility full-bleed {
