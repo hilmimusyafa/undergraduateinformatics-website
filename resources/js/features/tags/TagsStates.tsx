@@ -1,0 +1,47 @@
+import { ArticleContainer } from '@/components/ArticleContainer';
+import { Skeleton } from '@/components/ui/skeleton';
+
+export function TagsSkeleton() {
+    return (
+        <ArticleContainer role="status" aria-label="Memuat daftar label">
+            <h1>
+                <Skeleton className="h-9 w-full" />
+            </h1>
+            <div className="flex flex-col gap-1">
+                <Skeleton className="h-7 w-full" />
+                <Skeleton className="h-7 w-full" />
+            </div>
+            <ul className="list-none">
+                {[0, 1, 2, 3, 4, 5].map((index) => (
+                    <li key={index} className="relative">
+                        <Skeleton className="absolute top-2 -left-5.5 size-2" />
+                        <Skeleton className="h-7 w-full" />
+                        <p>
+                            <Skeleton className="h-7 w-full" />
+                        </p>
+                    </li>
+                ))}
+            </ul>
+        </ArticleContainer>
+    );
+}
+
+export function TagsEmpty() {
+    return (
+        <ArticleContainer>
+            <p role="status" className="text-muted-foreground">
+                Belum ada label.
+            </p>
+        </ArticleContainer>
+    );
+}
+
+export function TagsError() {
+    return (
+        <ArticleContainer>
+            <p role="alert" className="text-muted-foreground">
+                Terjadi kesalahan saat memuat halaman. Silakan coba lagi.
+            </p>
+        </ArticleContainer>
+    );
+}
