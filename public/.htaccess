@@ -14,8 +14,21 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
+    # Flag hashed build assets for immutable caching
+    RewriteCond %{REQUEST_URI} ^/build/assets/
+    RewriteRule .* - [E=HASHED_ASSET:1]
+
+    # Flag HTML responses so the SPA shell is never cached stale
+    RewriteCond %{HTTP:Accept} text/html [NC]
+    RewriteRule .* - [E=HTML_REQ:1]
+
     # Send Requests To Front Controller...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    Header set Cache-Control "public, max-age=31536000, immutable" env=HASHED_ASSET
+    Header set Cache-Control "no-cache, private" env=HTML_REQ
 </IfModule>
