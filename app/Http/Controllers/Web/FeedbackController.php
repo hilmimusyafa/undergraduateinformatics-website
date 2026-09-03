@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\FeedbackLink;
 use App\Services\MsForms\FormDefinitionService;
 use App\Services\MsForms\MsFormsException;
+use App\Support\PageMeta;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -40,15 +41,9 @@ class FeedbackController extends Controller
             'description' => $description,
         ];
 
-        return view('app', [
-            'title' => $title,
-            'description' => $description,
-            'ogUrl' => $request->url(),
-            'jsonLd' => $jsonLd,
-            'initialData' => [
-                'status' => 'success',
-                'data' => $initialData,
-            ],
-        ]);
+        return view('app', PageMeta::viewData($request, $title, $description, $jsonLd, [
+            'status' => 'success',
+            'data' => $initialData,
+        ]));
     }
 }

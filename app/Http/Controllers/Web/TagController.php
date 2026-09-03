@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Services\Tags\TagsDataService;
+use App\Support\PageMeta;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -24,15 +25,6 @@ class TagController extends Controller
             'description' => $description,
         ];
 
-        return view('app', [
-            'title' => $title,
-            'description' => $description,
-            'siteName' => 'Telkom University',
-            'ogTitle' => $title,
-            'ogDescription' => $description,
-            'ogUrl' => $request->url(),
-            'jsonLd' => $jsonLd,
-            'initialData' => $tagsData,
-        ]);
+        return view('app', PageMeta::viewData($request, $title, $description, $jsonLd, $tagsData));
     }
 }
