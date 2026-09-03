@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { Route } from './feedback';
+import { Route as LazyRoute } from './feedback.lazy';
 
 describe('feedback route', () => {
     it('sets the page title via the head option', () => {
@@ -26,7 +27,7 @@ describe('feedback route', () => {
         );
     });
 
-    it('keeps the feedback page as its component', () => {
-        expect(Route.options.component).toBeDefined();
+    it('provides the feedback page via the lazy route', () => {
+        expect(LazyRoute.options.component).toBeDefined();
     });
 });

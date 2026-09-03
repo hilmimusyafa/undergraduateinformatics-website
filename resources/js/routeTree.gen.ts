@@ -40,7 +40,9 @@ const SiteFeedbackRoute = SiteFeedbackRouteImport.update({
   id: '/feedback',
   path: '/feedback',
   getParentRoute: () => SiteRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/_site/feedback.lazy').then((d) => d.Route),
+)
 const SiteLinksRoute = SiteLinksRouteImport.update({
   id: '/links',
   path: '/links',
