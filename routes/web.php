@@ -7,6 +7,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\FeedbackController as AdminFeedbackController;
 use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\TagController as WebTagController;
 
@@ -48,6 +49,10 @@ Route::get('/feedback', [FeedbackController::class, 'show'])->name('viewFeedback
 //         Route::redirect('/', route('posts.index'));
 //     });
 // });
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::resource('feedback', AdminFeedbackController::class)->only(['index', 'edit', 'update']);
+});
 
 // Serve React App for all admin routes
 Route::get('/admin/{any?}', function () {
