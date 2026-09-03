@@ -17,9 +17,9 @@ export const Secondary: Story = () => <SecondaryButton>Kembali</SecondaryButton>
 
 export const Search: Story = () => <SearchBar />;
 
-export const TextFade: Story = () => <TextButton variant="fade">Kembali</TextButton>;
+export const TextButtonFade: Story = () => <TextButton variant="fade">Kembali</TextButton>;
 
-export const TextUnderline: Story = () => (
+export const TextButtonUnderline: Story = () => (
     <TextButton variant="underline">Isi Formulir Lagi</TextButton>
 );
 
