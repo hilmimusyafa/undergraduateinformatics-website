@@ -68,7 +68,7 @@ export function MsFormSuccess({ onReset }: MsFormSuccessProps) {
             <h1>Terima kasih!</h1>
             <p className="text-muted-foreground">Formulir Anda telah berhasil dikirim.</p>
             <div className="mt-4.5 md:mt-4">
-                <TextButton variant="underline" className="text-blue-600" onClick={onReset}>
+                <TextButton variant="underline" onClick={onReset}>
                     Isi Formulir Lagi
                 </TextButton>
             </div>

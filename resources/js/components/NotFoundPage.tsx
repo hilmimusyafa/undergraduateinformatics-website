@@ -15,11 +15,7 @@ export function NotFoundPage() {
                     Alamat mungkin salah atau sudah tidak tersedia.
                 </p>
                 <div className="mt-4.5 md:mt-4">
-                    <TextButton
-                        variant="underline"
-                        className="text-blue-600"
-                        onClick={() => navigate({ to: '/' })}
-                    >
+                    <TextButton variant="underline" onClick={() => navigate({ to: '/' })}>
                         Kembali ke Beranda
                     </TextButton>
                 </div>

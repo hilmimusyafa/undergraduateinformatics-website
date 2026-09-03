@@ -20,9 +20,7 @@ export const Search: Story = () => <SearchBar />;
 export const TextFade: Story = () => <TextButton variant="fade">Kembali</TextButton>;
 
 export const TextUnderline: Story = () => (
-    <TextButton variant="underline" className="text-blue-600">
-        Isi Formulir Lagi
-    </TextButton>
+    <TextButton variant="underline">Isi Formulir Lagi</TextButton>
 );
 
 export const TextLinkFade: Story = () => (
@@ -35,7 +33,7 @@ export const TextLinkFade: Story = () => (
 
 export const TextLinkUnderline: Story = () => (
     <RouterHarness>
-        <TextLink variant="underline" to="/" className="text-blue-600">
+        <TextLink variant="underline" to="/">
             Isi Formulir Lagi
         </TextLink>
     </RouterHarness>

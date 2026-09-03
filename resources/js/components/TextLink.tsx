@@ -24,6 +24,7 @@ const TextLinkBase = forwardRef<HTMLAnchorElement, TextLinkBaseProps>(function T
                 'h-auto p-0 text-base',
                 variant === 'fade' &&
                     'text-foreground hover:text-muted-foreground hover:bg-transparent dark:hover:bg-transparent',
+                variant === 'underline' && 'text-blue-600',
                 className
             )}
             {...props}
