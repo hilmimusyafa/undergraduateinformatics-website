@@ -19,7 +19,7 @@ const control = ({ questions }: { questions: MsFormQuestion[] }) => {
 
 const textQuestion: MsFormQuestion = {
     id: 'q1',
-    title: 'Isi Masukan',
+    title: { text: 'Isi Masukan' },
     subtitle: null,
     type: 'text',
     required: true,
@@ -29,7 +29,7 @@ const textQuestion: MsFormQuestion = {
 
 const dateQuestion: MsFormQuestion = {
     id: 'q2',
-    title: 'Tanggal Kejadian',
+    title: { text: 'Tanggal Kejadian' },
     subtitle: null,
     type: 'date',
     required: false,
@@ -39,28 +39,28 @@ const dateQuestion: MsFormQuestion = {
 
 const radioQuestion: MsFormQuestion = {
     id: 'q3',
-    title: 'Jenis Masukan',
+    title: { text: 'Jenis Masukan' },
     subtitle: null,
     type: 'choice',
     required: true,
     multiple: false,
     choices: [
-        { value: 'Saran', label: 'Saran', branchTargetId: null },
-        { value: 'Keluhan', label: 'Keluhan', branchTargetId: null },
+        { value: 'Saran', label: { text: 'Saran' }, branchTargetId: null },
+        { value: 'Keluhan', label: { text: 'Keluhan' }, branchTargetId: null },
     ],
 };
 
 const checkboxQuestion: MsFormQuestion = {
     id: 'q4',
-    title: 'Aspek yang Dinilai',
+    title: { text: 'Aspek yang Dinilai' },
     subtitle: null,
     type: 'choice',
     required: false,
     multiple: true,
     choices: [
-        { value: 'Akademik', label: 'Akademik', branchTargetId: null },
-        { value: 'Administrasi', label: 'Administrasi', branchTargetId: null },
-        { value: 'Fasilitas', label: 'Fasilitas', branchTargetId: null },
+        { value: 'Akademik', label: { text: 'Akademik' }, branchTargetId: null },
+        { value: 'Administrasi', label: { text: 'Administrasi' }, branchTargetId: null },
+        { value: 'Fasilitas', label: { text: 'Fasilitas' }, branchTargetId: null },
     ],
 };
 

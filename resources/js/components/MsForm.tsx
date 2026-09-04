@@ -15,18 +15,25 @@ import {
     resolveNextSectionId,
 } from '../lib/ms-form-branching';
 import { buildMsFormDefaultValues, buildMsFormSchema } from '../schemas/ms-forms';
-import { type MsFormQuestion, type MsFormSection, type MsFormValues } from '../types/ms-forms';
+import {
+    type MsFormQuestion,
+    type MsFormSection,
+    type MsFormValues,
+    type MsRichText,
+} from '../types/ms-forms';
 import { MsFormField } from './MsFormField';
 import { MsFormSuccess } from './MsFormStates';
 import { PrimaryButton } from './PrimaryButton';
+import { RichText } from './RichText';
+import { RichTextContent } from './RichTextContent';
 import { SecondaryButton } from './SecondaryButton';
 import { FieldDescription, FieldGroup } from './ui/field';
 
 interface MsFormProps {
     questions: MsFormQuestion[];
     sections?: MsFormSection[];
-    title: string;
-    description: string | null;
+    title: MsRichText;
+    description: MsRichText | null;
     submitUrl: string;
 }
 
@@ -170,17 +177,33 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     return (
         <ArticleContainer className="max-w-[37em]">
             <form noValidate>
-                <h1>{title}</h1>
-                {description && <p className="text-muted-foreground">{description}</p>}
-                {currentSection?.title && <h2>{currentSection.title}</h2>}
+                <h1>
+                    <RichTextContent content={title} as="span" />
+                </h1>
+                {description && (
+                    <RichTextContent
+                        content={description}
+                        as="div"
+                        className="text-muted-foreground"
+                    />
+                )}
+                {currentSection?.title && (
+                    <h2>
+                        <RichTextContent content={currentSection.title} as="span" />
+                    </h2>
+                )}
                 {currentSection?.subtitle && (
-                    <p className="text-muted-foreground">{currentSection.subtitle}</p>
+                    <RichTextContent
+                        content={currentSection.subtitle}
+                        as="div"
+                        className="text-muted-foreground"
+                    />
                 )}
 
                 {visibleQuestions.map((question) => (
                     <section key={question.id} data-question-id={question.id}>
                         <h3>
-                            {question.title}
+                            <RichTextContent content={question.title} as="span" />
                             {question.required && (
                                 <span aria-hidden="true" className="text-destructive">
                                     *
@@ -188,9 +211,17 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                             )}
                         </h3>
                         <FieldGroup>
-                            {question.subtitle && (
-                                <FieldDescription>{question.subtitle}</FieldDescription>
-                            )}
+                            {question.subtitle &&
+                                (question.subtitle.text || question.subtitle.html) &&
+                                (question.subtitle.html ? (
+                                    <RichText
+                                        as="div"
+                                        className="text-muted-foreground [&>a:hover]:text-primary text-left text-base leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5"
+                                        html={question.subtitle.html}
+                                    />
+                                ) : (
+                                    <FieldDescription>{question.subtitle.text}</FieldDescription>
+                                ))}
                             <MsFormField question={question} control={control} />
                         </FieldGroup>
                     </section>

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import type { Story, StoryDefault } from '@ladle/react';
 
-import { type MsFormQuestion, type MsFormSection } from '../types/ms-forms';
+import { type MsFormQuestion, type MsFormSection, type MsRichText } from '../types/ms-forms';
 import { MsForm } from './MsForm';
 import { MsFormError, MsFormSkeleton, MsFormUnavailable } from './MsFormStates';
 import {
@@ -16,8 +16,8 @@ import {
 } from './ms-form-fixtures';
 
 interface AutoSubmitFormProps {
-    title: string;
-    description: string | null;
+    title: MsRichText;
+    description: MsRichText | null;
     sections: MsFormSection[] | undefined;
     questions: MsFormQuestion[];
     submitUrl: string;

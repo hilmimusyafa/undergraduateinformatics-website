@@ -11,6 +11,7 @@ import {
     branchingPayload,
     optionalPayload,
     richPayload,
+    richTextPayload,
     simplePayload,
     toFormProps,
 } from './ms-form-fixtures';
@@ -67,6 +68,28 @@ describe('MsForm', () => {
             .getByRole('heading', { name: 'Form Umpan Balik' })
             .closest('.typeset-article');
         expect(container).toHaveClass('max-w-[37em]');
+    });
+
+    it('renders rich form title, description, section, and question titles', () => {
+        renderForm(toFormProps(richTextPayload));
+
+        expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Form Umpan Balik');
+        expect(screen.getByRole('heading', { level: 1 })).toContainHTML('<b>Umpan</b>');
+        expect(
+            screen.getByText(
+                (_, element) => element?.textContent === 'Bantu kami meningkatkan layanan.'
+            )
+        ).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Jenis Masukan');
+        expect(
+            screen.getByText((_, element) => element?.textContent === 'Pilih satu atau lebih.')
+        ).toBeInTheDocument();
+        expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Aspek yang Dinilai');
+        const questionSubtitle = screen.getByText(
+            (_, element) => element?.textContent === 'Tulis rincian Anda.'
+        );
+        expect(questionSubtitle).toBeInTheDocument();
+        expect(questionSubtitle).toHaveClass('nth-last-2:-mt-1', 'text-base');
     });
 
     it('renders section title and subtitle', () => {

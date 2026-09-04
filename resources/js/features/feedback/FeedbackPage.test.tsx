@@ -34,13 +34,13 @@ function axiosError(status: number, message?: string) {
 
 const formPayload: MsFormPayload = {
     link: 'https://forms.office.com/r/abc123',
-    title: 'Form Umpan Balik Test',
-    description: 'Deskripsi formulir pengujian',
+    title: { text: 'Form Umpan Balik Test' },
+    description: { text: 'Deskripsi formulir pengujian' },
     sections: [
         {
             id: 'section-1',
             title: null,
-            subtitle: 'Pilih cara menyampaikan masukan.',
+            subtitle: { text: 'Pilih cara menyampaikan masukan.' },
             questionIds: ['r1'],
         },
         { id: 'section-2', title: null, subtitle: null, questionIds: ['r2'] },
@@ -49,19 +49,19 @@ const formPayload: MsFormPayload = {
     questions: [
         {
             id: 'r1',
-            title: 'Rahasiakan identitas?',
+            title: { text: 'Rahasiakan identitas?' },
             subtitle: null,
             type: 'choice',
             required: true,
             multiple: false,
             choices: [
-                { value: 'Ya', label: 'Ya', branchTargetId: 'r3' },
-                { value: 'Tidak', label: 'Tidak', branchTargetId: 'r2' },
+                { value: 'Ya', label: { text: 'Ya' }, branchTargetId: 'r3' },
+                { value: 'Tidak', label: { text: 'Tidak' }, branchTargetId: 'r2' },
             ],
         },
         {
             id: 'r2',
-            title: 'Nama Lengkap',
+            title: { text: 'Nama Lengkap' },
             subtitle: null,
             type: 'text',
             required: true,
@@ -70,14 +70,14 @@ const formPayload: MsFormPayload = {
         },
         {
             id: 'r3',
-            title: 'Jenis Masukan',
-            subtitle: 'Pilih salah satu',
+            title: { text: 'Jenis Masukan' },
+            subtitle: { text: 'Pilih salah satu' },
             type: 'choice',
             required: true,
             multiple: false,
             choices: [
-                { value: 'Saran', label: 'Saran', branchTargetId: null },
-                { value: 'Keluhan', label: 'Keluhan', branchTargetId: null },
+                { value: 'Saran', label: { text: 'Saran' }, branchTargetId: null },
+                { value: 'Keluhan', label: { text: 'Keluhan' }, branchTargetId: null },
             ],
         },
     ],
@@ -85,7 +85,7 @@ const formPayload: MsFormPayload = {
 
 const formWithExtraTypes: MsFormPayload = {
     link: 'https://forms.office.com/r/abc123',
-    title: 'Form Tipe Lengkap',
+    title: { text: 'Form Tipe Lengkap' },
     description: null,
     sections: [
         {
@@ -98,19 +98,19 @@ const formWithExtraTypes: MsFormPayload = {
     questions: [
         {
             id: 'q1',
-            title: 'Pilih opsi',
+            title: { text: 'Pilih opsi' },
             subtitle: null,
             type: 'choice',
             required: true,
             multiple: true,
             choices: [
-                { value: 'A', label: 'A', branchTargetId: null },
-                { value: 'B', label: 'B', branchTargetId: null },
+                { value: 'A', label: { text: 'A' }, branchTargetId: null },
+                { value: 'B', label: { text: 'B' }, branchTargetId: null },
             ],
         },
         {
             id: 'q2',
-            title: 'Tanggal Kejadian',
+            title: { text: 'Tanggal Kejadian' },
             subtitle: null,
             type: 'date',
             required: true,
@@ -119,7 +119,7 @@ const formWithExtraTypes: MsFormPayload = {
         },
         {
             id: 'q3',
-            title: 'Catatan',
+            title: { text: 'Catatan' },
             subtitle: null,
             type: 'text',
             required: false,

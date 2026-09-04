@@ -24,7 +24,7 @@ vi.mock('axios', async () => {
 const questions: MsFormQuestion[] = [
     {
         id: 'q1',
-        title: 'Isi Masukan',
+        title: { text: 'Isi Masukan' },
         subtitle: null,
         type: 'text',
         required: true,
