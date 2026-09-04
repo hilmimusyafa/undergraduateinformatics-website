@@ -5,29 +5,26 @@
 @section('content')
     <div class="admin col-md-9">
         <div class="table-top">
-            <h1>Silahkan Tambah, Ganti atau Hapus Informasi yang Tersedia</h1>
-            <hr>
-            @include('partials.Alerts')
-            <div class="d-flex">
-                <div class="col-md">
-                    <a href="{{ route('posts.create') }}">
-                        <button class="btn btn-secondary">
-                            <i class="fa-solid fa-plus"></i> Tambah Informasi
-                        </button>
-                    </a>
-                </div>
-                <div class="col-md-3">
-                    <form method="GET" action="{{ route('posts.index') }}" class='d-flex'>
-                        <input class="form-control" name="search" type="search" placeholder="Cari"
-                            value="{{ request()->get('search') }}" aria-label="Search">
-                        {{-- <a href="#">
+            <div class="posts-toolbar">
+                <h1>Manajemen Informasi</h1>
+                <div class="d-flex">
+                    <div class="col-md">
+                        <a href="{{ route('posts.create') }}">
                             <button class="btn btn-secondary">
-                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <i class="fa-solid fa-plus"></i> Tambah Informasi
                             </button>
-                        </a> --}}
-                    </form>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <form method="GET" action="{{ route('posts.index') }}" class='d-flex'>
+                            <input class="form-control" name="search" type="search" placeholder="Cari"
+                                value="{{ request()->get('search') }}" aria-label="Search">
+                        </form>
+                    </div>
                 </div>
             </div>
+            <hr>
+            @include('partials.Alerts')
         </div>
         <div class="table-admin">
             <table class="table table-striped">
