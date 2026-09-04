@@ -86,9 +86,7 @@
 }
 
 #nprogress .peg {
-    box-shadow:
-        0 0 10px var(--primary),
-        0 0 5px var(--primary);
+    box-shadow: none;
 }
 
 @custom-variant dark (&:is(.dark *));
