@@ -9,6 +9,7 @@ import {
     SUBMIT_LABEL,
     branchingPayload,
     richPayload,
+    richTextPayload,
     simplePayload,
     submitFail,
     submitOk,
@@ -77,6 +78,9 @@ Form.msw = submitOk;
 
 export const Branching: Story = () => <MsForm {...toFormProps(branchingPayload)} />;
 Branching.msw = submitOk;
+
+export const RichText: Story = () => <MsForm {...toFormProps(richTextPayload)} />;
+RichText.msw = submitOk;
 
 export const Loading: Story = () => <MsFormSkeleton />;
 

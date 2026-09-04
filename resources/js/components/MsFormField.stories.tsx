@@ -64,6 +64,45 @@ const checkboxQuestion: MsFormQuestion = {
     ],
 };
 
+const richRadioQuestion: MsFormQuestion = {
+    id: 'q5',
+    title: { text: 'Jenis Masukan' },
+    subtitle: null,
+    type: 'choice',
+    required: true,
+    multiple: false,
+    choices: [
+        { value: 'Saran', label: { text: 'Saran', html: '<b>Saran</b>' }, branchTargetId: null },
+        {
+            value: 'Keluhan',
+            label: { text: 'Keluhan', html: '<u>Keluhan</u>' },
+            branchTargetId: null,
+        },
+    ],
+};
+
+const richCheckboxQuestion: MsFormQuestion = {
+    id: 'q6',
+    title: { text: 'Aspek yang Dinilai' },
+    subtitle: null,
+    type: 'choice',
+    required: false,
+    multiple: true,
+    choices: [
+        {
+            value: 'Akademik',
+            label: { text: 'Akademik', html: '<b>Akademik</b>' },
+            branchTargetId: null,
+        },
+        {
+            value: 'Administrasi',
+            label: { text: 'Administrasi', html: '<i>Administrasi</i>' },
+            branchTargetId: null,
+        },
+        { value: 'Fasilitas', label: { text: 'Fasilitas' }, branchTargetId: null },
+    ],
+};
+
 export default {
     title: 'Microsoft Form/Fields',
 };
@@ -75,3 +114,7 @@ export const DateField: Story = () => control({ questions: [dateQuestion] });
 export const Radio: Story = () => control({ questions: [radioQuestion] });
 
 export const Checkbox: Story = () => control({ questions: [checkboxQuestion] });
+
+export const RichRadio: Story = () => control({ questions: [richRadioQuestion] });
+
+export const RichCheckbox: Story = () => control({ questions: [richCheckboxQuestion] });
