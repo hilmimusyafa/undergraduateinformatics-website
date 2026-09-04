@@ -16,7 +16,7 @@ export function TagsContent({ tags }: { tags: Tag[] }) {
                     <li key={tag.id}>
                         <TextLink
                             variant="underline"
-                            className="no-underline"
+                            className="whitespace-normal no-underline"
                             to="/tags/$slug"
                             params={{ slug: tag.slug }}
                         >
