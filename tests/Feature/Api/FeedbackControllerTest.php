@@ -40,14 +40,16 @@ class FeedbackControllerTest extends TestCase
                 ],
             ],
         ]);
-        $response->assertJsonPath('data.title', 'this is form title');
-        $response->assertJsonPath('data.description', 'this is form subtitle');
+        $response->assertJsonPath('data.title.text', 'this is form title');
+        $response->assertJsonPath('data.title.html', null);
+        $response->assertJsonPath('data.description.text', 'this is form subtitle');
+        $response->assertJsonPath('data.description.html', null);
         $response->assertJsonPath('data.questions.0.type', 'text');
         $response->assertJsonPath('data.questions.1.type', 'date');
         $response->assertJsonPath('data.questions.2.type', 'choice');
         $response->assertJsonPath('data.sections.0.id', 'r5ea034e6b67a462ba2a1ff857fad2490');
         $response->assertJsonPath('data.sections.0.questionIds', ['rd7645a06d5f94664917ff0617f123de3']);
-        $response->assertJsonPath('data.sections.0.subtitle', 'this is section subtitle');
+        $response->assertJsonPath('data.sections.0.subtitle.text', 'this is section subtitle');
         $response->assertJsonPath('data.sections.1.questionIds', ['rb38b17fd578e4dfbb6b32d32f4dfc885']);
         $response->assertJsonPath('data.questions.2.choices.0.branchTargetId', null);
     }
@@ -77,7 +79,8 @@ class FeedbackControllerTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonPath('status', 'success');
         $response->assertJsonPath('data.link', 'https://forms.office.com/r/abc123');
-        $response->assertJsonPath('data.title', 'this is form title');
+        $response->assertJsonPath('data.title.text', 'this is form title');
+        $response->assertJsonPath('data.title.html', null);
     }
 
     public function test_submit_forwards_answers_to_microsoft(): void

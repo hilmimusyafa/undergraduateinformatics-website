@@ -1,0 +1,31 @@
+{
+    "title": "Form Umpan Balik",
+    "description": "Bantu kami meningkatkan layanan.",
+    "formsProRTTitle": "Form <b>Umpan</b> Balik",
+    "formsProRTDescription": "<p>Bantu kami <i>meningkatkan</i> layanan.</p>",
+    "descriptiveQuestions": [
+        {
+            "id": "sec1",
+            "type": "Question.ColumnGroup",
+            "title": "Section Judul",
+            "subtitle": "Subtitle section",
+            "formsProRTQuestionTitle": "Section <u>Judul</u>",
+            "formsProRTSubtitle": "<p>Subtitle <b>section</b></p>",
+            "order": 1
+        }
+    ],
+    "questions": [
+        {
+            "id": "q1",
+            "type": "Question.Choice",
+            "title": "Pilih satu",
+            "subtitle": null,
+            "formsProRTQuestionTitle": "Pilih <b>satu</b>",
+            "formsProRTSubtitle": null,
+            "allowMultipleValues": false,
+            "required": false,
+            "questionInfo": "{\"Choices\":[{\"Description\":\"<b>Opsi 1</b>\"},{\"Description\":\"Opsi 2\"}],\"ChoiceType\":1}",
+            "order": 2
+        }
+    ]
+}
