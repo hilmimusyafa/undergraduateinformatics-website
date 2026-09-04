@@ -27,4 +27,24 @@ describe('ArticleContainer', () => {
             'mt-4'
         );
     });
+
+    it('does not constrain the width by default', () => {
+        render(
+            <ArticleContainer>
+                <p>Konten</p>
+            </ArticleContainer>
+        );
+
+        expect(screen.getByText('Konten').parentElement).not.toHaveClass('max-w-[37em]');
+    });
+
+    it('applies an explicit max-width passed via className', () => {
+        render(
+            <ArticleContainer className="max-w-[37em]">
+                <p>Konten</p>
+            </ArticleContainer>
+        );
+
+        expect(screen.getByText('Konten').parentElement).toHaveClass('max-w-[37em]');
+    });
 });

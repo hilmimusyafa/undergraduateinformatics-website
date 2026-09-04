@@ -153,4 +153,15 @@ describe('TagsPage', () => {
 
         expect(await screen.findByText('Belum ada label.')).toBeInTheDocument();
     });
+
+    it('keeps the constrained article width', async () => {
+        renderPage();
+
+        await screen.findByRole('heading', { name: 'Daftar Label' });
+
+        const container = screen
+            .getByRole('heading', { name: 'Daftar Label' })
+            .closest('.typeset-article');
+        expect(container).toHaveClass('max-w-[37em]');
+    });
 });

@@ -168,7 +168,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     }
 
     return (
-        <ArticleContainer>
+        <ArticleContainer className="max-w-[37em]">
             <form noValidate>
                 <h1>{title}</h1>
                 {description && <p className="text-muted-foreground">{description}</p>}

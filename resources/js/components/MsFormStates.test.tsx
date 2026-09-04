@@ -15,6 +15,12 @@ describe('MsFormSkeleton', () => {
 
         expect(container.querySelectorAll('section')).toHaveLength(2);
     });
+
+    it('keeps the constrained article width', () => {
+        render(<MsFormSkeleton />);
+
+        expect(screen.getByRole('status', { name: /Memuat formulir/ })).toHaveClass('max-w-[37em]');
+    });
 });
 
 describe('MsFormUnavailable', () => {

@@ -62,6 +62,11 @@ describe('MsForm', () => {
             )
         ).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: 'Jenis Masukan' })).toBeInTheDocument();
+
+        const container = screen
+            .getByRole('heading', { name: 'Form Umpan Balik' })
+            .closest('.typeset-article');
+        expect(container).toHaveClass('max-w-[37em]');
     });
 
     it('renders section title and subtitle', () => {

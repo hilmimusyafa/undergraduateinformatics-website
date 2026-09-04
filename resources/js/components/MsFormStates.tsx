@@ -6,7 +6,7 @@ import { FieldGroup } from './ui/field';
 
 export function MsFormSkeleton() {
     return (
-        <ArticleContainer role="status" aria-label="Memuat formulir">
+        <ArticleContainer role="status" aria-label="Memuat formulir" className="max-w-[37em]">
             <h1>
                 <div className="flex flex-col gap-1">
                     <Skeleton className="h-9 w-full" />
@@ -55,7 +55,7 @@ export function MsFormSkeleton() {
 
 export function MsFormUnavailable() {
     return (
-        <ArticleContainer>
+        <ArticleContainer className="max-w-[37em]">
             <p role="status" className="text-muted-foreground">
                 Formulir sedang tidak tersedia. Silakan coba beberapa saat lagi.
             </p>
@@ -65,7 +65,7 @@ export function MsFormUnavailable() {
 
 export function MsFormError() {
     return (
-        <ArticleContainer>
+        <ArticleContainer className="max-w-[37em]">
             <p role="alert" className="text-muted-foreground">
                 Terjadi kesalahan saat memuat formulir. Silakan coba lagi.
             </p>
@@ -79,7 +79,7 @@ interface MsFormSuccessProps {
 
 export function MsFormSuccess({ onReset }: MsFormSuccessProps) {
     return (
-        <ArticleContainer>
+        <ArticleContainer className="max-w-[37em]">
             <h1>Terima kasih!</h1>
             <p className="text-muted-foreground">Formulir Anda telah berhasil dikirim.</p>
             <div className="mt-4.5 md:mt-4">

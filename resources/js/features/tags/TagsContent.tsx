@@ -5,7 +5,7 @@ import { type Tag } from './types';
 
 export function TagsContent({ tags }: { tags: Tag[] }) {
     return (
-        <ArticleContainer>
+        <ArticleContainer className="max-w-[37em]">
             <h1>Daftar Label</h1>
             <p className="text-muted-foreground">
                 Jelajahi informasi Program Studi Sarjana Informatika Telkom University berdasarkan
