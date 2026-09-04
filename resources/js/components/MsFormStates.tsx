@@ -2,37 +2,52 @@ import { ArticleContainer } from '@/components/ArticleContainer';
 import { TextButton } from '@/components/TextButton';
 import { Skeleton } from '@/components/ui/skeleton';
 
-interface MsFormSkeletonProps {
-    questions: number;
-}
+import { FieldGroup } from './ui/field';
 
-export function MsFormSkeleton({ questions }: MsFormSkeletonProps) {
+export function MsFormSkeleton() {
     return (
         <ArticleContainer role="status" aria-label="Memuat formulir">
             <h1>
-                <Skeleton className="h-9 w-full" />
+                <div className="flex flex-col gap-1">
+                    <Skeleton className="h-9 w-full" />
+                    <Skeleton className="h-9 w-full" />
+                    <Skeleton className="h-9 w-full" />
+                </div>
             </h1>
-            <div>
+            <div className="flex flex-col gap-1">
+                <Skeleton className="h-7 w-full" />
+                <Skeleton className="h-7 w-full" />
                 <Skeleton className="h-7 w-full" />
             </div>
             <h2>
                 <Skeleton className="h-7 w-full" />
             </h2>
-            <div>
+            <div className="flex flex-col gap-1">
+                <Skeleton className="h-7 w-full" />
+                <Skeleton className="h-7 w-full" />
+                <Skeleton className="h-7 w-full" />
                 <Skeleton className="h-7 w-full" />
             </div>
-            {Array.from({ length: questions }).map((_, index) => (
-                <section key={index}>
-                    <h3>
-                        <Skeleton className="h-7 w-full" />
-                    </h3>
-                    <div>
-                        <Skeleton className="h-16 w-full" />
-                    </div>
-                </section>
-            ))}
+            <section>
+                <h3>
+                    <Skeleton className="h-7 w-1/2" />
+                </h3>
+                <FieldGroup>
+                    <Skeleton className="h-7 w-1/2" />
+                    <Skeleton className="h-16 w-full" />
+                </FieldGroup>
+            </section>
+            <section>
+                <h3>
+                    <Skeleton className="h-7 w-1/2" />
+                </h3>
+                <FieldGroup>
+                    <Skeleton className="h-7 w-1/2" />
+                    <Skeleton className="h-16 w-full" />
+                </FieldGroup>
+            </section>
             <div className="mt-10 flex items-center gap-2 md:mt-9">
-                <Skeleton className="h-9 w-full" />
+                <Skeleton className="h-9 flex-1 md:w-24 md:flex-none" />
             </div>
         </ArticleContainer>
     );

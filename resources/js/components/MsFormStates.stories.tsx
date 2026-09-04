@@ -6,7 +6,7 @@ export default {
     title: 'Microsoft Form/States',
 };
 
-export const Loading: Story = () => <MsFormSkeleton questions={2} />;
+export const Loading: Story = () => <MsFormSkeleton />;
 
 export const Unavailable: Story = () => <MsFormUnavailable />;
 
