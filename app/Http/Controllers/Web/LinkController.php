@@ -14,17 +14,16 @@ class LinkController extends Controller
     {
         $linksData = app(LinksDataService::class)->getSectionsWithLinks();
 
-        $title = 'Tautan Penting - Portal Informasi Sarjana Informatika';
-        $description = 'Kumpulan tautan penting terkait informasi di Program Studi Sarjana Informatika Telkom University.';
+        $page = PageMeta::page('links');
 
         $jsonLd = [
             '@context' => 'https://schema.org',
             '@type' => 'CollectionPage',
-            'name' => $title,
+            'name' => $page['title'],
             'url' => $request->url(),
-            'description' => $description,
+            'description' => $page['description'],
         ];
 
-        return view('app', PageMeta::viewData($request, $title, $description, $jsonLd, $linksData));
+        return view('app', PageMeta::viewData($request, 'links', $jsonLd, $linksData));
     }
 }

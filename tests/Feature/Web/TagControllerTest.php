@@ -147,6 +147,8 @@ class TagControllerTest extends TestCase
         $response->assertSee('__INITIAL_DATA__');
         $response->assertSee('application/ld+json');
         $response->assertSee('CollectionPage');
+        $response->assertSee('Daftar Label - Portal Informasi Sarjana Informatika', false);
+        $response->assertSee('Jelajahi informasi Program Studi Sarjana Informatika Telkom University berdasarkan label.', false);
 
         preg_match('/window\.__INITIAL_DATA__ = (\{.*?\});/s', $response->getContent(), $matches);
         $this->assertNotEmpty($matches, 'Initial data script tag not found');

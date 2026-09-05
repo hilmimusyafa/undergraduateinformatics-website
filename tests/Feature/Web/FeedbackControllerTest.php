@@ -59,5 +59,6 @@ class FeedbackControllerTest extends TestCase
         $response->assertSee('property="og:title"', false);
         $response->assertSee('property="og:description"', false);
         $response->assertSee('application/ld+json', false);
+        $response->assertSee('Berikan masukan dan evaluasi layanan untuk Program Studi Sarjana Informatika Telkom University melalui formulir.', false);
     }
 }

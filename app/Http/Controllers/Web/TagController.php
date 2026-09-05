@@ -14,17 +14,16 @@ class TagController extends Controller
     {
         $tagsData = app(TagsDataService::class)->resolve();
 
-        $title = 'Daftar Label - Portal Informasi Sarjana Informatika';
-        $description = 'Jelajahi informasi Program Studi Sarjana Informatika Telkom University berdasarkan label.';
+        $page = PageMeta::page('tags');
 
         $jsonLd = [
             '@context' => 'https://schema.org',
             '@type' => 'CollectionPage',
-            'name' => $title,
+            'name' => $page['title'],
             'url' => $request->url(),
-            'description' => $description,
+            'description' => $page['description'],
         ];
 
-        return view('app', PageMeta::viewData($request, $title, $description, $jsonLd, $tagsData));
+        return view('app', PageMeta::viewData($request, 'tags', $jsonLd, $tagsData));
     }
 }

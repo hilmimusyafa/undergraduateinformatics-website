@@ -8,6 +8,7 @@ use App\Models\ImportantSection;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\TagResource;
 use App\Http\Resources\SectionResource;
+use App\Support\PageMeta;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -26,17 +27,7 @@ class HomePageController extends Controller
             'description' => $initialData['description'],
         ];
 
-        return view('app', [
-            'title' => $initialData['title'],
-            'description' => $initialData['description'],
-            'siteName' => $initialData['siteName'],
-            'ogTitle' => $initialData['title'],
-            'ogDescription' => $initialData['description'],
-            'ogImage' => url('/images/banner.jpg'),
-            'ogUrl' => $request->url(),
-            'jsonLd' => $jsonLd,
-            'initialData' => $initialData
-        ]);
+return view('app', PageMeta::viewData($request, 'home', $jsonLd, $initialData));
     }
 
     public function apiIndex(): JsonResponse
@@ -51,13 +42,15 @@ class HomePageController extends Controller
         $posts = Post::with('tags')->latest()->get();
         $sections = ImportantSection::orderBy('order_number')->get();
 
+        $seo = PageMeta::page('home');
+
         return [
-            'title' => 'Beranda - Portal Informasi Sarjana Informatika',
-            'description' => 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan informasi perkuliahan.',
-            'siteName' => 'Telkom University',
+            'title' => $seo['title'],
+            'description' => $seo['description'],
+            'siteName' => PageMeta::load()['siteName'],
             'tags' => TagResource::collection($tags)->resolve(),
             'posts' => PostResource::collection($posts)->resolve(),
-            'sections' => SectionResource::collection($sections)->resolve()
+            'sections' => SectionResource::collection($sections)->resolve(),
         ];
     }
 }

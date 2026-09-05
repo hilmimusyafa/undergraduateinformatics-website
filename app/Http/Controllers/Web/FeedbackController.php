@@ -30,18 +30,17 @@ class FeedbackController extends Controller
             $initialData = ['link' => $feedbackLink?->link];
         }
 
-        $title = 'Masukan - Portal Informasi Sarjana Informatika';
-        $description = 'Sampaikan masukan Anda melalui formulir umpan balik Program Studi Sarjana Informatika Telkom University.';
+        $page = PageMeta::page('feedback');
 
         $jsonLd = [
             '@context' => 'https://schema.org',
             '@type' => 'WebPage',
-            'name' => $title,
+            'name' => $page['title'],
             'url' => $request->url(),
-            'description' => $description,
+            'description' => $page['description'],
         ];
 
-        return view('app', PageMeta::viewData($request, $title, $description, $jsonLd, [
+        return view('app', PageMeta::viewData($request, 'feedback', $jsonLd, [
             'status' => 'success',
             'data' => $initialData,
         ]));
