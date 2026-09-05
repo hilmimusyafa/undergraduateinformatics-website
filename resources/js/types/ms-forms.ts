@@ -2,7 +2,7 @@ export type MsFormBranchTarget = string | 'end' | null;
 
 export interface MsRichText {
     text: string;
-    html?: string | null;
+    html?: string;
 }
 
 export interface MsFormChoice {

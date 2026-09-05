@@ -19,20 +19,20 @@ final class FormDefinitionNormalizerTest extends TestCase
         $this->assertSame([
             [
                 'id' => 'p1',
-                'title' => ['text' => 'Kerahasiaan Identitas', 'html' => null],
-                'subtitle' => ['text' => 'Pilih cara Anda menyampaikan masukan.', 'html' => null],
+                'title' => ['text' => 'Kerahasiaan Identitas'],
+                'subtitle' => ['text' => 'Pilih cara Anda menyampaikan masukan.'],
                 'questionIds' => ['q1'],
             ],
             [
                 'id' => 'p2',
-                'title' => ['text' => 'IDENTITAS', 'html' => null],
-                'subtitle' => ['text' => 'Isi identitas agar dapat ditindaklanjuti.', 'html' => null],
+                'title' => ['text' => 'IDENTITAS'],
+                'subtitle' => ['text' => 'Isi identitas agar dapat ditindaklanjuti.'],
                 'questionIds' => ['q2'],
             ],
             [
                 'id' => 'p3',
-                'title' => ['text' => 'PENGADUAN', 'html' => null],
-                'subtitle' => ['text' => 'Sampaikan masukan Anda di sini.', 'html' => null],
+                'title' => ['text' => 'PENGADUAN'],
+                'subtitle' => ['text' => 'Sampaikan masukan Anda di sini.'],
                 'questionIds' => ['q3'],
             ],
         ], $result['sections']);
@@ -55,18 +55,18 @@ final class FormDefinitionNormalizerTest extends TestCase
 
         $result = (new FormDefinitionNormalizer)->normalize($raw);
 
-        $this->assertSame(['text' => 'this is form title', 'html' => null], $result['title']);
+        $this->assertSame(['text' => 'this is form title'], $result['title']);
 
         $this->assertSame([
             [
                 'id' => 'r5ea034e6b67a462ba2a1ff857fad2490',
-                'title' => ['text' => 'this is section title', 'html' => null],
-                'subtitle' => ['text' => 'this is section subtitle', 'html' => null],
+                'title' => ['text' => 'this is section title'],
+                'subtitle' => ['text' => 'this is section subtitle'],
                 'questionIds' => ['rd7645a06d5f94664917ff0617f123de3'],
             ],
             [
                 'id' => 'r988954e7af514c56b64d4d9fc107b58d',
-                'title' => ['text' => 'this is the next section title that doesnt have subtitle', 'html' => null],
+                'title' => ['text' => 'this is the next section title that doesnt have subtitle'],
                 'subtitle' => null,
                 'questionIds' => ['rb38b17fd578e4dfbb6b32d32f4dfc885'],
             ],
@@ -84,8 +84,8 @@ final class FormDefinitionNormalizerTest extends TestCase
 
         $choice = $result['questions'][2];
         $this->assertSame(['Option 1', 'Option 2'], array_column($choice['choices'], 'value'));
-        $this->assertSame(['text' => 'Option 1', 'html' => null], $choice['choices'][0]['label']);
-        $this->assertSame(['text' => 'Option 2', 'html' => null], $choice['choices'][1]['label']);
+        $this->assertSame(['text' => 'Option 1'], $choice['choices'][0]['label']);
+        $this->assertSame(['text' => 'Option 2'], $choice['choices'][1]['label']);
         $this->assertNull($choice['choices'][0]['branchTargetId']);
         $this->assertArrayNotHasKey('branchInfo', $choice['choices'][0]);
     }
@@ -160,7 +160,7 @@ final class FormDefinitionNormalizerTest extends TestCase
             ['text' => 'Opsi 1', 'html' => '<b>Opsi 1</b>'],
             $result['questions'][0]['choices'][0]['label']
         );
-        $this->assertSame(['text' => 'Opsi 2', 'html' => null], $result['questions'][0]['choices'][1]['label']);
+        $this->assertSame(['text' => 'Opsi 2'], $result['questions'][0]['choices'][1]['label']);
         $this->assertSame('<b>Opsi 1</b>', $result['questions'][0]['choices'][0]['value']);
     }
 
@@ -175,9 +175,9 @@ final class FormDefinitionNormalizerTest extends TestCase
 
         $result = (new FormDefinitionNormalizer)->normalize($raw);
 
-        $this->assertSame(['text' => 'T', 'html' => null], $result['title']);
+        $this->assertSame(['text' => 'T'], $result['title']);
         $this->assertNull($result['description']);
-        $this->assertSame(['text' => 'A', 'html' => null], $result['questions'][0]['title']);
+        $this->assertSame(['text' => 'A'], $result['questions'][0]['title']);
         $this->assertNull($result['questions'][0]['subtitle']);
     }
 }

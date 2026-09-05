@@ -23,10 +23,14 @@ final class FormDefinitionNormalizer
             return null;
         }
 
-        return [
-            'text' => $plain,
-            'html' => $this->sanitizer->sanitizeRich($rich),
-        ];
+        $result = ['text' => $plain];
+        $html = $this->sanitizer->sanitizeRich($rich);
+
+        if ($html !== null) {
+            $result['html'] = $html;
+        }
+
+        return $result;
     }
 
     public function normalize(array $raw): array
@@ -210,12 +214,16 @@ final class FormDefinitionNormalizer
                     continue;
                 }
 
+                $label = ['text' => trim(strip_tags($description))];
+                $labelHtml = $this->sanitizer->sanitizeRich($description);
+
+                if ($labelHtml !== null) {
+                    $label['html'] = $labelHtml;
+                }
+
                 $result['choices'][] = [
                     'value' => $description,
-                    'label' => [
-                        'text' => trim(strip_tags($description)),
-                        'html' => $this->sanitizer->sanitizeRich($description),
-                    ],
+                    'label' => $label,
                     'branchInfo' => $choice['BranchInfo'] ?? null,
                 ];
             }

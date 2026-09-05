@@ -7,13 +7,20 @@ use HTMLPurifier_Config;
 
 final class RichTextSanitizer
 {
+    private const ALLOWED_TAGS = ['b', 'strong', 'i', 'em', 'u', 'span', 'ul', 'ol', 'li', 'br', 'div', 'p', 'a'];
+
     private HTMLPurifier $purifier;
 
     public function __construct()
     {
         $config = HTMLPurifier_Config::createDefault();
 
-        $config->set('HTML.Allowed', 'b,strong,i,em,u,span,ul,ol,li,br,div,p,a[href]');
+        $allowed = implode(',', array_map(
+            static fn (string $tag): string => $tag === 'a' ? 'a[href]' : $tag,
+            self::ALLOWED_TAGS
+        ));
+
+        $config->set('HTML.Allowed', $allowed);
         $config->set('HTML.TargetBlank', true);
         $config->set('Attr.AllowedRel', ['noopener', 'noreferrer']);
         $config->set('AutoFormat.AutoParagraph', false);
@@ -49,7 +56,7 @@ final class RichTextSanitizer
 
     public function isRich(string $html): bool
     {
-        return preg_match('#<(b|strong|i|em|u|span|ul|ol|li|br|div|p|a)(\s|>)#i', $html) === 1;
+        return preg_match('#<(' . implode('|', self::ALLOWED_TAGS) . ')(\s|>)#i', $html) === 1;
     }
 
     private function unwrapSingleBlockWrapper(string $html): string
