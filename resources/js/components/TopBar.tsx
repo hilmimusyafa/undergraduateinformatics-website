@@ -49,7 +49,7 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
                             to="/"
                             className={cn(
                                 buttonVariants({ variant: 'default' }),
-                                'ml-3 h-auto px-3 py-1.5 text-base font-semibold'
+                                'ml-3 h-auto px-3 py-1.5 text-base'
                             )}
                         >
                             Masuk
