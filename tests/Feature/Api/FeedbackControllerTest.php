@@ -19,6 +19,7 @@ class FeedbackControllerTest extends TestCase
         parent::setUp();
         Http::preventStrayRequests();
         Http::fake($this->microsoftEndpoints());
+        FeedbackLink::create(['link' => 'https://forms.office.com/r/abc123']);
     }
 
     public function test_form_returns_normalized_definition(): void
