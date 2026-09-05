@@ -222,7 +222,7 @@ final class FormDefinitionNormalizer
                 }
 
                 $result['choices'][] = [
-                    'value' => $description,
+                    'value' => $label['text'],
                     'label' => $label,
                     'branchInfo' => $choice['BranchInfo'] ?? null,
                 ];
