@@ -161,7 +161,7 @@ final class FormDefinitionNormalizerTest extends TestCase
             $result['questions'][0]['choices'][0]['label']
         );
         $this->assertSame(['text' => 'Opsi 2'], $result['questions'][0]['choices'][1]['label']);
-        $this->assertSame('Opsi 1', $result['questions'][0]['choices'][0]['value']);
+        $this->assertSame('<b>Opsi 1</b>', $result['questions'][0]['choices'][0]['value']);
     }
 
     public function test_falls_back_to_plain_text_when_rich_source_missing(): void
