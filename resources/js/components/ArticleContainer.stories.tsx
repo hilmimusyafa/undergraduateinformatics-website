@@ -7,7 +7,7 @@ export default {
 } satisfies StoryDefault;
 
 export const Default: Story = () => (
-    <ArticleContainer className="max-w-[37em]">
+    <ArticleContainer>
         <h1>Artikel</h1>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor

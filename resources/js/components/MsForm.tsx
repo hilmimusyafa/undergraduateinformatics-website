@@ -175,7 +175,7 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     }
 
     return (
-        <ArticleContainer className="max-w-[37em]">
+        <ArticleContainer>
             <form noValidate>
                 <h1>
                     <RichTextContent content={title} as="span" />

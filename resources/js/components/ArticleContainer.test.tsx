@@ -28,23 +28,24 @@ describe('ArticleContainer', () => {
         );
     });
 
-    it('does not constrain the width by default', () => {
+    it('constrains the width to 37em by default', () => {
         render(
             <ArticleContainer>
                 <p>Konten</p>
             </ArticleContainer>
         );
 
-        expect(screen.getByText('Konten').parentElement).not.toHaveClass('max-w-[37em]');
+        expect(screen.getByText('Konten').parentElement).toHaveClass('max-w-[37em]');
     });
 
-    it('applies an explicit max-width passed via className', () => {
+    it('allows callers to override the default max-width', () => {
         render(
-            <ArticleContainer className="max-w-[37em]">
+            <ArticleContainer className="max-w-xl">
                 <p>Konten</p>
             </ArticleContainer>
         );
 
-        expect(screen.getByText('Konten').parentElement).toHaveClass('max-w-[37em]');
+        expect(screen.getByText('Konten').parentElement).toHaveClass('max-w-xl');
+        expect(screen.getByText('Konten').parentElement).not.toHaveClass('max-w-[37em]');
     });
 });

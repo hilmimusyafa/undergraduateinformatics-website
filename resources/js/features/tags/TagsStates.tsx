@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export function TagsSkeleton() {
     return (
-        <ArticleContainer role="status" aria-label="Memuat daftar label" className="max-w-[37em]">
+        <ArticleContainer role="status" aria-label="Memuat daftar label">
             <h1>
                 <Skeleton className="h-9 w-1/2" />
             </h1>
@@ -28,7 +28,7 @@ export function TagsSkeleton() {
 
 export function TagsEmpty() {
     return (
-        <ArticleContainer className="max-w-[37em]">
+        <ArticleContainer>
             <p role="status" className="text-muted-foreground">
                 Belum ada label.
             </p>
@@ -38,7 +38,7 @@ export function TagsEmpty() {
 
 export function TagsError() {
     return (
-        <ArticleContainer className="max-w-[37em]">
+        <ArticleContainer>
             <p role="alert" className="text-muted-foreground">
                 Terjadi kesalahan saat memuat halaman. Silakan coba lagi.
             </p>
