@@ -113,7 +113,7 @@ class PostController extends Controller
             $request->image->move($pathPublic, $imageName);
             $post->image = "images/posts/".$imageName;
         } else {
-            $post->image = "images/placeholder.png";
+            $post->image = null;
         }
 
         // Update record in database
@@ -205,7 +205,7 @@ class PostController extends Controller
             $pathPublic = app()->make('path.public');
             File::delete($pathPublic . "/".$post->image);
             
-            $post->image = "images/placeholder.png";
+            $post->image = null;
         }
 
         // Delete previous PostTag data 
