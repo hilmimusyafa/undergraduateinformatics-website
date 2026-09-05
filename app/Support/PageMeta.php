@@ -20,7 +20,7 @@ final class PageMeta
             'siteName' => 'Telkom University',
             'ogTitle' => $title,
             'ogDescription' => $description,
-            'ogImage' => $ogImage ?? url('/images/banner.png'),
+            'ogImage' => $ogImage ?? url('/images/banner.jpg'),
             'ogUrl' => $request->url(),
             'jsonLd' => $jsonLd,
             'initialData' => $initialData,
