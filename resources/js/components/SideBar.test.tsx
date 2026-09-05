@@ -32,7 +32,7 @@ describe('SideBar', () => {
             'href',
             '/reservation'
         );
-        expect(screen.getByRole('link', { name: 'Masuk' })).toHaveAttribute('href', '/reservation');
+        expect(screen.getByRole('link', { name: 'Masuk' })).toHaveAttribute('href', '/admin/login');
     });
 
     it('renders a search bar', () => {

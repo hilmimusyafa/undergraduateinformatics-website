@@ -45,15 +45,15 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
                             </NavItem>
                             <SearchBar />
                         </div>
-                        <Link
-                            to="/"
+                        <a
+                            href="/admin/login"
                             className={cn(
                                 buttonVariants({ variant: 'default' }),
                                 'ml-3 h-auto px-3 py-1.5 text-base'
                             )}
                         >
                             Masuk
-                        </Link>
+                        </a>
                     </div>
                 </div>
 

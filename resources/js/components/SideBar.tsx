@@ -1,5 +1,7 @@
+import { cn } from '../lib/utils';
 import { NavItem } from './NavItem';
 import { SearchBar } from './SearchBar';
+import { buttonVariants } from './ui/button';
 
 interface SideBarProps {
     isOpen: boolean;
@@ -46,9 +48,16 @@ export function SideBar({ isOpen, onClose }: SideBarProps) {
                     </div>
                     <hr className="border-border mx-6 my-2 border-t" />
                     <div className="mx-3 my-0.5">
-                        <NavItem variant="side" to="/reservation" onClick={onClose}>
+                        <a
+                            href="/admin/login"
+                            onClick={onClose}
+                            className={cn(
+                                buttonVariants({ variant: 'ghost' }),
+                                'text-muted-foreground active:bg-muted h-auto w-full justify-start py-3.5 pr-0 pl-3 text-base'
+                            )}
+                        >
                             Masuk
-                        </NavItem>
+                        </a>
                     </div>
                 </div>
             </div>

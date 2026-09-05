@@ -42,7 +42,7 @@ describe('TopBar', () => {
     it('renders the sign-in link', () => {
         render(<TopBar isSidebarOpen={false} onToggleSidebar={() => undefined} />);
 
-        expect(screen.getByRole('link', { name: 'Masuk' })).toHaveAttribute('href', '/');
+        expect(screen.getByRole('link', { name: 'Masuk' })).toHaveAttribute('href', '/admin/login');
     });
 
     it('renders the sidebar toggle button on small screens', () => {
