@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { usePageData } from '../../hooks/usePageData';
+import { seoPage } from '../../lib/seo';
 
 export interface HomePagePayload {
     title?: string;
@@ -16,13 +17,14 @@ export const Route = createFileRoute('/_site/')({
 
 function HomePage() {
     const { data } = usePageData<HomePagePayload>('/api/home');
+    const { title, description } = seoPage('home');
 
     return (
         <div className="space-y-4">
             {data && (
                 <>
-                    {data.title && <title>{data.title}</title>}
-                    {data.description && <meta name="description" content={data.description} />}
+                    <title>{data.title ?? title}</title>
+                    <meta name="description" content={data.description ?? description} />
                 </>
             )}
             <h1 className="text-primary text-4xl font-extrabold">Hello World</h1>

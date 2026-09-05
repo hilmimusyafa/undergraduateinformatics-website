@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { seoPage } from '@/lib/seo';
+
 import { Route } from './tags';
 
 describe('tags route', () => {
@@ -11,7 +13,7 @@ describe('tags route', () => {
         expect(head).toBeDefined();
 
         const result = head({});
-        expect(result.meta?.[0]?.title).toBe('Daftar Label - Portal Informasi Sarjana Informatika');
+        expect(result.meta?.[0]?.title).toBe(seoPage('tags').title);
     });
 
     it('sets the page description via the head option', () => {
@@ -21,9 +23,7 @@ describe('tags route', () => {
 
         const result = head({});
         const description = result.meta?.find((entry) => entry.name === 'description');
-        expect(description?.content).toBe(
-            'Jelajahi informasi Program Studi Sarjana Informatika Telkom University berdasarkan label.'
-        );
+        expect(description?.content).toBe(seoPage('tags').description);
     });
 
     it('keeps the tags index page as its component', () => {

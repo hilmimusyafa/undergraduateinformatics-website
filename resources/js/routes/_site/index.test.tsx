@@ -71,4 +71,21 @@ describe('HomePage route', () => {
             ).toBe('Sumber informasi resmi.');
         });
     });
+
+    it('falls back to the shared home meta when the payload omits it', async () => {
+        vi.mocked(axios.get).mockResolvedValue({
+            data: {} as HomePagePayload,
+        });
+
+        renderHome();
+
+        await waitFor(() => {
+            expect(document.title).toBe('Beranda - Portal Informasi Sarjana Informatika');
+            expect(
+                document.querySelector('meta[name="description"]')?.getAttribute('content')
+            ).toBe(
+                'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan informasi perkuliahan.'
+            );
+        });
+    });
 });

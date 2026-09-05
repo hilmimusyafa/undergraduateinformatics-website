@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { seoPage } from '@/lib/seo';
+
 import { Route } from './feedback';
 import { Route as LazyRoute } from './feedback.lazy';
 
@@ -12,7 +14,7 @@ describe('feedback route', () => {
         expect(head).toBeDefined();
 
         const result = head({});
-        expect(result.meta?.[0]?.title).toBe('Masukan - Portal Informasi Sarjana Informatika');
+        expect(result.meta?.[0]?.title).toBe(seoPage('feedback').title);
     });
 
     it('sets the page description via the head option', () => {
@@ -22,9 +24,7 @@ describe('feedback route', () => {
 
         const result = head({});
         const description = result.meta?.find((entry) => entry.name === 'description');
-        expect(description?.content).toBe(
-            'Berikan masukan dan evaluasi layanan untuk Program Studi Sarjana Informatika Telkom University melalui formulir.'
-        );
+        expect(description?.content).toBe(seoPage('feedback').description);
     });
 
     it('provides the feedback page via the lazy route', () => {
