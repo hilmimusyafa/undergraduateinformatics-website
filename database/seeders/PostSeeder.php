@@ -42,13 +42,13 @@ class PostSeeder extends Seeder
             'Timeline Tugas Akhir',
         ];
 
-        foreach ($titles as $title) {
+        foreach ($titles as $index => $title) {
             Post::updateOrCreate(
                 ['title' => $title],
                 [
                     'subtitle' => $title,
                     'body' => "<p>{$title}</p>",
-                    'image' => 'images/placeholder.png',
+                    'image' => $index % 2 === 0 ? 'images/placeholder.png' : null,
                 ]
             );
         }
