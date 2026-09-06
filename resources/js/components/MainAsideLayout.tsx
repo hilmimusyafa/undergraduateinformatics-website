@@ -3,33 +3,26 @@ import { type ComponentProps, type ReactNode } from 'react';
 import { ArticleContainer } from '@/components/ArticleContainer';
 import { cn } from '@/lib/utils';
 
-interface LinksLayoutProps extends ComponentProps<'div'> {
+interface MainAsideLayoutProps extends ComponentProps<'div'> {
     mainContent: ReactNode;
     asideContent: ReactNode;
     asideClassName?: string;
 }
 
-export function LinksLayout({
+export function MainAsideLayout({
     mainContent,
     asideContent,
     asideClassName,
     ...wrapperProps
-}: LinksLayoutProps) {
+}: MainAsideLayoutProps) {
     return (
         <div
             className="lg:mx-auto lg:flex lg:w-full lg:max-w-4xl lg:justify-between"
             {...wrapperProps}
         >
             <ArticleContainer className="max-w-[37em] lg:mx-0">{mainContent}</ArticleContainer>
-            <aside className="hidden lg:block">
-                <div
-                    className={cn(
-                        'mt-10 max-w-3xs scrollbar-none md:mt-9 lg:sticky lg:top-27 lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto',
-                        asideClassName
-                    )}
-                >
-                    {asideContent}
-                </div>
+            <aside className="hidden w-full lg:block lg:max-w-3xs">
+                <div className={cn('mt-10 md:mt-9 lg:h-full', asideClassName)}>{asideContent}</div>
             </aside>
         </div>
     );

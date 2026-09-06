@@ -2,10 +2,10 @@ import type { Story, StoryDefault } from '@ladle/react';
 
 import { RouterHarness } from '@/components/RouterHarness';
 
-import { TagsContent } from './TagsContent';
-import { type Tag } from './types';
+import { TagListContent } from './TagListContent';
+import { type TagWithCount } from './types';
 
-const tagsFixture: Tag[] = [
+const tagsFixture: TagWithCount[] = [
     {
         id: 1,
         slug: 's1-informatika',
@@ -36,6 +36,12 @@ export default {
 
 export const List: Story = () => (
     <RouterHarness>
-        <TagsContent tags={tagsFixture} />
+        <TagListContent tags={tagsFixture} />
+    </RouterHarness>
+);
+
+export const Empty: Story = () => (
+    <RouterHarness>
+        <TagListContent tags={[]} />
     </RouterHarness>
 );

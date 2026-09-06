@@ -15,6 +15,7 @@ class TagResource extends JsonResource
             'name' => $this->name,
             'description' => $this->description,
             'posts_count' => $this->whenCounted('posts'),
+            'posts' => PostSummaryResource::collection($this->whenLoaded('posts')),
         ];
     }
 }

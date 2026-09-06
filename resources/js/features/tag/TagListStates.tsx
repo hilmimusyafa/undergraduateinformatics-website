@@ -1,7 +1,7 @@
 import { ArticleContainer } from '@/components/ArticleContainer';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export function TagsSkeleton() {
+export function TagListSkeleton() {
     return (
         <ArticleContainer role="status" aria-label="Memuat daftar topik">
             <h1>
@@ -22,26 +22,6 @@ export function TagsSkeleton() {
                     </li>
                 ))}
             </ul>
-        </ArticleContainer>
-    );
-}
-
-export function TagsEmpty() {
-    return (
-        <ArticleContainer>
-            <p role="status" className="text-muted-foreground">
-                Belum ada topik.
-            </p>
-        </ArticleContainer>
-    );
-}
-
-export function TagsError() {
-    return (
-        <ArticleContainer>
-            <p role="alert" className="text-muted-foreground">
-                Terjadi kesalahan saat memuat halaman. Silakan coba lagi.
-            </p>
         </ArticleContainer>
     );
 }

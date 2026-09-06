@@ -136,10 +136,10 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slugOrId)
     {
         // Fetch targeted post data
-        $post = Post::findOrFail($id);
+        $post = Post::whereSlugOrId($slugOrId)->firstOrFail();
 
         // Return post detail view with data
         return view("PostPage", [

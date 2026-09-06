@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Tag;
 use App\Models\PostTag;
 use App\Models\Post;
+use App\Services\Tags\TagsDataService;
+use App\Support\PageMeta;
+use Illuminate\View\View;
 
 class TagController extends Controller
 {
@@ -85,15 +88,24 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $slug)
+    public function show(Request $request, string $slugOrId): View
     {
-        // Fetch targeted tag data
-        $tag = Tag::whereSlugOrId($slug)->firstOrFail();
+        $tagData = app(TagsDataService::class)->resolveDetail($slugOrId);
 
-        // Return tag details view with data
-        return view("TagPage", [
-            'tag' => $tag
-        ]);
+        $tag = $tagData['data'];
+
+        $title = $tag['name'] . ' - Portal Informasi Sarjana Informatika';
+        $description = $tag['description'] ?? '';
+
+        $jsonLd = [
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            'name' => $title,
+            'url' => $request->url(),
+            'description' => $description,
+        ];
+
+        return view('app', PageMeta::viewData($request, 'tagDetail', $jsonLd, $tagData, $title, $description));
     }
 
     /**

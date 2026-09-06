@@ -158,18 +158,38 @@ class TagControllerTest extends TestCase
         $this->assertSame(0, $initialData['data'][0]['posts_count']);
     }
 
-    public function test_web_tag_detail_route_renders_by_slug(): void
+    public function test_web_tag_detail_route_renders_app_with_initial_data_and_seo_tags(): void
     {
         $tag = Tag::create([
             'name' => 'Beasiswa',
             'description' => 'Info beasiswa',
         ]);
 
+        $post = Post::create([
+            'title' => 'Pendaftaran Beasiswa 2026',
+            'subtitle' => 'Periode baru dibuka',
+            'body' => '<p>Detail.</p>',
+            'image' => 'images/placeholder.png',
+        ]);
+        $tag->posts()->attach($post);
+
         $response = $this->get('/tags/beasiswa');
 
         $response->assertStatus(200);
-        $response->assertViewIs('TagPage');
-        $response->assertSee('Beasiswa');
+        $response->assertViewIs('app');
+        $response->assertViewHas('initialData');
+        $response->assertSee('__INITIAL_DATA__');
+        $response->assertSee('application/ld+json');
+        $response->assertSee('CollectionPage');
+
+        preg_match('/window\.__INITIAL_DATA__ = (\{.*?\});/s', $response->getContent(), $matches);
+        $this->assertNotEmpty($matches, 'Initial data script tag not found');
+        $initialData = json_decode($matches[1], true);
+        $this->assertSame('success', $initialData['status']);
+        $this->assertSame('Beasiswa', $initialData['data']['name']);
+        $this->assertSame('Pendaftaran Beasiswa 2026', $initialData['data']['posts'][0]['title']);
+        $this->assertSame('pendaftaran-beasiswa-2026', $initialData['data']['posts'][0]['slug']);
+        $this->assertSame('beasiswa', $initialData['data']['posts'][0]['tags'][0]['slug']);
     }
 
     public function test_web_tag_detail_route_resolves_by_id_for_backward_compatibility(): void
@@ -182,6 +202,7 @@ class TagControllerTest extends TestCase
         $response = $this->get('/tags/' . $tag->id);
 
         $response->assertStatus(200);
+        $response->assertViewIs('app');
         $response->assertSee('Beasiswa');
     }
 
@@ -190,5 +211,126 @@ class TagControllerTest extends TestCase
         $response = $this->get('/tags/tidak-ada');
 
         $response->assertStatus(404);
+    }
+
+    public function test_api_tag_detail_returns_tag_with_posts(): void
+    {
+        $tag = Tag::create([
+            'name' => 'Beasiswa',
+            'description' => 'Info beasiswa',
+        ]);
+
+        $post = Post::create([
+            'title' => 'Pendaftaran Beasiswa 2026',
+            'subtitle' => 'Periode baru dibuka',
+            'body' => '<p>Detail.</p>',
+            'image' => 'images/placeholder.png',
+        ]);
+        $tag->posts()->attach($post);
+
+        $response = $this->getJson('/api/tags/beasiswa');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('status', 'success');
+        $response->assertJsonStructure([
+            'status',
+            'data' => [
+                'id',
+                'slug',
+                'name',
+                'description',
+                'posts' => [
+                    '*' => [
+                        'id',
+                        'slug',
+                        'title',
+                        'subtitle',
+                        'updated_at',
+                        'tags' => ['*' => ['id', 'slug', 'name']],
+                    ],
+                ],
+            ],
+        ]);
+        $response->assertJsonPath('data.slug', 'beasiswa');
+        $response->assertJsonPath('data.name', 'Beasiswa');
+        $response->assertJsonCount(1, 'data.posts');
+        $response->assertJsonPath('data.posts.0.title', 'Pendaftaran Beasiswa 2026');
+        $response->assertJsonPath('data.posts.0.slug', $post->slug);
+        $response->assertJsonPath('data.posts.0.tags.0.slug', 'beasiswa');
+        $response->assertJsonPath('data.posts.0.updated_at', $post->updated_at->toIso8601String());
+        $this->assertArrayNotHasKey('image', $response->json('data.posts.0'));
+        $this->assertArrayNotHasKey('posts_count', $response->json('data'));
+        $this->assertArrayNotHasKey('body', $response->json('data.posts.0'));
+        $this->assertArrayNotHasKey('description', $response->json('data.posts.0.tags.0'));
+        $this->assertArrayNotHasKey('posts_count', $response->json('data.posts.0.tags.0'));
+    }
+
+    public function test_api_tag_detail_returns_empty_posts_when_tag_has_no_posts(): void
+    {
+        Tag::create([
+            'name' => 'Akademik',
+            'description' => 'Info akademik',
+        ]);
+
+        $response = $this->getJson('/api/tags/akademik');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('status', 'success');
+        $response->assertJsonPath('data.posts', []);
+    }
+
+    public function test_api_tag_detail_returns_404_for_unknown_slug(): void
+    {
+        $response = $this->getJson('/api/tags/tidak-ada');
+
+        $response->assertStatus(404);
+        $response->assertJsonPath('status', 'error');
+        $response->assertJsonPath('message', 'Tag not found');
+    }
+
+    public function test_api_tag_detail_resolves_by_numeric_id(): void
+    {
+        $tag = Tag::create([
+            'name' => 'Beasiswa',
+            'description' => 'Info beasiswa',
+        ]);
+
+        $response = $this->getJson('/api/tags/' . $tag->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('status', 'success');
+        $response->assertJsonPath('data.slug', 'beasiswa');
+    }
+
+    public function test_api_tag_detail_orders_posts_by_newest_updated_at(): void
+    {
+        $tag = Tag::create([
+            'name' => 'Akademik',
+            'description' => 'Info akademik',
+        ]);
+
+        $olderPost = Post::create([
+            'title' => 'Pengumuman Lama',
+            'subtitle' => 'Subtitle lama',
+            'body' => '<p>Konten lama.</p>',
+            'image' => 'images/placeholder.png',
+            'created_at' => now()->subDays(10),
+            'updated_at' => now()->subDays(5),
+        ]);
+        $newerPost = Post::create([
+            'title' => 'Pengumuman Baru',
+            'subtitle' => 'Subtitle baru',
+            'body' => '<p>Konten baru.</p>',
+            'image' => 'images/placeholder.png',
+            'created_at' => now()->subDays(2),
+            'updated_at' => now()->subDay(),
+        ]);
+        $tag->posts()->attach([$olderPost->id, $newerPost->id]);
+
+        $response = $this->getJson('/api/tags/akademik');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('data.posts.0.title', 'Pengumuman Baru');
+        $response->assertJsonPath('data.posts.1.title', 'Pengumuman Lama');
     }
 }

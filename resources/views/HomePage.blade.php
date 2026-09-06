@@ -24,7 +24,7 @@
                             @forelse($data->posts->sortByDesc('updated_at')->slice(0, 3) as $key => $post)
                                 <div class="col-md-4 card-holder">
                                     <div class="card">
-                                        <a class="text-decoration-none" href="{{ route('viewPost', ['id' => $post->id]) }}">
+                                        <a class="text-decoration-none" href="{{ route('viewPost', ['slug' => $post->slug]) }}">
                                             <img src="/{{ $post->image }}" class="card-img-top" alt="{{ $post->title }}">
                                             <div class="card-body">
                                                 <h5 class="card-title truncate-1">{{ $post->title }}</h5>
@@ -68,7 +68,7 @@
                         <h5>
                             @forelse($posts->slice(0, 10) as $post)
                                 <li><a class="truncate-3"
-                                        href="{{ route('viewPost', ['id' => $post->id]) }}">{{ $post->title }}</a></li>
+                                        href="{{ route('viewPost', ['slug' => $post->slug]) }}">{{ $post->title }}</a></li>
                             @empty
                                 @include('partials.Empty')
                             @endforelse
