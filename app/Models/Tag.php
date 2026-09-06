@@ -4,13 +4,39 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Support\Slug;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Tag extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected static function booted(): void
+    {
+        static::saving(function (Tag $tag) {
+            if ($tag->slug) {
+                return;
+            }
+
+            $tag->slug = Slug::makeUnique(Str::slug($tag->name) ?: 'tag', function (string $slug) use ($tag) {
+                $query = Tag::where('slug', $slug);
+
+                if ($tag->exists) {
+                    $query->where('id', '!=', $tag->id);
+                }
+
+                return $query->exists();
+            });
+        });
+    }
+
+    public function scopeWhereSlugOrId($query, string $value)
+    {
+        return $query->where('slug', $value)->orWhere('id', $value);
+    }
 
     public function post_tags()
     {

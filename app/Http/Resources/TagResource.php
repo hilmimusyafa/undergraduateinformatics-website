@@ -11,8 +11,11 @@ class TagResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'slug' => $this->slug,
             'name' => $this->name,
             'description' => $this->description,
+            'posts_count' => $this->whenCounted('posts'),
+            'posts' => PostSummaryResource::collection($this->whenLoaded('posts')),
         ];
     }
 }

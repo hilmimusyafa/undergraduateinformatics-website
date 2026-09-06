@@ -2,13 +2,14 @@ import { useEffect, useRef } from 'react';
 
 import type { Story, StoryDefault } from '@ladle/react';
 
-import { type MsFormQuestion, type MsFormSection } from '../types/ms-forms';
+import { type MsFormQuestion, type MsFormSection, type MsRichText } from '../types/ms-forms';
 import { MsForm } from './MsForm';
 import { MsFormError, MsFormSkeleton, MsFormUnavailable } from './MsFormStates';
 import {
     SUBMIT_LABEL,
     branchingPayload,
     richPayload,
+    richTextPayload,
     simplePayload,
     submitFail,
     submitOk,
@@ -16,8 +17,8 @@ import {
 } from './ms-form-fixtures';
 
 interface AutoSubmitFormProps {
-    title: string;
-    description: string | null;
+    title: MsRichText;
+    description: MsRichText | null;
     sections: MsFormSection[] | undefined;
     questions: MsFormQuestion[];
     submitUrl: string;
@@ -77,6 +78,9 @@ Form.msw = submitOk;
 
 export const Branching: Story = () => <MsForm {...toFormProps(branchingPayload)} />;
 Branching.msw = submitOk;
+
+export const RichText: Story = () => <MsForm {...toFormProps(richTextPayload)} />;
+RichText.msw = submitOk;
 
 export const Loading: Story = () => <MsFormSkeleton />;
 

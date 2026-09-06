@@ -1,67 +1,25 @@
-<div class="side-bar col-md-3 sticky-top">
-    <div class="d-flex">
-        <a href="{{ route('home') }}"><img class="img-fluid logo" src="/images/Logo2.png" alt="LogoSideBar"></a>
+<aside class="admin-sidebar">
+    <a class="admin-brand" href="{{ route('home') }}" title="Kembali ke halaman utama">
+        <img src="/images/Logo2.png" alt="Logo Telkom University">
+    </a>
+
+    <nav class="admin-nav" aria-label="Navigasi admin">
+        <p class="admin-nav__label">PENGATURAN UMUM</p>
+        <a class="admin-nav__link {{ Route::is('admin.dashboard') ? 'is-active' : '' }}" href="{{ route('admin.dashboard') }}"><i class="fa-solid fa-chart-line"></i><span>Dashboard Statistik</span></a>
+        <a class="admin-nav__link {{ Route::is('admin.form-link') ? 'is-active' : '' }}" href="{{ route('admin.form-link') }}"><i class="fa-solid fa-link"></i><span>Manajemen Form Link</span></a>
+        <a class="admin-nav__link {{ Route::is('admin.reservation') ? 'is-active' : '' }}" href="{{ route('admin.reservation') }}"><i class="fa-solid fa-calendar-check"></i><span>Approval Reservasi</span></a>
+
+        <p class="admin-nav__label">PENGATURAN POST INFOTMASI</p>
+        <a class="admin-nav__link {{ Route::is('posts.index', 'posts.create', 'posts.edit') ? 'is-active' : '' }}" href="{{ route('posts.index') }}"><i class="fa-solid fa-file-lines"></i><span>Manajemen Informasi</span></a>
+        <a class="admin-nav__link {{ Route::is('tags.index', 'tags.create', 'tags.edit') ? 'is-active' : '' }}" href="{{ route('tags.index') }}"><i class="fa-solid fa-tag"></i><span>Tag Post Informasi</span></a>
+
+        <p class="admin-nav__label">PENGATURAN LINK PENTING</p>
+        <a class="admin-nav__link {{ Route::is('sections.index', 'sections.create', 'sections.edit', 'sections.changeOrder') ? 'is-active' : '' }}" href="{{ route('sections.index') }}"><i class="fa-solid fa-list"></i><span>Section Link Penting</span></a>
+        <a class="admin-nav__link {{ Route::is('links.index', 'links.create', 'links.edit') ? 'is-active' : '' }}" href="{{ route('links.index') }}"><i class="fa-solid fa-link"></i><span>Manajemen Link Penting</span></a>
+    </nav>
+
+    <div class="admin-sidebar__footer">
+        <a class="admin-nav__link" href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i><span>Kembali ke website</span></a>
+        <a class="admin-nav__link" href="{{ route('logout') }}"><i class="fa-solid fa-arrow-right-from-bracket"></i><span>Logout</span></a>
     </div>
-    <div class="atas">
-        <ul>
-            <div class="side-items">
-                <a href="{{ route('home') }}">
-                    <li><i class="fa-solid fa-arrow-left"></i>Kembali</li>
-                </a>
-            </div>
-        </ul>
-    </div>
-    <div class="tengah">
-        <ul>
-            <div class="side-items {{ Route::is('posts.index', 'posts.create', 'posts.edit') ? 'active' : '' }}">
-                <a href="{{ route('posts.index') }}">
-                    <li><i class="fa-solid fa-circle-info"></i>Informasi</li>
-                </a>
-            </div>
-            <div class="side-items {{ Route::is('tags.index', 'tags.create', 'tags.edit') ? 'active' : '' }}">
-                <a href="{{ route('tags.index') }}">
-                    <li><i class="fa-solid fa-tag"></i>Tag</li>
-                </a>
-            </div>
-            <div class="side-items {{ Route::is('sections.index', 'sections.create', 'sections.edit') ? 'active' : '' }}">
-                <a href="{{ route('sections.index') }}">
-                    <li><i class="fa-solid fa-list"></i></i>Section Link</li>
-                </a>
-            </div>
-            <div class="side-items {{ Route::is('links.index', 'links.create', 'links.edit') ? 'active' : '' }}">
-                <a href="{{ route('links.index') }}">
-                    <li><i class="fa-solid fa-link"></i>Link Penting</li>
-                </a>
-            </div>
-            <div class="side-items {{ Route::is('feedback.index', 'feedback.edit') ? 'active' : '' }}">
-                <a href="{{ route('feedback.index') }}">
-                    <li><i class="fa-solid fa-comment"></i>Feedback</li>
-                </a>
-            </div>
-            <!-- <div class="side-items {{ Route::is('bookmark') ? 'active' : '' }}">
-                <a href="#">
-                    <li><i class="fa-solid fa-bookmark"></i>Bookmark</li>
-                </a>
-            </div> -->
-        </ul>
-    </div>
-    <div class="bawah">
-        <ul>
-            <div class="side-items">
-                <a href="{{ route('forgotPassword') }}">
-                    <li><i class="fa-solid fa-key"></i>Ganti Password</li>
-                </a>
-            </div>
-            <div class="side-items {{ Route::is('editPasswordRecoveryQuestion') ? 'active' : '' }}">
-                <a href="{{ route('editPasswordRecoveryQuestion') }}">
-                    <li><i class="fa-solid fa-question"></i>Ganti Pertanyaan</li>
-                </a>
-            </div>
-            <div class="side-items">
-                <a href="{{ route('logout') }}">
-                    <li><i class="fa-solid fa-arrow-right-from-bracket"></i>Logout</li>
-                </a>
-            </div>
-        </ul>
-    </div>
-</div>
+</aside>

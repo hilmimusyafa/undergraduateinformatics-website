@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Outlet, createFileRoute } from '@tanstack/react-router';
 
-import { SiteSideBar } from '../components/SiteSideBar';
+import { SideBar } from '../components/SideBar';
 import { TopBar } from '../components/TopBar';
 
 export const Route = createFileRoute('/_site')({
@@ -26,7 +26,7 @@ function SiteLayout() {
                 isSidebarOpen={isSidebarOpen}
                 onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
             />
-            <SiteSideBar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+            <SideBar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
             <div
                 className={`fixed inset-0 z-40 bg-black/40 transition-all duration-300 ${

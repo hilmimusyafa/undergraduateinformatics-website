@@ -1,0 +1,29 @@
+{
+    "siteName": "Telkom University",
+    "defaultTitle": "Portal Informasi Sarjana Informatika",
+    "defaultDescription": "Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik.",
+    "defaultOgImage": "/images/banner.jpg",
+    "ogType": "website",
+    "pages": {
+        "home": {
+            "title": "Beranda - Portal Informasi Sarjana Informatika",
+            "description": "Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik."
+        },
+        "tagList": {
+            "title": "Daftar Topik - Portal Informasi Sarjana Informatika",
+            "description": "Kumpulan topik informasi perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University"
+        },
+        "tagDetail": {
+            "title": "Detail Label - Portal Informasi Sarjana Informatika",
+            "description": "Informasi detail label beserta postingan terkait di Program Studi Sarjana Informatika Telkom University."
+        },
+        "feedback": {
+            "title": "Masukan - Portal Informasi Sarjana Informatika",
+            "description": "Sampaikan pengaduan, keluhan, atau aspirasi terkait layanan akademik maupun non-akademik Program Studi Sarjana Informatika Telkom University"
+        },
+        "links": {
+            "title": "Tautan Penting - Portal Informasi Sarjana Informatika",
+            "description": "Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University"
+        }
+    }
+}

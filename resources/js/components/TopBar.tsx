@@ -3,10 +3,10 @@ import { Link } from '@tanstack/react-router';
 import { IconListSearch } from '@tabler/icons-react';
 import { X } from 'lucide-react';
 
-import { NavLink } from './NavLink';
-import { PrimaryButton } from './PrimaryButton';
+import { cn } from '../lib/utils';
+import { NavItem } from './NavItem';
 import { SearchBar } from './SearchBar';
-import { Button } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 
 interface TopBarProps {
     isSidebarOpen: boolean;
@@ -15,9 +15,7 @@ interface TopBarProps {
 
 export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
     return (
-        <nav
-            className={`sticky top-0 z-50 h-full max-h-18 w-full bg-white transition-shadow duration-300 ${isSidebarOpen ? 'shadow-none' : 'shadow-md'}`}
-        >
+        <nav className="sticky top-0 z-50 h-full max-h-18 w-full bg-white">
             <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 py-3">
                 <Link to="/">
                     <img
@@ -27,21 +25,35 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
                     />
                 </Link>
 
-                <div className="hidden items-center gap-6 lg:flex">
-                    <div className="flex items-center gap-3">
-                        <NavLink to="/">Beranda</NavLink>
-                        <NavLink to="/explore">Informasi</NavLink>
-                        <NavLink to="/link">Tautan</NavLink>
-                        <NavLink to="/feedback">Masukan</NavLink>
-                        <NavLink to="/reservation">Pertemuan</NavLink>
-                        <SearchBar />
-                        <PrimaryButton
-                            nativeButton={false}
-                            render={<Link to="/" />}
-                            className="font-semibold"
+                <div className="hidden items-center lg:flex">
+                    <div className="flex items-center">
+                        <div className="ml-8 flex items-center gap-8">
+                            <NavItem variant="top" to="/">
+                                Beranda
+                            </NavItem>
+                            <NavItem variant="top" to="/tags">
+                                Informasi
+                            </NavItem>
+                            <NavItem variant="top" to="/links">
+                                Tautan
+                            </NavItem>
+                            <NavItem variant="top" to="/feedback">
+                                Masukan
+                            </NavItem>
+                            <NavItem variant="top" to="/reservation">
+                                Pertemuan
+                            </NavItem>
+                            <SearchBar />
+                        </div>
+                        <a
+                            href="/admin/login"
+                            className={cn(
+                                buttonVariants({ variant: 'default' }),
+                                'ml-3 h-auto px-3 py-1.5 text-base'
+                            )}
                         >
                             Masuk
-                        </PrimaryButton>
+                        </a>
                     </div>
                 </div>
 

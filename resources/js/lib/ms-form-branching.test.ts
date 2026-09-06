@@ -18,20 +18,20 @@ const sections: MsFormSection[] = [
 const questions: MsFormQuestion[] = [
     {
         id: 'q1',
-        title: 'Rahasiakan identitas?',
-        subtitle: '',
+        title: { text: 'Rahasiakan identitas?' },
+        subtitle: { text: '' },
         type: 'choice',
         required: true,
         multiple: false,
         choices: [
-            { value: 'Ya', label: 'Ya', branchTargetId: 'q3' },
-            { value: 'Tidak', label: 'Tidak', branchTargetId: 'q2' },
+            { value: 'Ya', label: { text: 'Ya' }, branchTargetId: 'q3' },
+            { value: 'Tidak', label: { text: 'Tidak' }, branchTargetId: 'q2' },
         ],
     },
     {
         id: 'q2',
-        title: 'Nama Lengkap',
-        subtitle: '',
+        title: { text: 'Nama Lengkap' },
+        subtitle: { text: '' },
         type: 'text',
         required: false,
         multiple: false,
@@ -39,14 +39,14 @@ const questions: MsFormQuestion[] = [
     },
     {
         id: 'q3',
-        title: 'Jenis Masukan',
-        subtitle: '',
+        title: { text: 'Jenis Masukan' },
+        subtitle: { text: '' },
         type: 'choice',
         required: true,
         multiple: false,
         choices: [
-            { value: 'Saran', label: 'Saran', branchTargetId: null },
-            { value: 'Keluhan', label: 'Keluhan', branchTargetId: null },
+            { value: 'Saran', label: { text: 'Saran' }, branchTargetId: null },
+            { value: 'Keluhan', label: { text: 'Keluhan' }, branchTargetId: null },
         ],
     },
 ];
@@ -59,20 +59,20 @@ const endSections: MsFormSection[] = [
 const endQuestions: MsFormQuestion[] = [
     {
         id: 'q1',
-        title: 'Rahasiakan identitas?',
-        subtitle: '',
+        title: { text: 'Rahasiakan identitas?' },
+        subtitle: { text: '' },
         type: 'choice',
         required: true,
         multiple: false,
         choices: [
-            { value: 'Ya', label: 'Ya', branchTargetId: 'end' },
-            { value: 'Tidak', label: 'Tidak', branchTargetId: 'q2' },
+            { value: 'Ya', label: { text: 'Ya' }, branchTargetId: 'end' },
+            { value: 'Tidak', label: { text: 'Tidak' }, branchTargetId: 'q2' },
         ],
     },
     {
         id: 'q2',
-        title: 'Nama Lengkap',
-        subtitle: '',
+        title: { text: 'Nama Lengkap' },
+        subtitle: { text: '' },
         type: 'text',
         required: false,
         multiple: false,

@@ -6,7 +6,7 @@ import { buildMsFormSchema } from './ms-forms';
 const questions: MsFormQuestion[] = [
     {
         id: 'r1',
-        title: 'Nama Lengkap',
+        title: { text: 'Nama Lengkap' },
         subtitle: null,
         type: 'text',
         required: true,
@@ -15,19 +15,19 @@ const questions: MsFormQuestion[] = [
     },
     {
         id: 'r2',
-        title: 'Jenis Masukan',
-        subtitle: 'Pilih salah satu',
+        title: { text: 'Jenis Masukan' },
+        subtitle: { text: 'Pilih salah satu' },
         type: 'choice',
         required: true,
         multiple: false,
         choices: [
-            { value: 'Saran', label: 'Saran', branchTargetId: null },
-            { value: 'Keluhan', label: 'Keluhan', branchTargetId: null },
+            { value: 'Saran', label: { text: 'Saran' }, branchTargetId: null },
+            { value: 'Keluhan', label: { text: 'Keluhan' }, branchTargetId: null },
         ],
     },
     {
         id: 'r3',
-        title: 'Tanggal Kejadian',
+        title: { text: 'Tanggal Kejadian' },
         subtitle: null,
         type: 'date',
         required: false,
@@ -57,14 +57,14 @@ describe('buildMsFormSchema', () => {
         const multipleQuestions = [
             {
                 id: 'm1',
-                title: 'Topik',
+                title: { text: 'Topik' },
                 subtitle: null,
                 type: 'choice' as const,
                 required: true,
                 multiple: true,
                 choices: [
-                    { value: 'A', label: 'A', branchTargetId: null },
-                    { value: 'B', label: 'B', branchTargetId: null },
+                    { value: 'A', label: { text: 'A' }, branchTargetId: null },
+                    { value: 'B', label: { text: 'B' }, branchTargetId: null },
                 ],
             },
         ];

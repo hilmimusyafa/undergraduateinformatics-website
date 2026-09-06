@@ -15,7 +15,7 @@
                     <ul class="dropdown-menu">
                         @foreach ($tags_navbar->slice(0, 8) as $tag)
                             <li><a class="dropdown-item"
-                                    href="{{ route('viewTag', ['id' => $tag->id]) }}">{{ $tag->name }}</a></li>
+                                    href="{{ route('viewTag', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a></li>
                         @endforeach
                         <li><a class="dropdown-item" href="{{ route('posts.search') }}">Informasi Lainnya</a></li>
                     </ul>

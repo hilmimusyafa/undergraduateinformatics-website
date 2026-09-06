@@ -9,8 +9,8 @@
         "lint": "eslint resources/js",
         "format": "prettier --write resources/js",
         "format:check": "prettier --check resources/js",
-        "ladle": "ladle serve",
-        "ladle:build": "ladle build"
+        "ladle": "ladle serve --viteConfig ladle.vite.config.ts",
+        "ladle:build": "ladle build --viteConfig ladle.vite.config.ts"
     },
     "devDependencies": {
         "@eslint/js": "^10.0.1",

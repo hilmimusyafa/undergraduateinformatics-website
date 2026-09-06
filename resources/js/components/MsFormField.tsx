@@ -25,6 +25,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Textarea } from '@/components/ui/textarea';
 
 import { type MsFormQuestion, type MsFormValues } from '../types/ms-forms';
+import { RichTextContent } from './RichTextContent';
 
 interface DateFieldInputProps {
     id: string;
@@ -108,7 +109,7 @@ export function MsFormField({ question, control }: MsFormFieldProps) {
                 render={({ field, fieldState }) => (
                     <Field data-invalid={fieldState.invalid}>
                         <FieldLabel htmlFor={question.id} className="sr-only">
-                            {question.title}
+                            {question.title.text}
                         </FieldLabel>
                         {question.type === 'text' ? (
                             <Textarea
@@ -140,7 +141,7 @@ export function MsFormField({ question, control }: MsFormFieldProps) {
                 render={({ field, fieldState }) => (
                     <FieldSet data-invalid={fieldState.invalid}>
                         <FieldLegend variant="label" className="sr-only">
-                            {question.title}
+                            {question.title.text}
                         </FieldLegend>
                         <FieldGroup data-slot="checkbox-group">
                             {question.choices.map((choice) => {
@@ -168,7 +169,7 @@ export function MsFormField({ question, control }: MsFormFieldProps) {
                                                     )
                                                 }
                                             />
-                                            <span>{choice.label}</span>
+                                            <RichTextContent content={choice.label} as="span" />
                                         </Field>
                                     </FieldLabel>
                                 );
@@ -188,7 +189,7 @@ export function MsFormField({ question, control }: MsFormFieldProps) {
             render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                     <FieldLabel id={`${question.id}-title`} className="sr-only">
-                        {question.title}
+                        {question.title.text}
                     </FieldLabel>
                     <RadioGroup
                         name={field.name}
@@ -213,7 +214,7 @@ export function MsFormField({ question, control }: MsFormFieldProps) {
                                         id={`${question.id}-${choice.value}`}
                                         aria-invalid={fieldState.invalid}
                                     />
-                                    <span>{choice.label}</span>
+                                    <RichTextContent content={choice.label} as="span" />
                                 </Field>
                             </FieldLabel>
                         ))}

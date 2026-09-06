@@ -72,7 +72,7 @@ class ApiPostController extends Controller
                 'succes' => "Berhasil Menambahkan Post"
             ],202);
         };
-        $validateData['image'] = "images/placeholder.png";
+        $validateData['image'] = null;
         $post = Post::create($validateData);  
         
         PostTag::create([
@@ -156,7 +156,7 @@ class ApiPostController extends Controller
                 ],202);
             };
           
-            $post->image = "images/placeholder.png";
+            $post->image = null;
             $post->title = $request->title;
             $post->subtitle = $request->subtitle;
             $post->body = $request->body;
@@ -248,7 +248,7 @@ class ApiPostController extends Controller
     */
     public function destroy(Request $request) {
         $post = Post::find($request->id);
-        if($post->image != 'images/placeholder.png') {
+        if($post->hasImage()) {
             $pathPublic = app()->make('path.public');
             File::delete($pathPublic . "/".$post->image);
         };

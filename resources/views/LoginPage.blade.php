@@ -3,31 +3,33 @@
 @section('title', 'Admin Login')
 
 @section('content')
-    <div class="card">
-        <div class="card-header">
-            <h3 class="text-center">Admin Login</h3>
+    <div class="auth-card">
+        <div class="auth-card__header">
+            <img src="/images/Logo.png" alt="Bachelor of Informatics Telkom University">
+            <p>PORTAL ADMINISTRATOR</p>
+            <h1>Admin Login</h1>
         </div>
-        <div class="card-body">
+        <div class="auth-card__body">
             <div class="back">
-                <a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left fa-lg"></i>Kembali</a>
+                <a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i>Kembali ke website</a>
             </div>
             <form method="POST" action="{{ route('loginAttempt') }}">
                 @csrf
-                <div class="email-field">
+                <div class="auth-field">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email"
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email"
                         required>
                 </div>
-                <div class="password-field">
+                <div class="auth-field">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password"
-                        placeholder="Enter your password" required autocomplete="off">
+                        placeholder="Masukkan password" required autocomplete="off">
                 </div>
-                <div class="bawah d-flex justify-content-between">
+                <div class="auth-actions">
                     <div class="lupa-password">
                         <a href="{{ route('forgotPassword') }}" class="text-decoration-none">Lupa Password?</a>
                     </div>
-                    <button type="submit" class="btn btn-danger">Login</button>
+                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
                 </div>
             </form>
         </div>

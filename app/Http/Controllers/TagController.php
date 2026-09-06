@@ -83,20 +83,6 @@ class TagController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        // Fetch targeted tag data
-        $tag = Tag::findOrFail($id);
-
-        // Return tag details view with data
-        return view("TagPage", [
-            'tag' => $tag
-        ]);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)

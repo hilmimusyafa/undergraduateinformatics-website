@@ -13,7 +13,7 @@
             <div class="col-md-9">
                 @forelse($tags as $key => $data)
                     <div class="content-title d-flex">
-                        <a class="d-flex" href="{{ route('viewTag', ['id' => $data->id]) }}">
+                        <a class="d-flex" href="{{ route('viewTag', ['slug' => $data->slug]) }}">
                             <i class="fa-sharp fa-solid fa-square fa-xl"></i>
                             <h3>{{ $data->name }}</h3>
                             <i class="fa-solid fa-arrow-right fa-lg"></i>
@@ -24,7 +24,7 @@
                             @forelse($data->posts->sortByDesc('updated_at')->slice(0, 3) as $key => $post)
                                 <div class="col-md-4 card-holder">
                                     <div class="card">
-                                        <a class="text-decoration-none" href="{{ route('viewPost', ['id' => $post->id]) }}">
+                                        <a class="text-decoration-none" href="{{ route('viewPost', ['slug' => $post->slug]) }}">
                                             <img src="/{{ $post->image }}" class="card-img-top" alt="{{ $post->title }}">
                                             <div class="card-body">
                                                 <h5 class="card-title truncate-1">{{ $post->title }}</h5>
@@ -68,7 +68,7 @@
                         <h5>
                             @forelse($posts->slice(0, 10) as $post)
                                 <li><a class="truncate-3"
-                                        href="{{ route('viewPost', ['id' => $post->id]) }}">{{ $post->title }}</a></li>
+                                        href="{{ route('viewPost', ['slug' => $post->slug]) }}">{{ $post->title }}</a></li>
                             @empty
                                 @include('partials.Empty')
                             @endforelse

@@ -10,6 +10,29 @@ final class FormDefinitionNormalizer
         'Question.DateTime' => 'date',
     ];
 
+    private RichTextSanitizer $sanitizer;
+
+    public function __construct(?RichTextSanitizer $sanitizer = null)
+    {
+        $this->sanitizer = $sanitizer ?? new RichTextSanitizer;
+    }
+
+    private function richText(?string $plain, ?string $rich): ?array
+    {
+        if ($plain === null) {
+            return null;
+        }
+
+        $result = ['text' => $plain];
+        $html = $this->sanitizer->sanitizeRich($rich);
+
+        if ($html !== null) {
+            $result['html'] = $html;
+        }
+
+        return $result;
+    }
+
     public function normalize(array $raw): array
     {
         $questions = [];
@@ -23,8 +46,8 @@ final class FormDefinitionNormalizer
             $items[] = [
                 'kind' => 'section',
                 'id' => $descriptive['id'] ?? '',
-                'title' => $descriptive['title'] ?: null,
-                'subtitle' => $descriptive['subtitle'] ?: null,
+                'title' => $this->richText(($descriptive['title'] ?? '') ?: null, $descriptive['formsProRTQuestionTitle'] ?? null),
+                'subtitle' => $this->richText(($descriptive['subtitle'] ?? '') ?: null, $descriptive['formsProRTSubtitle'] ?? null),
                 'order' => $descriptive['order'] ?? 0,
             ];
         }
@@ -49,8 +72,8 @@ final class FormDefinitionNormalizer
         $this->resolveBranchTargets($questions, $sections);
 
         return [
-            'title' => $raw['title'] ?? '',
-            'description' => $raw['description'] ?? null,
+            'title' => $this->richText($raw['title'] ?? '', $raw['formsProRTTitle'] ?? null),
+            'description' => $this->richText(($raw['description'] ?? '') ?: null, $raw['formsProRTDescription'] ?? null),
             'sections' => $sections,
             'questions' => $questions,
         ];
@@ -141,7 +164,7 @@ final class FormDefinitionNormalizer
 
         $target = $branchInfo['TargetQuestionId'] ?? null;
 
-        if (!is_string($target) || $target === '') {
+        if (! is_string($target) || $target === '') {
             return null;
         }
 
@@ -167,8 +190,8 @@ final class FormDefinitionNormalizer
 
         $result = [
             'id' => $question['id'] ?? '',
-            'title' => $question['title'] ?? '',
-            'subtitle' => $question['subtitle'] ?? null,
+            'title' => $this->richText($question['title'] ?? '', $question['formsProRTQuestionTitle'] ?? null),
+            'subtitle' => $this->richText(($question['subtitle'] ?? '') ?: null, $question['formsProRTSubtitle'] ?? null),
             'type' => $normalizedType,
             'required' => (bool) ($question['required'] ?? false),
             'multiple' => false,
@@ -178,7 +201,7 @@ final class FormDefinitionNormalizer
         if ($normalizedType === 'choice') {
             $info = json_decode($question['questionInfo'] ?? '{}', true);
 
-            if (!is_array($info)) {
+            if (! is_array($info)) {
                 return null;
             }
 
@@ -191,9 +214,16 @@ final class FormDefinitionNormalizer
                     continue;
                 }
 
+                $label = ['text' => trim(strip_tags($description))];
+                $labelHtml = $this->sanitizer->sanitizeRich($description);
+
+                if ($labelHtml !== null) {
+                    $label['html'] = $labelHtml;
+                }
+
                 $result['choices'][] = [
                     'value' => $description,
-                    'label' => trim($description),
+                    'label' => $label,
                     'branchInfo' => $choice['BranchInfo'] ?? null,
                 ];
             }

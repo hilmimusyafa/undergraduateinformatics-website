@@ -25,7 +25,7 @@
                     @forelse($tag->posts->sortByDesc('updated_at') as $post)
                         <div class="col-md-3 card-holder">
                             <div class="card">
-                                <a class="text-decoration-none" href="{{ route('viewPost', ['id' => $post->id]) }}">
+                                <a class="text-decoration-none" href="{{ route('viewPost', ['slug' => $post->slug]) }}">
                                     <img src="/{{ $post->image }}" class="card-img-top" alt="...">
                                     <div class="card-body">
                                         <h5 class="card-title truncate-1">{{ $post->title }}</h5>

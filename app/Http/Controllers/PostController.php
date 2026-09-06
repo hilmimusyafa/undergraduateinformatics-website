@@ -113,7 +113,7 @@ class PostController extends Controller
             $request->image->move($pathPublic, $imageName);
             $post->image = "images/posts/".$imageName;
         } else {
-            $post->image = "images/placeholder.png";
+            $post->image = null;
         }
 
         // Update record in database
@@ -136,10 +136,10 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slugOrId)
     {
         // Fetch targeted post data
-        $post = Post::findOrFail($id);
+        $post = Post::whereSlugOrId($slugOrId)->firstOrFail();
 
         // Return post detail view with data
         return view("PostPage", [
@@ -205,7 +205,7 @@ class PostController extends Controller
             $pathPublic = app()->make('path.public');
             File::delete($pathPublic . "/".$post->image);
             
-            $post->image = "images/placeholder.png";
+            $post->image = null;
         }
 
         // Delete previous PostTag data 

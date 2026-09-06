@@ -26,9 +26,9 @@ class AdminController extends Controller
             return back()->withError('Email atau password salah, silahkan coba lagi');
         }
 
-        // Redirect to admin post index view if credentials are valid
+        // Redirect to admin dashboard if credentials are valid
         $request->session()->flash('success', 'Berhasil log in!');
-        return redirect()->to(route('posts.index'));
+        return redirect()->to(route('admin.dashboard'));
     }
 
     /**
