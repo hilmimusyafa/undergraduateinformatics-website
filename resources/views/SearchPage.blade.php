@@ -65,7 +65,7 @@
                 <div class="d-flex">
                     @forelse($posts_search as $post)
                         <div class="col-md-3 card-holder">
-                            <a class="text-decoration-none" href="{{ route('viewPost', ['id' => $post->id]) }}">
+                            <a class="text-decoration-none" href="{{ route('viewPost', ['slug' => $post->slug]) }}">
                                 <div class="card">
                                     <img src="/{{ $post->image }}" class="card-img-top" alt="{{ $post->title }}">
                                     <div class="card-body">

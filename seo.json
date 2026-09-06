@@ -13,6 +13,10 @@
             "title": "Daftar Topik - Portal Informasi Sarjana Informatika",
             "description": "Kumpulan topik informasi perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University"
         },
+        "tagDetail": {
+            "title": "Detail Label - Portal Informasi Sarjana Informatika",
+            "description": "Informasi detail label beserta postingan terkait di Program Studi Sarjana Informatika Telkom University."
+        },
         "feedback": {
             "title": "Masukan - Portal Informasi Sarjana Informatika",
             "description": "Sampaikan pengaduan, keluhan, atau aspirasi terkait layanan akademik maupun non-akademik Program Studi Sarjana Informatika Telkom University"
