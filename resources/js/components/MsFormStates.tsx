@@ -1,59 +1,75 @@
-import { Button } from '@/components/ui/button';
+import { ArticleContainer } from '@/components/ArticleContainer';
+import { TextButton } from '@/components/TextButton';
 import { Skeleton } from '@/components/ui/skeleton';
+
+import { FieldGroup } from './ui/field';
 
 export function MsFormSkeleton() {
     return (
-        <div
-            role="status"
-            aria-label="Memuat formulir"
-            className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9"
-        >
+        <ArticleContainer role="status" aria-label="Memuat formulir">
             <h1>
-                <Skeleton className="h-9 w-2/3" />
+                <div className="flex flex-col gap-1">
+                    <Skeleton className="h-9 w-full" />
+                    <Skeleton className="h-9 w-full" />
+                    <Skeleton className="h-9 w-full" />
+                </div>
             </h1>
-            <div>
+            <div className="flex flex-col gap-1">
+                <Skeleton className="h-7 w-full" />
+                <Skeleton className="h-7 w-full" />
                 <Skeleton className="h-7 w-full" />
             </div>
             <h2>
-                <Skeleton className="h-7 w-1/2" />
+                <Skeleton className="h-7 w-full" />
             </h2>
-            <div>
-                <Skeleton className="h-7 w-3/4" />
+            <div className="flex flex-col gap-1">
+                <Skeleton className="h-7 w-full" />
+                <Skeleton className="h-7 w-full" />
+                <Skeleton className="h-7 w-full" />
+                <Skeleton className="h-7 w-full" />
             </div>
-            {[0, 1].map((index) => (
-                <section key={index}>
-                    <h3>
-                        <Skeleton className="h-7 w-1/3" />
-                    </h3>
-                    <div>
-                        <Skeleton className="h-16 w-full" />
-                    </div>
-                </section>
-            ))}
+            <section>
+                <h3>
+                    <Skeleton className="h-7 w-1/2" />
+                </h3>
+                <FieldGroup>
+                    <Skeleton className="h-7 w-1/2" />
+                    <Skeleton className="h-16 w-full" />
+                </FieldGroup>
+            </section>
+            <section>
+                <h3>
+                    <Skeleton className="h-7 w-1/2" />
+                </h3>
+                <FieldGroup>
+                    <Skeleton className="h-7 w-1/2" />
+                    <Skeleton className="h-16 w-full" />
+                </FieldGroup>
+            </section>
             <div className="mt-10 flex items-center gap-2 md:mt-9">
-                <Skeleton className="h-9 w-24" />
+                <Skeleton className="h-9 flex-1 md:w-24 md:flex-none" />
             </div>
-        </div>
+        </ArticleContainer>
     );
 }
 
 export function MsFormUnavailable() {
     return (
-        <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
+        <ArticleContainer>
             <p role="status" className="text-muted-foreground">
                 Formulir sedang tidak tersedia. Silakan coba beberapa saat lagi.
             </p>
-        </div>
+        </ArticleContainer>
     );
 }
 
 export function MsFormError() {
     return (
-        <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
+        <ArticleContainer>
             <p role="alert" className="text-muted-foreground">
                 Terjadi kesalahan saat memuat formulir. Silakan coba lagi.
             </p>
-        </div>
+        </ArticleContainer>
     );
 }
 
@@ -63,19 +79,14 @@ interface MsFormSuccessProps {
 
 export function MsFormSuccess({ onReset }: MsFormSuccessProps) {
     return (
-        <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
+        <ArticleContainer>
             <h1>Terima kasih!</h1>
             <p className="text-muted-foreground">Formulir Anda telah berhasil dikirim.</p>
             <div className="mt-4.5 md:mt-4">
-                <Button
-                    type="button"
-                    variant="link"
-                    onClick={onReset}
-                    className="p-0 text-base text-blue-600 underline"
-                >
+                <TextButton variant="underline" onClick={onReset}>
                     Isi Formulir Lagi
-                </Button>
+                </TextButton>
             </div>
-        </div>
+        </ArticleContainer>
     );
 }

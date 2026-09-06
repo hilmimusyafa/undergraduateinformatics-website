@@ -1,0 +1,123 @@
+import { type ReactNode } from 'react';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+import { act, renderHook, waitFor } from '@testing-library/react';
+import axios, { AxiosError, type AxiosResponse } from 'axios';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { type MsFormQuestion, type MsFormValues } from '../types/ms-forms';
+import { useMsFormSubmission } from './useMsFormSubmission';
+
+vi.mock('axios', async () => {
+    const actual = await vi.importActual<typeof import('axios')>('axios');
+
+    return {
+        ...actual,
+        default: {
+            ...actual.default,
+            post: vi.fn(),
+        },
+    };
+});
+
+const questions: MsFormQuestion[] = [
+    {
+        id: 'q1',
+        title: { text: 'Isi Masukan' },
+        subtitle: null,
+        type: 'text',
+        required: true,
+        multiple: false,
+        choices: [],
+    },
+];
+
+const wrapper = ({ children }: { children: ReactNode }) => {
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            mutations: { retry: false },
+        },
+    });
+
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+};
+
+function axiosError(status: number) {
+    const error = new AxiosError('Request failed');
+    error.response = { status, data: {} } as AxiosResponse;
+    return error;
+}
+
+describe('useMsFormSubmission', () => {
+    beforeEach(() => {
+        vi.mocked(axios.post).mockResolvedValue({ data: { success: true } });
+    });
+
+    it('submits the non-empty answers to the given url', async () => {
+        const { result } = renderHook(() => useMsFormSubmission('/api/feedback', [], questions), {
+            wrapper,
+        });
+
+        const values: MsFormValues = { q1: 'Masukan saya' };
+
+        await act(async () => {
+            result.current.submitForm.mutate(values);
+        });
+
+        expect(axios.post).toHaveBeenCalledWith('/api/feedback', {
+            answers: [{ questionId: 'q1', answer: 'Masukan saya' }],
+        });
+
+        await waitFor(() => {
+            expect(result.current.submitForm.isSuccess).toBe(true);
+        });
+    });
+
+    it('shows the generic error message on a non-404 failure', async () => {
+        vi.mocked(axios.post).mockRejectedValue(axiosError(422));
+        const { result } = renderHook(() => useMsFormSubmission('/api/feedback', [], questions), {
+            wrapper,
+        });
+
+        await act(async () => {
+            result.current.submitForm.mutate({ q1: 'Masukan saya' });
+        });
+
+        expect(result.current.submitError).toBe(
+            'Gagal mengirim jawaban. Silakan coba beberapa saat lagi.'
+        );
+    });
+
+    it('shows the unavailable message on a 404 failure', async () => {
+        vi.mocked(axios.post).mockRejectedValue(axiosError(404));
+        const { result } = renderHook(() => useMsFormSubmission('/api/feedback', [], questions), {
+            wrapper,
+        });
+
+        await act(async () => {
+            result.current.submitForm.mutate({ q1: 'Masukan saya' });
+        });
+
+        expect(result.current.submitError).toBe('Formulir sedang tidak tersedia.');
+    });
+
+    it('clears the error via resetSubmitError', async () => {
+        vi.mocked(axios.post).mockRejectedValue(axiosError(422));
+        const { result } = renderHook(() => useMsFormSubmission('/api/feedback', [], questions), {
+            wrapper,
+        });
+
+        await act(async () => {
+            result.current.submitForm.mutate({ q1: 'Masukan saya' });
+        });
+
+        expect(result.current.submitError).not.toBeNull();
+
+        await act(async () => {
+            result.current.resetSubmitError();
+        });
+
+        expect(result.current.submitError).toBeNull();
+    });
+});

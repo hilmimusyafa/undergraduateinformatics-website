@@ -1,10 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { FeedbackPage } from '@/features/feedback/FeedbackPage';
+import { seoHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/_site/feedback')({
-    head: () => ({
-        meta: [{ title: 'Masukan - Portal Informasi Sarjana Informatika' }],
-    }),
-    component: FeedbackPage,
+    head: () => seoHead('feedback'),
 });

@@ -3,51 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeedbackLink;
-use App\Services\MsForms\FormDefinitionService;
-use App\Services\MsForms\MsFormsException;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class FeedbackController extends Controller
 {
-    public function show(Request $request): View
+    public function index()
     {
-        $feedbackLink = FeedbackLink::configured()->first();
+        return view('AdminFeedback.AdminPageFeedback', ['feedbackLink' => FeedbackLink::all()->first()]);
+    }
 
-        $initialData = null;
+    public function edit()
+    {
+        return view('AdminFeedback.AdminPageEditFeedback', ['feedbackLink' => FeedbackLink::all()->first()]);
+    }
 
-        if ($feedbackLink) {
-            try {
-                $initialData = app(FormDefinitionService::class)->resolve($feedbackLink);
-            } catch (MsFormsException) {
-                $initialData = null;
-            }
-        }
-
-        if ($initialData === null) {
-            $initialData = ['link' => $feedbackLink?->link];
-        }
-
-        $title = 'Masukan - Portal Informasi Sarjana Informatika';
-        $description = 'Sampaikan masukan Anda melalui formulir umpan balik Program Studi Sarjana Informatika Telkom University.';
-
-        $jsonLd = [
-            '@context' => 'https://schema.org',
-            '@type' => 'WebPage',
-            'name' => $title,
-            'url' => $request->url(),
-            'description' => $description,
-        ];
-
-        return view('app', [
-            'title' => $title,
-            'description' => $description,
-            'ogUrl' => $request->url(),
-            'jsonLd' => $jsonLd,
-            'initialData' => [
-                'status' => 'success',
-                'data' => $initialData,
-            ],
+    public function update(Request $request)
+    {
+        $validatedData = $request->validate([
+            'new_feedback_link' => 'required|url|active_url',
         ]);
+
+        $feedbackLink = FeedbackLink::all()->first();
+        $feedbackLink->link = $validatedData['new_feedback_link'];
+        $feedbackLink->save();
+
+        request()->session()->flash('success', 'Feedback link updated successfully!');
+        return redirect()->route('feedback.index');
     }
 }

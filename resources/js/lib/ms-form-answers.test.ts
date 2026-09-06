@@ -12,19 +12,19 @@ const sections: MsFormSection[] = [
 const questions: MsFormQuestion[] = [
     {
         id: 'q1',
-        title: 'Rahasiakan identitas?',
+        title: { text: 'Rahasiakan identitas?' },
         subtitle: null,
         type: 'choice',
         required: true,
         multiple: false,
         choices: [
-            { value: 'Ya', label: 'Ya', branchTargetId: 'q3' },
-            { value: 'Tidak', label: 'Tidak', branchTargetId: 'q2' },
+            { value: 'Ya', label: { text: 'Ya' }, branchTargetId: 'q3' },
+            { value: 'Tidak', label: { text: 'Tidak' }, branchTargetId: 'q2' },
         ],
     },
     {
         id: 'q2',
-        title: 'Nama Lengkap',
+        title: { text: 'Nama Lengkap' },
         subtitle: null,
         type: 'text',
         required: false,
@@ -33,14 +33,14 @@ const questions: MsFormQuestion[] = [
     },
     {
         id: 'q3',
-        title: 'Jenis Masukan',
+        title: { text: 'Jenis Masukan' },
         subtitle: null,
         type: 'choice',
         required: true,
         multiple: true,
         choices: [
-            { value: 'Saran', label: 'Saran', branchTargetId: null },
-            { value: 'Keluhan', label: 'Keluhan', branchTargetId: null },
+            { value: 'Saran', label: { text: 'Saran' }, branchTargetId: null },
+            { value: 'Keluhan', label: { text: 'Keluhan' }, branchTargetId: null },
         ],
     },
 ];

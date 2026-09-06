@@ -11,6 +11,14 @@ export interface MsFormAnswerEntry {
     answer: MsFormAnswer;
 }
 
+export function isEmptyAnswer(value: MsFormAnswer | undefined): boolean {
+    if (value === undefined) {
+        return true;
+    }
+
+    return typeof value === 'string' ? value.trim() === '' : value.length === 0;
+}
+
 export function buildMsFormAnswers(
     sections: MsFormSection[] | undefined,
     questions: MsFormQuestion[],
@@ -21,11 +29,5 @@ export function buildMsFormAnswers(
     return questions
         .filter((question) => reachable.has(question.id))
         .map((question) => ({ questionId: question.id, answer: values[question.id] }))
-        .filter(
-            (entry): entry is MsFormAnswerEntry =>
-                entry.answer !== undefined &&
-                (typeof entry.answer === 'string'
-                    ? entry.answer.trim() !== ''
-                    : entry.answer.length > 0)
-        );
+        .filter((entry) => !isEmptyAnswer(entry.answer));
 }

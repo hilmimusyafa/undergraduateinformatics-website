@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TagController;
-use App\Http\Controllers\LinkController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\Web\LinkController;
 use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\FeedbackController;
 use App\Models\DashboardDataset;
@@ -14,12 +14,15 @@ use App\Models\ReservationLink;
 use App\Models\ReservationSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Controllers\Web\FeedbackController;
+use App\Http\Controllers\Web\TagController as WebTagController;
 
 Route::get('/', [HomePageController::class, 'index'])->name('home');
 
-Route::get('/tags/{id}', [TagController::class, 'show'])->name('viewTag');
-Route::get('/posts/{id}', [PostController::class, 'show'])->name('viewPost');
-Route::get('/links', [LinkController::class, 'index_home'])->name('home.links');
+Route::get('/tags', [WebTagController::class, 'index'])->name('tags.index');
+Route::get('/tags/{slug}', [TagController::class, 'show'])->name('viewTag');
+Route::get('/posts/{slug}', [PostController::class, 'show'])->name('viewPost');
+Route::get('/links', [LinkController::class, 'index'])->name('home.links');
 Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search');
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('viewFeedback');
 

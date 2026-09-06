@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
+    cacheDir: 'node_modules/.vite-ladle',
     plugins: [tailwindcss()],
     resolve: {
         alias: {

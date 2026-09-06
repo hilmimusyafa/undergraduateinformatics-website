@@ -1,13 +1,12 @@
 import { useMemo, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 
-import { useMutation } from '@tanstack/react-query';
-
 import { zodResolver } from '@hookform/resolvers/zod';
-import axios from 'axios';
 import { Loader2 } from 'lucide-react';
 
-import { buildMsFormAnswers } from '../lib/ms-form-answers';
+import { ArticleContainer } from '../components/ArticleContainer';
+import { useMsFormSubmission } from '../hooks/useMsFormSubmission';
+import { buildMsFormAnswers, isEmptyAnswer } from '../lib/ms-form-answers';
 import {
     computeReachableIds,
     flattenQuestions,
@@ -16,18 +15,25 @@ import {
     resolveNextSectionId,
 } from '../lib/ms-form-branching';
 import { buildMsFormDefaultValues, buildMsFormSchema } from '../schemas/ms-forms';
-import { type MsFormQuestion, type MsFormSection, type MsFormValues } from '../types/ms-forms';
+import {
+    type MsFormQuestion,
+    type MsFormSection,
+    type MsFormValues,
+    type MsRichText,
+} from '../types/ms-forms';
 import { MsFormField } from './MsFormField';
 import { MsFormSuccess } from './MsFormStates';
 import { PrimaryButton } from './PrimaryButton';
+import { RichText } from './RichText';
+import { RichTextContent } from './RichTextContent';
 import { SecondaryButton } from './SecondaryButton';
 import { FieldDescription, FieldGroup } from './ui/field';
 
 interface MsFormProps {
     questions: MsFormQuestion[];
     sections?: MsFormSection[];
-    title: string;
-    description: string | null;
+    title: MsRichText;
+    description: MsRichText | null;
     submitUrl: string;
 }
 
@@ -43,9 +49,18 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     const { control, getValues, setValue } = form;
 
     const sectionIds = useMemo(() => getSectionIds(sections), [sections]);
-    const flat = useMemo(() => flattenQuestions(sections, questions), [sections, questions]);
+    const allQuestions = useMemo(
+        () => flattenQuestions(sections, questions),
+        [sections, questions]
+    );
     const [history, setHistory] = useState<string[]>([sectionIds[0]]);
-    const [submitError, setSubmitError] = useState<string | null>(null);
+    const [emptySubmitTried, setEmptySubmitTried] = useState(false);
+
+    const { submitForm, submitError, resetSubmitError } = useMsFormSubmission(
+        submitUrl,
+        sections,
+        questions
+    );
 
     const values = useWatch({ control }) as MsFormValues;
 
@@ -56,17 +71,22 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     const hasNextSection = nextSectionId !== null;
     const isFirstStep = history.length === 1;
 
+    const hasAnyAnswer = useMemo(
+        () => buildMsFormAnswers(sections, questions, values).length > 0,
+        [sections, questions, values]
+    );
+
     const clearHiddenAnswers = () => {
         const reachable = computeReachableIds(sections, questions, getValues());
 
-        for (const question of flat) {
+        for (const question of allQuestions) {
             if (reachable.has(question.id)) {
                 continue;
             }
 
             const value = getValues(question.id);
 
-            if (Array.isArray(value) ? value.length > 0 : value !== '') {
+            if (!isEmptyAnswer(value)) {
                 setValue(question.id, question.multiple ? [] : '', { shouldDirty: true });
             }
         }
@@ -76,10 +96,25 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const scrollToFirstInvalid = (questions: MsFormQuestion[]) => {
+        const result = buildMsFormSchema(questions).safeParse(getValues());
+        const invalidIds = new Set(
+            result.success ? [] : result.error.issues.map((issue) => issue.path[0])
+        );
+        const invalidId = questions.find((question) => invalidIds.has(question.id))?.id;
+
+        if (invalidId) {
+            document
+                .querySelector(`[data-question-id="${invalidId}"]`)
+                ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    };
+
     const handleNext = async () => {
         const valid = await form.trigger(visibleQuestions.map((question) => question.id));
 
         if (!valid) {
+            scrollToFirstInvalid(visibleQuestions);
             return;
         }
 
@@ -92,32 +127,17 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
         }
 
         setHistory((current) => [...current, nextId]);
-        setSubmitError(null);
+        resetSubmitError();
+        setEmptySubmitTried(false);
         scrollToTop();
     };
 
     const handlePrevious = () => {
         setHistory((current) => current.slice(0, -1));
-        setSubmitError(null);
+        resetSubmitError();
+        setEmptySubmitTried(false);
         scrollToTop();
     };
-
-    const submitForm = useMutation({
-        mutationFn: async (values: MsFormValues) => {
-            await axios.post(submitUrl, {
-                answers: buildMsFormAnswers(sections, questions, values),
-            });
-        },
-        onError: (error) => {
-            const status = axios.isAxiosError(error) ? error.response?.status : undefined;
-
-            setSubmitError(
-                status === 404
-                    ? 'Formulir sedang tidak tersedia.'
-                    : 'Gagal mengirim jawaban. Silakan coba beberapa saat lagi.'
-            );
-        },
-    });
 
     const handleValidSubmit = async () => {
         const reachable = computeReachableIds(sections, questions, getValues());
@@ -128,6 +148,12 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
         );
 
         if (!valid) {
+            scrollToFirstInvalid(visibleQuestions);
+            return;
+        }
+
+        if (buildMsFormAnswers(sections, questions, getValues()).length === 0) {
+            setEmptySubmitTried(true);
             return;
         }
 
@@ -138,7 +164,8 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     const handleReset = () => {
         form.reset(buildMsFormDefaultValues(questions));
         setHistory([sectionIds[0]]);
-        setSubmitError(null);
+        resetSubmitError();
+        setEmptySubmitTried(false);
         submitForm.reset();
         scrollToTop();
     };
@@ -148,19 +175,35 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
     }
 
     return (
-        <div className="typeset typeset-article mx-auto w-full max-w-[37em] px-4 py-10 md:py-9">
+        <ArticleContainer>
             <form noValidate>
-                <h1>{title}</h1>
-                {description && <p className="text-muted-foreground">{description}</p>}
-                {currentSection?.title && <h2>{currentSection.title}</h2>}
+                <h1>
+                    <RichTextContent content={title} as="span" />
+                </h1>
+                {description && (
+                    <RichTextContent
+                        content={description}
+                        as="div"
+                        className="text-muted-foreground"
+                    />
+                )}
+                {currentSection?.title && (
+                    <h2>
+                        <RichTextContent content={currentSection.title} as="span" />
+                    </h2>
+                )}
                 {currentSection?.subtitle && (
-                    <p className="text-muted-foreground">{currentSection.subtitle}</p>
+                    <RichTextContent
+                        content={currentSection.subtitle}
+                        as="div"
+                        className="text-muted-foreground"
+                    />
                 )}
 
                 {visibleQuestions.map((question) => (
-                    <section key={question.id}>
+                    <section key={question.id} data-question-id={question.id}>
                         <h3>
-                            {question.title}
+                            <RichTextContent content={question.title} as="span" />
                             {question.required && (
                                 <span aria-hidden="true" className="text-destructive">
                                     *
@@ -168,9 +211,17 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                             )}
                         </h3>
                         <FieldGroup>
-                            {question.subtitle && (
-                                <FieldDescription>{question.subtitle}</FieldDescription>
-                            )}
+                            {question.subtitle &&
+                                (question.subtitle.text || question.subtitle.html) &&
+                                (question.subtitle.html ? (
+                                    <RichText
+                                        as="div"
+                                        className="text-muted-foreground [&>a:hover]:text-primary text-left text-base leading-normal font-normal group-has-data-horizontal/field:text-balance last:mt-0 nth-last-2:-mt-1 [&>a]:underline [&>a]:underline-offset-4 [[data-variant=legend]+&]:-mt-1.5"
+                                        html={question.subtitle.html}
+                                    />
+                                ) : (
+                                    <FieldDescription>{question.subtitle.text}</FieldDescription>
+                                ))}
                             <MsFormField question={question} control={control} />
                         </FieldGroup>
                     </section>
@@ -179,6 +230,12 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                 {submitError && (
                     <p role="alert" className="text-destructive">
                         {submitError}
+                    </p>
+                )}
+
+                {emptySubmitTried && !hasAnyAnswer && (
+                    <p role="alert" className="text-destructive">
+                        Isi minimal satu jawaban terlebih dahulu.
                     </p>
                 )}
 
@@ -213,6 +270,6 @@ export function MsForm({ questions, sections, title, description, submitUrl }: M
                     )}
                 </div>
             </form>
-        </div>
+        </ArticleContainer>
     );
 }

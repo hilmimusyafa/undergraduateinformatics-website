@@ -1,22 +1,27 @@
 export type MsFormBranchTarget = string | 'end' | null;
 
+export interface MsRichText {
+    text: string;
+    html?: string;
+}
+
 export interface MsFormChoice {
     value: string;
-    label: string;
+    label: MsRichText;
     branchTargetId: MsFormBranchTarget;
 }
 
 export interface MsFormSection {
     id: string;
-    title: string | null;
-    subtitle: string | null;
+    title: MsRichText | null;
+    subtitle: MsRichText | null;
     questionIds: string[];
 }
 
 export interface MsFormQuestion {
     id: string;
-    title: string;
-    subtitle: string | null;
+    title: MsRichText;
+    subtitle: MsRichText | null;
     type: 'text' | 'choice' | 'date';
     required: boolean;
     multiple: boolean;
@@ -25,8 +30,8 @@ export interface MsFormQuestion {
 
 export interface MsFormPayload {
     link: string;
-    title: string;
-    description: string | null;
+    title: MsRichText;
+    description: MsRichText | null;
     sections?: MsFormSection[];
     questions: MsFormQuestion[];
 }
