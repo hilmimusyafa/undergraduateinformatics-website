@@ -5,9 +5,9 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\LinkController as AdminLinkController;
 use App\Http\Controllers\Web\LinkController;
 use App\Http\Controllers\HomePageController;
-use App\Http\Controllers\FeedbackController;
 use App\Models\DashboardDataset;
 use App\Models\FeedbackLink;
 use App\Models\ReservationLink;
@@ -106,7 +106,7 @@ Route::prefix('admin')->group(function () {
 
         Route::get('logout', [AdminController::class, 'logout'])->name('logout');
         Route::resource('posts', PostController::class)->except(['show']);
-        Route::resource('links', LinkController::class)->except(['show']);
+        Route::resource('links', AdminLinkController::class)->except(['show']);
         Route::resource('tags', TagController::class)->except(['show']);
         Route::resource('sections', SectionController::class)->except(['show']);
 
