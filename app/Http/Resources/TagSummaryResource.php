@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TagResource extends JsonResource
+class TagSummaryResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -13,9 +13,6 @@ class TagResource extends JsonResource
             'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
-            'description' => $this->description,
-            'posts_count' => $this->whenCounted('posts'),
-            'posts' => PostSummaryResource::collection($this->whenLoaded('posts')),
         ];
     }
 }

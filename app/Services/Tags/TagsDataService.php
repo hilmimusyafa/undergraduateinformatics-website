@@ -20,4 +20,17 @@ class TagsDataService
             'data' => TagResource::collection($tags)->resolve(),
         ];
     }
+
+    public function resolveDetail(string $slugOrId): array
+    {
+        $tag = Tag::with([
+            'posts' => fn ($query) => $query->orderByDesc('posts.updated_at'),
+            'posts.tags',
+        ])->whereSlugOrId($slugOrId)->firstOrFail();
+
+        return [
+            'status' => 'success',
+            'data' => TagResource::make($tag)->resolve(),
+        ];
+    }
 }

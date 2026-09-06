@@ -35,6 +35,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/home', [HomePageController::class, 'apiIndex']);
 
 Route::get('/tags', [TagController::class, 'index']);
+Route::get('/tags/{slug}', [TagController::class, 'show']);
 
 Route::get('/links', [LinkController::class, 'index']);
 
