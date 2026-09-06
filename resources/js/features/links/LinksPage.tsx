@@ -1,5 +1,5 @@
 import { LinksContent } from './LinksContent';
-import { LinksEmpty, LinksError, LinksSkeleton } from './LinksStates';
+import { LinksError, LinksSkeleton } from './LinksStates';
 import { useLinks } from './useLinks';
 
 export function LinksPage() {
@@ -14,10 +14,6 @@ export function LinksPage() {
     }
 
     const sections = query.data;
-
-    if (sections.length === 0) {
-        return <LinksEmpty />;
-    }
 
     return <LinksContent sections={sections} />;
 }

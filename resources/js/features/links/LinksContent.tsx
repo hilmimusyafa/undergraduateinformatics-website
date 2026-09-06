@@ -22,37 +22,51 @@ export function LinksContent({ sections }: { sections: LinkSection[] }) {
                         Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi
                         Sarjana Informatika Telkom University.
                     </p>
-                    <div className="mt-10 md:mt-9 lg:hidden">
-                        <TableOfContents sections={sections} onSelect={scrollToSection} />
-                    </div>
-                    {sections.map((section) => (
-                        <section key={section.id}>
-                            <h2 id={sectionId(section.id)} className="scroll-mt-28 md:scroll-mt-27">
-                                {section.name}
-                            </h2>
-                            {section.links.length === 0 ? (
-                                <p className="text-muted-foreground">
-                                    Belum ada tautan pada section ini.
-                                </p>
-                            ) : (
-                                <ul>
-                                    {section.links.map((link) => (
-                                        <li key={link.id}>
-                                            <TextLink
-                                                variant="underline"
-                                                className="whitespace-normal no-underline"
-                                                to={link.link}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                {link.name}
-                                            </TextLink>
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
-                        </section>
-                    ))}
+                    {sections.length > 0 && (
+                        <div className="mt-10 md:mt-9 lg:hidden">
+                            <TableOfContents sections={sections} onSelect={scrollToSection} />
+                        </div>
+                    )}
+                    {sections.length === 0 ? (
+                        <p
+                            role="status"
+                            className="text-muted-foreground mt-[calc(var(--typeset-flow)*1.4)]"
+                        >
+                            Belum ada tautan penting.
+                        </p>
+                    ) : (
+                        sections.map((section) => (
+                            <section key={section.id}>
+                                <h2
+                                    id={sectionId(section.id)}
+                                    className="scroll-mt-28 md:scroll-mt-27"
+                                >
+                                    {section.name}
+                                </h2>
+                                {section.links.length === 0 ? (
+                                    <p className="text-muted-foreground">
+                                        Belum ada tautan pada section ini.
+                                    </p>
+                                ) : (
+                                    <ul>
+                                        {section.links.map((link) => (
+                                            <li key={link.id}>
+                                                <TextLink
+                                                    variant="underline"
+                                                    className="whitespace-normal no-underline"
+                                                    to={link.link}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {link.name}
+                                                </TextLink>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </section>
+                        ))
+                    )}
                 </>
             }
             asideContent={<TableOfContents sections={sections} onSelect={scrollToSection} />}

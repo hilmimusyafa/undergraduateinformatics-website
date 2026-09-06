@@ -190,12 +190,20 @@ describe('LinksPage', () => {
         ).toBeInTheDocument();
     });
 
-    it('shows an empty state when there are no sections', async () => {
+    it('shows an empty state with the intro, a desktop Daftar Isi heading, and a message when there are no sections', async () => {
         vi.mocked(axios.get).mockResolvedValue({ data: { status: 'success', data: [] } });
 
         renderPage();
 
-        expect(await screen.findByText('Belum ada tautan penting.')).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Tautan Penting' })).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University.'
+            )
+        ).toBeInTheDocument();
+        expect(screen.getAllByText('Daftar Isi')).toHaveLength(1);
+        expect(screen.getAllByText('Belum ada bagian.')).toHaveLength(1);
+        expect(screen.getByText('Belum ada tautan penting.')).toBeInTheDocument();
     });
 
     it('renders a Daftar Isi navigation in the mobile flow and the desktop sidebar', async () => {

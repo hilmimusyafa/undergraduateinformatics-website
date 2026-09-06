@@ -38,4 +38,12 @@ describe('TableOfContents', () => {
         expect(onSelect).toHaveBeenCalledTimes(1);
         expect(onSelect).toHaveBeenCalledWith(2);
     });
+
+    it('shows a message instead of a navigation when there are no sections', () => {
+        render(<TableOfContents sections={[]} onSelect={() => undefined} />);
+
+        expect(screen.getByText('Daftar Isi')).toBeInTheDocument();
+        expect(screen.getByText('Belum ada bagian.')).toBeInTheDocument();
+        expect(screen.queryByRole('navigation', { name: 'Daftar Isi' })).not.toBeInTheDocument();
+    });
 });

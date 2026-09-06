@@ -1,6 +1,7 @@
 import type { Story } from '@ladle/react';
 
-import { LinksEmpty, LinksError, LinksSkeleton } from './LinksStates';
+import { LinksContent } from './LinksContent';
+import { LinksError, LinksSkeleton } from './LinksStates';
 
 export default {
     title: 'Links/States',
@@ -12,7 +13,7 @@ Loading.meta = { width: 'large' };
 export const LoadingMobileTablet: Story = () => <LinksSkeleton />;
 LoadingMobileTablet.meta = { width: 'medium' };
 
-export const Empty: Story = () => <LinksEmpty />;
+export const Empty: Story = () => <LinksContent sections={[]} />;
 Empty.meta = { width: 'large' };
 
 export const Error: Story = () => <LinksError />;

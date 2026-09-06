@@ -9,7 +9,6 @@ export function LinksSkeleton() {
         <LinksLayout
             role="status"
             aria-label="Memuat daftar tautan penting"
-            asideClassName="lg:w-72"
             mainContent={
                 <>
                     <h1>
@@ -41,16 +40,6 @@ export function LinksSkeleton() {
             }
             asideContent={<TableOfContentsSkeleton />}
         />
-    );
-}
-
-export function LinksEmpty() {
-    return (
-        <ArticleContainer className="max-w-[37em]">
-            <p role="status" className="text-muted-foreground">
-                Belum ada tautan penting.
-            </p>
-        </ArticleContainer>
     );
 }
 

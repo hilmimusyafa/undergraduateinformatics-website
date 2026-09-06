@@ -16,3 +16,5 @@ export default {
 export const Default: Story = () => (
     <TableOfContents sections={sectionsFixture} onSelect={() => undefined} />
 );
+
+export const Empty: Story = () => <TableOfContents sections={[]} onSelect={() => undefined} />;
