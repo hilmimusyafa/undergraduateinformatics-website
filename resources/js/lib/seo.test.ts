@@ -25,6 +25,16 @@ describe('seo', () => {
         });
     });
 
+    it('overrides title and description with dynamic values', () => {
+        const head = seoHead('tagDetail', {
+            title: 'Kurikulum - Portal Informasi Sarjana Informatika',
+            description: 'Info kurikulum',
+        });
+
+        expect(head.meta[0]).toEqual({ title: 'Kurikulum - Portal Informasi Sarjana Informatika' });
+        expect(head.meta[1]).toEqual({ name: 'description', content: 'Info kurikulum' });
+    });
+
     it('exposes site defaults', () => {
         expect(seoDefaults.title).toBe('Portal Informasi Sarjana Informatika');
         expect(seoDefaults.description).toBe(

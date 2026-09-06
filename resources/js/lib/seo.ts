@@ -11,8 +11,15 @@ export function seoPage(pageKey: SeoPageKey) {
     return seoConfig.pages[pageKey];
 }
 
-export function seoHead(pageKey: SeoPageKey) {
-    const { title, description } = seoPage(pageKey);
+export function seoHead(
+    pageKey: SeoPageKey,
+    overrides: { title?: string; description?: string } = {}
+) {
+    const { title, description } = {
+        ...seoPage(pageKey),
+        ...(overrides.title !== undefined ? { title: overrides.title } : {}),
+        ...(overrides.description !== undefined ? { description: overrides.description } : {}),
+    };
 
     return {
         meta: [{ title }, { name: 'description', content: description }] as (
