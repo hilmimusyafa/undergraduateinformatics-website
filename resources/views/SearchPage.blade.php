@@ -57,7 +57,7 @@
                 @endif
                 @if (request()->query('tags'))
                     @foreach ($tags_search as $tag)
-                        <a href="{{ route('viewTag', ['id' => $tag->id]) }}">{{ $tag->name }}</a>
+                        <a href="{{ route('viewTag', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a>
                     @endforeach
                 @endif
             </div>

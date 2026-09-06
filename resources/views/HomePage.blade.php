@@ -13,7 +13,7 @@
             <div class="col-md-9">
                 @forelse($tags as $key => $data)
                     <div class="content-title d-flex">
-                        <a class="d-flex" href="{{ route('viewTag', ['id' => $data->id]) }}">
+                        <a class="d-flex" href="{{ route('viewTag', ['slug' => $data->slug]) }}">
                             <i class="fa-sharp fa-solid fa-square fa-xl"></i>
                             <h3>{{ $data->name }}</h3>
                             <i class="fa-solid fa-arrow-right fa-lg"></i>

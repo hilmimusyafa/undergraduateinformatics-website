@@ -48,7 +48,7 @@
                             <td>
                                 <ol>
                                     @foreach ($data->tags as $key => $post_tags)
-                                        <a href="{{ route('viewTag', ['id' => $post_tags->id]) }}">
+                                        <a href="{{ route('viewTag', ['slug' => $post_tags->slug]) }}">
                                             <li>
                                                 {{ $post_tags->name }}
                                             </li>
