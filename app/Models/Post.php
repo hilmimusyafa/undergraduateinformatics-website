@@ -3,15 +3,41 @@
 namespace App\Models;
 
 use App\Models\PostTag;
+use App\Support\Slug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected static function booted(): void
+    {
+        static::saving(function (Post $post) {
+            if ($post->slug) {
+                return;
+            }
+
+            $post->slug = Slug::makeUnique(Str::slug($post->title) ?: 'post', function (string $slug) use ($post) {
+                $query = Post::where('slug', $slug);
+
+                if ($post->exists) {
+                    $query->where('id', '!=', $post->id);
+                }
+
+                return $query->exists();
+            });
+        });
+    }
+
+    public function scopeWhereSlugOrId($query, string $value)
+    {
+        return $query->where('slug', $value)->orWhere('id', $value);
+    }
 
     public function scopeFilter($query, array $filters)
     {
