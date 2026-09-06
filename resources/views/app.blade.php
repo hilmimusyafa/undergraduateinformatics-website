@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
+@php $seoDefaults = \App\Support\PageMeta::load(); @endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-ssr="true">{{ $title ?? 'Portal Informasi Sarjana Informatika' }}</title>
-    <meta data-ssr="true" name="description" content="{{ $description ?? 'Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik.' }}">
-    <meta data-ssr="true" property="og:title" content="{{ $ogTitle ?? $title ?? 'Portal Informasi Sarjana Informatika' }}">
-    <meta data-ssr="true" property="og:description" content="{{ $ogDescription ?? $description ?? 'Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik.' }}">
-    <meta data-ssr="true" property="og:type" content="{{ $ogType ?? 'website' }}">
-    <meta data-ssr="true" property="og:site_name" content="{{ $siteName ?? 'Telkom University' }}">
-    <meta data-ssr="true" property="og:image" content="{{ $ogImage ?? url('/images/banner.jpg') }}">
+    <title data-ssr="true">{{ $title ?? $seoDefaults['defaultTitle'] }}</title>
+    <meta data-ssr="true" name="description" content="{{ $description ?? $seoDefaults['defaultDescription'] }}">
+    <meta data-ssr="true" property="og:title" content="{{ $ogTitle ?? $title ?? $seoDefaults['defaultTitle'] }}">
+    <meta data-ssr="true" property="og:description" content="{{ $ogDescription ?? $description ?? $seoDefaults['defaultDescription'] }}">
+    <meta data-ssr="true" property="og:type" content="{{ $ogType ?? $seoDefaults['ogType'] }}">
+    <meta data-ssr="true" property="og:site_name" content="{{ $siteName ?? $seoDefaults['siteName'] }}">
+    <meta data-ssr="true" property="og:image" content="{{ $ogImage ?? url($seoDefaults['defaultOgImage']) }}">
     <meta data-ssr="true" property="og:url" content="{{ $ogUrl ?? url('/') }}">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
