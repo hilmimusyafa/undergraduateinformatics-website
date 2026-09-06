@@ -5,7 +5,7 @@
 @section('content')
     <div class="admin col-md-9">
         <div class="table-top">
-            <h1>Silahkan Tambah, Ganti atau Hapus Tag yang Tersedia</h1>
+            <h1>Manajemen Tag Post Informasi</h1>
             <hr>
             @include('partials.Alerts')
             <div class="d-flex">
