@@ -84,7 +84,7 @@ describe('HomePage route', () => {
             expect(
                 document.querySelector('meta[name="description"]')?.getAttribute('content')
             ).toBe(
-                'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan informasi perkuliahan.'
+                'Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik.'
             );
         });
     });

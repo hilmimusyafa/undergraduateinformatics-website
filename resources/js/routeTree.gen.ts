@@ -15,12 +15,13 @@ import { Route as SiteIndexRouteImport } from './routes/_site/index'
 import { Route as SiteFeedbackRouteImport } from './routes/_site/feedback'
 import { Route as SiteLinksRouteImport } from './routes/_site/links'
 import { Route as SiteReservationRouteImport } from './routes/_site/reservation'
-import { Route as SiteTagsRouteImport } from './routes/_site/tags'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminFeedbackRouteImport } from './routes/admin/feedback'
 import { Route as AdminInformasiRouteImport } from './routes/admin/informasi'
 import { Route as AdminReservationRouteImport } from './routes/admin/reservation'
 import { Route as AdminUploadRouteImport } from './routes/admin/upload'
+import { Route as SitePostsSlugRouteImport } from './routes/_site/posts.$slug'
+import { Route as SiteTagsIndexRouteImport } from './routes/_site/tags.index'
 import { Route as SiteTagsSlugRouteImport } from './routes/_site/tags.$slug'
 
 const SiteRoute = SiteRouteImport.update({
@@ -54,11 +55,6 @@ const SiteReservationRoute = SiteReservationRouteImport.update({
   path: '/reservation',
   getParentRoute: () => SiteRoute,
 } as any)
-const SiteTagsRoute = SiteTagsRouteImport.update({
-  id: '/tags',
-  path: '/tags',
-  getParentRoute: () => SiteRoute,
-} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -90,10 +86,20 @@ const AdminUploadRoute = AdminUploadRouteImport.update({
   path: '/upload',
   getParentRoute: () => AdminRouteRoute,
 } as any).lazy(() => import('./routes/admin/upload.lazy').then((d) => d.Route))
+const SitePostsSlugRoute = SitePostsSlugRouteImport.update({
+  id: '/posts/$slug',
+  path: '/posts/$slug',
+  getParentRoute: () => SiteRoute,
+} as any)
+const SiteTagsIndexRoute = SiteTagsIndexRouteImport.update({
+  id: '/tags/',
+  path: '/tags/',
+  getParentRoute: () => SiteRoute,
+} as any)
 const SiteTagsSlugRoute = SiteTagsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => SiteTagsRoute,
+  id: '/tags/$slug',
+  path: '/tags/$slug',
+  getParentRoute: () => SiteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -102,26 +108,28 @@ export interface FileRoutesByFullPath {
   '/feedback': typeof SiteFeedbackRoute
   '/links': typeof SiteLinksRoute
   '/reservation': typeof SiteReservationRoute
-  '/tags': typeof SiteTagsRouteWithChildren
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
   '/admin/upload': typeof AdminUploadRoute
   '/admin/': typeof AdminIndexRoute
+  '/posts/$slug': typeof SitePostsSlugRoute
   '/tags/$slug': typeof SiteTagsSlugRoute
+  '/tags/': typeof SiteTagsIndexRoute
 }
 export interface FileRoutesByTo {
   '/feedback': typeof SiteFeedbackRoute
   '/links': typeof SiteLinksRoute
   '/reservation': typeof SiteReservationRoute
-  '/tags': typeof SiteTagsRouteWithChildren
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
   '/admin/upload': typeof AdminUploadRoute
   '/': typeof SiteIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/posts/$slug': typeof SitePostsSlugRoute
   '/tags/$slug': typeof SiteTagsSlugRoute
+  '/tags': typeof SiteTagsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -130,14 +138,15 @@ export interface FileRoutesById {
   '/_site/feedback': typeof SiteFeedbackRoute
   '/_site/links': typeof SiteLinksRoute
   '/_site/reservation': typeof SiteReservationRoute
-  '/_site/tags': typeof SiteTagsRouteWithChildren
   '/admin/feedback': typeof AdminFeedbackRoute
   '/admin/informasi': typeof AdminInformasiRoute
   '/admin/reservation': typeof AdminReservationRoute
   '/admin/upload': typeof AdminUploadRoute
   '/_site/': typeof SiteIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/_site/posts/$slug': typeof SitePostsSlugRoute
   '/_site/tags/$slug': typeof SiteTagsSlugRoute
+  '/_site/tags/': typeof SiteTagsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -147,26 +156,28 @@ export interface FileRouteTypes {
     | '/feedback'
     | '/links'
     | '/reservation'
-    | '/tags'
     | '/admin/feedback'
     | '/admin/informasi'
     | '/admin/reservation'
     | '/admin/upload'
     | '/admin/'
+    | '/posts/$slug'
     | '/tags/$slug'
+    | '/tags/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/feedback'
     | '/links'
     | '/reservation'
-    | '/tags'
     | '/admin/feedback'
     | '/admin/informasi'
     | '/admin/reservation'
     | '/admin/upload'
     | '/'
     | '/admin'
+    | '/posts/$slug'
     | '/tags/$slug'
+    | '/tags'
   id:
     | '__root__'
     | '/admin'
@@ -174,14 +185,15 @@ export interface FileRouteTypes {
     | '/_site/feedback'
     | '/_site/links'
     | '/_site/reservation'
-    | '/_site/tags'
     | '/admin/feedback'
     | '/admin/informasi'
     | '/admin/reservation'
     | '/admin/upload'
     | '/_site/'
     | '/admin/'
+    | '/_site/posts/$slug'
     | '/_site/tags/$slug'
+    | '/_site/tags/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -233,13 +245,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteReservationRouteImport
       parentRoute: typeof SiteRoute
     }
-    '/_site/tags': {
-      id: '/_site/tags'
-      path: '/tags'
-      fullPath: '/tags'
-      preLoaderRoute: typeof SiteTagsRouteImport
-      parentRoute: typeof SiteRoute
-    }
     '/admin/': {
       id: '/admin/'
       path: '/'
@@ -275,12 +280,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUploadRouteImport
       parentRoute: typeof AdminRouteRoute
     }
+    '/_site/posts/$slug': {
+      id: '/_site/posts/$slug'
+      path: '/posts/$slug'
+      fullPath: '/posts/$slug'
+      preLoaderRoute: typeof SitePostsSlugRouteImport
+      parentRoute: typeof SiteRoute
+    }
+    '/_site/tags/': {
+      id: '/_site/tags/'
+      path: '/tags'
+      fullPath: '/tags/'
+      preLoaderRoute: typeof SiteTagsIndexRouteImport
+      parentRoute: typeof SiteRoute
+    }
     '/_site/tags/$slug': {
       id: '/_site/tags/$slug'
-      path: '/$slug'
+      path: '/tags/$slug'
       fullPath: '/tags/$slug'
       preLoaderRoute: typeof SiteTagsSlugRouteImport
-      parentRoute: typeof SiteTagsRoute
+      parentRoute: typeof SiteRoute
     }
   }
 }
@@ -305,32 +324,24 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
   AdminRouteRouteChildren,
 )
 
-interface SiteTagsRouteChildren {
-  SiteTagsSlugRoute: typeof SiteTagsSlugRoute
-}
-
-const SiteTagsRouteChildren: SiteTagsRouteChildren = {
-  SiteTagsSlugRoute: SiteTagsSlugRoute,
-}
-
-const SiteTagsRouteWithChildren = SiteTagsRoute._addFileChildren(
-  SiteTagsRouteChildren,
-)
-
 interface SiteRouteChildren {
   SiteFeedbackRoute: typeof SiteFeedbackRoute
   SiteLinksRoute: typeof SiteLinksRoute
   SiteReservationRoute: typeof SiteReservationRoute
-  SiteTagsRoute: typeof SiteTagsRouteWithChildren
   SiteIndexRoute: typeof SiteIndexRoute
+  SitePostsSlugRoute: typeof SitePostsSlugRoute
+  SiteTagsSlugRoute: typeof SiteTagsSlugRoute
+  SiteTagsIndexRoute: typeof SiteTagsIndexRoute
 }
 
 const SiteRouteChildren: SiteRouteChildren = {
   SiteFeedbackRoute: SiteFeedbackRoute,
   SiteLinksRoute: SiteLinksRoute,
   SiteReservationRoute: SiteReservationRoute,
-  SiteTagsRoute: SiteTagsRouteWithChildren,
   SiteIndexRoute: SiteIndexRoute,
+  SitePostsSlugRoute: SitePostsSlugRoute,
+  SiteTagsSlugRoute: SiteTagsSlugRoute,
+  SiteTagsIndexRoute: SiteTagsIndexRoute,
 }
 
 const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)

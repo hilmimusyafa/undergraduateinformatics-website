@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { seoPage } from '@/lib/seo';
 
-import { Route } from './tags';
+import { Route } from './tags.index';
 
 describe('tags route', () => {
     it('sets the page title via the head option', () => {

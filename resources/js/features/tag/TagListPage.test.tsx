@@ -4,8 +4,8 @@ import { render, screen } from '@testing-library/react';
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { TagsPage } from './TagsPage';
-import { type TagsPayload } from './types';
+import { TagListPage } from './TagListPage';
+import { type TagWithCountsPayload } from './types';
 
 vi.mock('axios', async () => {
     const actual = await vi.importActual<typeof import('axios')>('axios');
@@ -46,7 +46,7 @@ function axiosError(status: number, message?: string) {
     return error;
 }
 
-const tagsPayload: TagsPayload = {
+const tagsPayload: TagWithCountsPayload = {
     status: 'success',
     data: [
         {
@@ -69,12 +69,12 @@ function renderPage() {
 
     return render(
         <QueryClientProvider client={queryClient}>
-            <TagsPage />
+            <TagListPage />
         </QueryClientProvider>
     );
 }
 
-describe('TagsPage', () => {
+describe('TagListPage', () => {
     beforeEach(() => {
         vi.mocked(axios.get).mockResolvedValue({ data: tagsPayload });
         delete (window as any).__INITIAL_DATA__;
@@ -116,7 +116,7 @@ describe('TagsPage', () => {
     });
 
     it('renders a skeleton while loading', async () => {
-        let resolveGet: (value: { data: TagsPayload }) => void = () => undefined;
+        let resolveGet: (value: { data: TagWithCountsPayload }) => void = () => undefined;
         vi.mocked(axios.get).mockReturnValue(
             new Promise((resolve) => {
                 resolveGet = resolve;
@@ -166,12 +166,20 @@ describe('TagsPage', () => {
         ).toBeInTheDocument();
     });
 
-    it('shows an empty state when there are no tags', async () => {
+    it('shows an empty state with the intro and a message when there are no tags', async () => {
         vi.mocked(axios.get).mockResolvedValue({ data: { status: 'success', data: [] } });
 
         renderPage();
 
-        expect(await screen.findByText('Belum ada topik.')).toBeInTheDocument();
+        expect(
+            await screen.findByRole('heading', { name: 'Daftar Topik' }, { timeout: 3000 })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                'Kumpulan topik informasi perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University.'
+            )
+        ).toBeInTheDocument();
+        expect(screen.getByText('Belum ada topik.')).toBeInTheDocument();
     });
 
     it('keeps the constrained article width', async () => {
