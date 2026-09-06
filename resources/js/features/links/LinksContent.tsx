@@ -19,8 +19,8 @@ export function LinksContent({ sections }: { sections: LinkSection[] }) {
                 <>
                     <h1>Tautan Penting</h1>
                     <p className="text-muted-foreground">
-                        Kumpulan tautan penting terkait informasi di Program Studi Sarjana
-                        Informatika Telkom University.
+                        Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi
+                        Sarjana Informatika Telkom University.
                     </p>
                     <div className="mt-10 md:mt-9 lg:hidden">
                         <TableOfContents sections={sections} onSelect={scrollToSection} />

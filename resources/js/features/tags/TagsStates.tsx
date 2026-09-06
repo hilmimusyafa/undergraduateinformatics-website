@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export function TagsSkeleton() {
     return (
-        <ArticleContainer role="status" aria-label="Memuat daftar label">
+        <ArticleContainer role="status" aria-label="Memuat daftar topik">
             <h1>
                 <Skeleton className="h-9 w-1/2" />
             </h1>
@@ -30,7 +30,7 @@ export function TagsEmpty() {
     return (
         <ArticleContainer>
             <p role="status" className="text-muted-foreground">
-                Belum ada label.
+                Belum ada topik.
             </p>
         </ArticleContainer>
     );

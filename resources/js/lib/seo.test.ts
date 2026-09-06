@@ -8,9 +8,11 @@ describe('seo', () => {
     });
 
     it('reads the tags page entry from the shared config', () => {
-        expect(seoPage('tagList').title).toBe('Daftar Label - Portal Informasi Sarjana Informatika');
+        expect(seoPage('tagList').title).toBe(
+            'Daftar Topik - Portal Informasi Sarjana Informatika'
+        );
         expect(seoPage('tagList').description).toBe(
-            'Jelajahi informasi Program Studi Sarjana Informatika Telkom University berdasarkan label.'
+            'Kumpulan topik informasi perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University'
         );
     });
 
@@ -21,7 +23,7 @@ describe('seo', () => {
         expect(head.meta[1]).toEqual({
             name: 'description',
             content:
-                'Berikan masukan dan evaluasi layanan untuk Program Studi Sarjana Informatika Telkom University melalui formulir.',
+                'Sampaikan pengaduan, keluhan, atau aspirasi terkait layanan akademik maupun non-akademik Program Studi Sarjana Informatika Telkom University',
         });
     });
 

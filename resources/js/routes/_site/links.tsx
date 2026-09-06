@@ -1,17 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { LinksPage } from '@/features/links/LinksPage';
+import { seoHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/_site/links')({
-    head: () => ({
-        meta: [
-            { title: 'Tautan Penting - Portal Informasi Sarjana Informatika' },
-            {
-                name: 'description',
-                content:
-                    'Kumpulan tautan penting terkait informasi di Program Studi Sarjana Informatika Telkom University.',
-            },
-        ],
-    }),
+    head: () => seoHead('links'),
     component: LinksPage,
 });

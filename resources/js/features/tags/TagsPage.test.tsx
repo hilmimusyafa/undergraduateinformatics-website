@@ -83,10 +83,10 @@ describe('TagsPage', () => {
     it('renders the heading and a row per tag with description and post count', async () => {
         renderPage();
 
-        expect(await screen.findByRole('heading', { name: 'Daftar Label' })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Daftar Topik' })).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Jelajahi informasi Program Studi Sarjana Informatika Telkom University berdasarkan label.'
+                'Kumpulan topik informasi perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University.'
             )
         ).toBeInTheDocument();
         expect(screen.getByText('Academic (3)')).toBeInTheDocument();
@@ -97,14 +97,14 @@ describe('TagsPage', () => {
     it('omits the description paragraph for a tag without one', async () => {
         renderPage();
 
-        await screen.findByRole('heading', { name: 'Daftar Label' });
+        await screen.findByRole('heading', { name: 'Daftar Topik' });
         expect(screen.queryByText('Beasiswa announcements')).not.toBeInTheDocument();
     });
 
     it('links each tag name to its detail page', async () => {
         renderPage();
 
-        await screen.findByRole('heading', { name: 'Daftar Label' });
+        await screen.findByRole('heading', { name: 'Daftar Topik' });
 
         const academic = screen.getByRole('link', { name: 'Academic (3)' });
         expect(academic).toHaveAttribute('href', '/tags/academic');
@@ -125,11 +125,11 @@ describe('TagsPage', () => {
 
         renderPage();
 
-        expect(screen.getByRole('status', { name: /Memuat daftar label/ })).toBeInTheDocument();
+        expect(screen.getByRole('status', { name: /Memuat daftar topik/ })).toBeInTheDocument();
 
         resolveGet({ data: tagsPayload });
 
-        expect(await screen.findByRole('heading', { name: 'Daftar Label' })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: 'Daftar Topik' })).toBeInTheDocument();
     });
 
     it('shows an error message when the request fails', async () => {
@@ -151,16 +151,16 @@ describe('TagsPage', () => {
 
         renderPage();
 
-        expect(await screen.findByText('Belum ada label.')).toBeInTheDocument();
+        expect(await screen.findByText('Belum ada topik.')).toBeInTheDocument();
     });
 
     it('keeps the constrained article width', async () => {
         renderPage();
 
-        await screen.findByRole('heading', { name: 'Daftar Label' });
+        await screen.findByRole('heading', { name: 'Daftar Topik' });
 
         const container = screen
-            .getByRole('heading', { name: 'Daftar Label' })
+            .getByRole('heading', { name: 'Daftar Topik' })
             .closest('.typeset-article');
         expect(container).toHaveClass('max-w-[37em]');
     });

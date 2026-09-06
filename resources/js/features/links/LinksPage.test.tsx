@@ -100,7 +100,7 @@ describe('LinksPage', () => {
         ).toBeInTheDocument();
         expect(
             screen.getByText(
-                'Kumpulan tautan penting terkait informasi di Program Studi Sarjana Informatika Telkom University.'
+                'Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University.'
             )
         ).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: 'Kumpulan Link MBKM' })).toBeInTheDocument();
