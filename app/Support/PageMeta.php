@@ -12,7 +12,7 @@ final class PageMeta
         'siteName' => 'Telkom University',
         'defaultTitle' => 'Portal Informasi Sarjana Informatika',
         'defaultDescription' => 'Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik.',
-        'defaultOgImage' => '/images/banner.png',
+        'defaultOgImage' => '/images/banner.jpg',
         'ogType' => 'website',
         'pages' => [],
     ];
