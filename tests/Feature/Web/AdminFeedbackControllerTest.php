@@ -2,12 +2,11 @@
 
 namespace Tests\Feature\Web;
 
-use App\Http\Controllers\FeedbackController;
 use App\Models\FeedbackLink;
+use App\Models\ReservationLink;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
-use Illuminate\View\View;
 use Tests\TestCase;
 
 class AdminFeedbackControllerTest extends TestCase
@@ -19,6 +18,7 @@ class AdminFeedbackControllerTest extends TestCase
         parent::setUp();
         Http::preventStrayRequests();
         FeedbackLink::query()->delete();
+        ReservationLink::query()->delete();
     }
 
     private function createAdminUser(): User
@@ -30,48 +30,63 @@ class AdminFeedbackControllerTest extends TestCase
         ]);
     }
 
-    public function test_admin_feedback_index_returns_list_view(): void
+    public function test_form_link_page_requires_authentication(): void
     {
-        FeedbackLink::create(['link' => 'https://example.com/forms']);
-
-        $view = (new FeedbackController())->index();
-
-        $this->assertInstanceOf(View::class, $view);
-        $this->assertSame('AdminFeedback.AdminPageFeedback', $view->name());
-        $this->assertSame('https://example.com/forms', $view->getData()['feedbackLink']->link);
+        $this->get('/admin/form-link')->assertRedirect(route('login'));
     }
 
-    public function test_admin_feedback_edit_returns_form_view(): void
+    public function test_form_link_page_renders_both_links(): void
     {
         FeedbackLink::create(['link' => 'https://example.com/forms']);
+        ReservationLink::create(['link' => 'https://example.com/reservation']);
 
-        $view = (new FeedbackController())->edit();
+        $response = $this->actingAs($this->createAdminUser())->get('/admin/form-link');
 
-        $this->assertInstanceOf(View::class, $view);
-        $this->assertSame('AdminFeedback.AdminPageEditFeedback', $view->name());
-        $this->assertSame('https://example.com/forms', $view->getData()['feedbackLink']->link);
+        $response->assertStatus(200);
+        $response->assertViewIs('AdminDashboard.feedback');
+        $response->assertSee('Manajemen Form Link');
+        $response->assertSee('https://example.com/forms');
+        $response->assertSee('https://example.com/reservation');
     }
 
-    public function test_admin_feedback_update_changes_link(): void
+    public function test_form_link_update_changes_feedback_link(): void
     {
         $link = FeedbackLink::create(['link' => 'https://example.com/old']);
         Http::fake(['https://example.com/new' => Http::response('', 200)]);
         $this->actingAs($this->createAdminUser());
 
-        $response = $this->put('/admin/feedback/1', ['new_feedback_link' => 'https://example.com/new']);
+        $response = $this->put('/admin/form-link/feedback', [
+            'feedback_link' => 'https://example.com/new',
+        ]);
 
-        $response->assertRedirect(route('feedback.index'));
+        $response->assertRedirect(route('admin.form-link'));
         $this->assertSame('https://example.com/new', $link->fresh()->link);
     }
 
-    public function test_admin_feedback_update_rejects_invalid_url(): void
+    public function test_form_link_update_rejects_invalid_feedback_url(): void
     {
         $link = FeedbackLink::create(['link' => 'https://example.com/old']);
         $this->actingAs($this->createAdminUser());
 
-        $response = $this->put('/admin/feedback/1', ['new_feedback_link' => 'not-a-url']);
+        $response = $this->put('/admin/form-link/feedback', [
+            'feedback_link' => 'not-a-url',
+        ]);
 
-        $response->assertSessionHasErrors('new_feedback_link');
+        $response->assertSessionHasErrors('feedback_link');
         $this->assertSame('https://example.com/old', $link->fresh()->link);
+    }
+
+    public function test_form_link_update_changes_reservation_link(): void
+    {
+        $link = ReservationLink::create(['link' => 'https://example.com/old']);
+        Http::fake(['https://example.com/new' => Http::response('', 200)]);
+        $this->actingAs($this->createAdminUser());
+
+        $response = $this->put('/admin/form-link/reservation', [
+            'reservation_link' => 'https://example.com/new',
+        ]);
+
+        $response->assertRedirect(route('admin.form-link'));
+        $this->assertSame('https://example.com/new', $link->fresh()->link);
     }
 }
