@@ -16,9 +16,9 @@ export function TagsSkeleton() {
                     <li key={index} className="relative">
                         <Skeleton className="absolute top-2 -left-5 size-2" />
                         <Skeleton className="h-7 w-1/2" />
-                        <p>
+                        <div>
                             <Skeleton className="h-7 w-full" />
-                        </p>
+                        </div>
                     </li>
                 ))}
             </ul>

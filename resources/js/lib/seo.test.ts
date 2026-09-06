@@ -28,7 +28,7 @@ describe('seo', () => {
     });
 
     it('overrides title and description with dynamic values', () => {
-        const head = seoHead('tagDetail', {
+        const head = seoHead('tagList', {
             title: 'Kurikulum - Portal Informasi Sarjana Informatika',
             description: 'Info kurikulum',
         });

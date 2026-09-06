@@ -132,6 +132,26 @@ describe('TagsPage', () => {
         expect(await screen.findByRole('heading', { name: 'Daftar Topik' })).toBeInTheDocument();
     });
 
+    it('does not nest a div inside a p in the skeleton', async () => {
+        let resolveGet: (value: { data: TagsPayload }) => void = () => undefined;
+        vi.mocked(axios.get).mockReturnValue(
+            new Promise((resolve) => {
+                resolveGet = resolve;
+            })
+        );
+
+        const { container } = renderPage();
+
+        expect(screen.getByRole('status', { name: /Memuat daftar topik/ })).toBeInTheDocument();
+
+        const paragraphs = container.querySelectorAll('p');
+        paragraphs.forEach((paragraph) => {
+            expect(paragraph.querySelector('div')).toBeNull();
+        });
+
+        resolveGet({ data: tagsPayload });
+    });
+
     it('shows an error message when the request fails', async () => {
         vi.mocked(axios.get).mockRejectedValue(axiosError(500));
 
