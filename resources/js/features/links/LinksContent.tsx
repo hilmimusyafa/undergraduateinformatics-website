@@ -1,75 +1,51 @@
 import { TextLink } from '@/components/TextLink';
+import { TocLayout } from '@/components/TocLayout';
+import { sectionId } from '@/lib/sectionId';
 
-import { LinksLayout } from './LinksLayout';
-import { TableOfContents } from './TableOfContents';
-import { sectionId } from './sectionId';
 import { type LinkSection } from './types';
 
 export function LinksContent({ sections }: { sections: LinkSection[] }) {
-    const scrollToSection = (sectionIdNumber: number) => {
-        document.getElementById(sectionId(sectionIdNumber))?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-        });
-    };
+    const tocItems = sections.map((section) => ({
+        id: sectionId('link-section', section.id),
+        label: section.name,
+    }));
 
     return (
-        <LinksLayout
-            mainContent={
-                <>
-                    <h1>Tautan Penting</h1>
-                    <p className="text-muted-foreground">
-                        Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi
-                        Sarjana Informatika Telkom University.
-                    </p>
-                    {sections.length > 0 && (
-                        <div className="mt-10 md:mt-9 lg:hidden">
-                            <TableOfContents sections={sections} onSelect={scrollToSection} />
-                        </div>
-                    )}
-                    {sections.length === 0 ? (
-                        <p
-                            role="status"
-                            className="text-muted-foreground mt-[calc(var(--typeset-flow)*1.4)]"
-                        >
-                            Belum ada tautan penting.
-                        </p>
+        <TocLayout
+            title="Tautan Penting"
+            description="Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University."
+            items={tocItems}
+            emptyMessage="Belum ada tautan penting."
+        >
+            {sections.map((section) => (
+                <section key={section.id}>
+                    <h2
+                        id={sectionId('link-section', section.id)}
+                        className="scroll-mt-28 md:scroll-mt-27"
+                    >
+                        {section.name}
+                    </h2>
+                    {section.links.length === 0 ? (
+                        <p className="text-muted-foreground">Belum ada tautan pada section ini.</p>
                     ) : (
-                        sections.map((section) => (
-                            <section key={section.id}>
-                                <h2
-                                    id={sectionId(section.id)}
-                                    className="scroll-mt-28 md:scroll-mt-27"
-                                >
-                                    {section.name}
-                                </h2>
-                                {section.links.length === 0 ? (
-                                    <p className="text-muted-foreground">
-                                        Belum ada tautan pada section ini.
-                                    </p>
-                                ) : (
-                                    <ul>
-                                        {section.links.map((link) => (
-                                            <li key={link.id}>
-                                                <TextLink
-                                                    variant="underline"
-                                                    className="whitespace-normal no-underline"
-                                                    to={link.link}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    {link.name}
-                                                </TextLink>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </section>
-                        ))
+                        <ul>
+                            {section.links.map((link) => (
+                                <li key={link.id}>
+                                    <TextLink
+                                        variant="underline"
+                                        className="whitespace-normal no-underline"
+                                        to={link.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        {link.name}
+                                    </TextLink>
+                                </li>
+                            ))}
+                        </ul>
                     )}
-                </>
-            }
-            asideContent={<TableOfContents sections={sections} onSelect={scrollToSection} />}
-        />
+                </section>
+            ))}
+        </TocLayout>
     );
 }

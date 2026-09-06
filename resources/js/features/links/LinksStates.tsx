@@ -1,12 +1,10 @@
-import { ArticleContainer } from '@/components/ArticleContainer';
+import { MainAsideLayout } from '@/components/MainAsideLayout';
+import { TableOfContentsSkeleton, skeletonSectionCount } from '@/components/TableOfContentsStates';
 import { Skeleton } from '@/components/ui/skeleton';
-
-import { LinksLayout } from './LinksLayout';
-import { TableOfContentsSkeleton, skeletonSectionCount } from './TableOfContentsStates';
 
 export function LinksSkeleton() {
     return (
-        <LinksLayout
+        <MainAsideLayout
             role="status"
             aria-label="Memuat daftar tautan penting"
             mainContent={
@@ -40,15 +38,5 @@ export function LinksSkeleton() {
             }
             asideContent={<TableOfContentsSkeleton />}
         />
-    );
-}
-
-export function LinksError() {
-    return (
-        <ArticleContainer className="max-w-[37em]">
-            <p role="alert" className="text-muted-foreground">
-                Terjadi kesalahan saat memuat halaman. Silakan coba lagi.
-            </p>
-        </ArticleContainer>
     );
 }
