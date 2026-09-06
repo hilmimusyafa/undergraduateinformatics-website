@@ -38,11 +38,10 @@ class HomePageTest extends TestCase
         $response->assertViewIs('app');
         $response->assertViewHas('initialData');
         $response->assertSee('__INITIAL_DATA__');
-        $response->assertSee('Program Studi S1 Informatika');
         $response->assertSee('Welcome to Informatics');
         $response->assertSee('Academic');
         $response->assertSee('Beranda - Portal Informasi Sarjana Informatika', false);
-        $response->assertSee('Sumber informasi resmi Program Studi Sarjana Informatika Telkom University yang menyediakan informasi perkuliahan.', false);
+        $response->assertSee('Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik.', false);
     }
 
     public function test_api_home_route_returns_identical_json_structure(): void
