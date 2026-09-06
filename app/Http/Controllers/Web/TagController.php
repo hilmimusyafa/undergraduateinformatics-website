@@ -26,4 +26,24 @@ class TagController extends Controller
 
         return view('app', PageMeta::viewData($request, 'tagList', $jsonLd, $tagsData));
     }
+
+    public function show(Request $request, string $slugOrId): View
+    {
+        $tagData = app(TagsDataService::class)->resolveDetail($slugOrId);
+
+        $tag = $tagData['data'];
+
+        $title = $tag['name'] . ' - Portal Informasi Sarjana Informatika';
+        $description = $tag['description'] ?? '';
+
+        $jsonLd = [
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            'name' => $title,
+            'url' => $request->url(),
+            'description' => $description,
+        ];
+
+        return view('app', PageMeta::viewData($request, 'tagDetail', $jsonLd, $tagData, $title, $description));
+    }
 }
