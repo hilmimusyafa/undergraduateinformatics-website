@@ -8,8 +8,8 @@ describe('seo', () => {
     });
 
     it('reads the tags page entry from the shared config', () => {
-        expect(seoPage('tags').title).toBe('Daftar Label - Portal Informasi Sarjana Informatika');
-        expect(seoPage('tags').description).toBe(
+        expect(seoPage('tagList').title).toBe('Daftar Label - Portal Informasi Sarjana Informatika');
+        expect(seoPage('tagList').description).toBe(
             'Jelajahi informasi Program Studi Sarjana Informatika Telkom University berdasarkan label.'
         );
     });

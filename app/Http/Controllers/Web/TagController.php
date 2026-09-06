@@ -14,7 +14,7 @@ class TagController extends Controller
     {
         $tagsData = app(TagsDataService::class)->resolve();
 
-        $page = PageMeta::page('tags');
+        $page = PageMeta::page('tagList');
 
         $jsonLd = [
             '@context' => 'https://schema.org',
@@ -24,6 +24,6 @@ class TagController extends Controller
             'description' => $page['description'],
         ];
 
-        return view('app', PageMeta::viewData($request, 'tags', $jsonLd, $tagsData));
+        return view('app', PageMeta::viewData($request, 'tagList', $jsonLd, $tagsData));
     }
 }

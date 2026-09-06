@@ -1,9 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 
-import { TagsPage } from '@/features/tags/TagsPage';
+import { TagListPage } from '@/features/tag/TagListPage';
 import { seoHead } from '@/lib/seo';
 
 export const Route = createFileRoute('/_site/tags')({
-    head: () => seoHead('tags'),
-    component: TagsPage,
+    head: () => seoHead('tagList'),
+    component: TagListPage,
 });
