@@ -20,13 +20,13 @@ class SearchController extends Controller
 
         $searchData = app(SearchDataService::class)->resolve($q, $page, $perPage);
 
-        $seo = PageMeta::page('postSearch');
+        $page = PageMeta::page('postSearch');
         $jsonLd = [
             '@context' => 'https://schema.org',
             '@type' => 'SearchResultsPage',
-            'name' => $seo['title'],
+            'name' => $page['title'],
             'url' => $request->url(),
-            'description' => $seo['description'],
+            'description' => $page['description'],
         ];
 
         return view('app', PageMeta::viewData($request, 'postSearch', $jsonLd, $searchData));
