@@ -242,7 +242,18 @@ function AdminReservation() {
     };
 
     useEffect(() => {
-        fetchReservations();
+        async function loadReservations() {
+            try {
+                const res = await axios.get('/api/reservation/schedule');
+                setReservations(res.data.data ?? []);
+            } catch {
+                setError('Gagal memuat data reservasi dari server.');
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        void loadReservations();
     }, []);
 
     return (
