@@ -57,7 +57,7 @@
                 @endif
                 @if (request()->query('tags'))
                     @foreach ($tags_search as $tag)
-                        <a href="{{ route('viewTag', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a>
+                        <a href="{{ route('tags.show', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a>
                     @endforeach
                 @endif
             </div>
@@ -65,7 +65,7 @@
                 <div class="d-flex">
                     @forelse($posts_search as $post)
                         <div class="col-md-3 card-holder">
-                            <a class="text-decoration-none" href="{{ route('viewPost', ['slug' => $post->slug]) }}">
+                            <a class="text-decoration-none" href="{{ route('posts.show', ['slug' => $post->slug]) }}">
                                 <div class="card">
                                     <img src="/{{ $post->image }}" class="card-img-top" alt="{{ $post->title }}">
                                     <div class="card-body">

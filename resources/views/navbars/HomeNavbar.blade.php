@@ -15,16 +15,16 @@
                     <ul class="dropdown-menu">
                         @foreach ($tags_navbar->slice(0, 8) as $tag)
                             <li><a class="dropdown-item"
-                                    href="{{ route('viewTag', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a></li>
+                                    href="{{ route('tags.show', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a></li>
                         @endforeach
                         <li><a class="dropdown-item" href="{{ route('posts.search') }}">Informasi Lainnya</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home.links') }}">Link Penting</a>
+                    <a class="nav-link" href="{{ route('links.index') }}">Link Penting</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('viewFeedback') }}">Masukan/Saran</a>
+                    <a class="nav-link" href="{{ route('feedback.show') }}">Masukan/Saran</a>
                 </li>
                 <li class="nav-item">
                     <form method="GET" action="{{ route('posts.search') }}" class="d-flex" role="search">

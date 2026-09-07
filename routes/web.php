@@ -23,11 +23,11 @@ use App\Http\Controllers\Web\PostController as WebPostController;
 Route::get('/', [HomePageController::class, 'index'])->name('home');
 
 Route::get('/tags', [WebTagController::class, 'index'])->name('tags.index');
-Route::get('/tags/{slug}', [WebTagController::class, 'show'])->name('viewTag');
+Route::get('/tags/{slug}', [WebTagController::class, 'show'])->name('tags.show');
 Route::get('/posts/search', [SearchController::class, 'index'])->name('posts.search');
-Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('viewPost');
-Route::get('/links', [LinkController::class, 'index'])->name('home.links');
-Route::get('/feedback', [FeedbackController::class, 'show'])->name('viewFeedback');
+Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('posts.show');
+Route::get('/links', [LinkController::class, 'index'])->name('links.index');
+Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
 
 /*
  * Admin uses Laravel's regular web stack: session authentication, named routes,
