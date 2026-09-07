@@ -17,7 +17,7 @@ export function SearchBar({ className, ...props }: ComponentProps<typeof Input>)
                 type="text"
                 placeholder="Cari..."
                 {...props}
-                className="no-ring h-auto w-full border-none bg-transparent p-0 pr-8 text-base md:text-base"
+                className="no-ring h-auto w-full border-none bg-transparent p-0 pr-8 text-lg md:text-base"
             />
             <Search className="absolute top-1/2 right-3 size-4 -translate-y-1/2 text-gray-400" />
         </div>

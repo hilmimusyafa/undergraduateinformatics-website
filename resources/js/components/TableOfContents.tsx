@@ -24,7 +24,7 @@ export function TableOfContents({ items, onSelect }: TableOfContentsProps) {
                                 <li key={item.id} className="list-none">
                                     <TextButton
                                         variant="fade"
-                                        className="text-muted-foreground hover:text-foreground text-left whitespace-normal lg:text-sm"
+                                        className="text-muted-foreground hover:text-foreground text-left text-base whitespace-normal"
                                         onClick={() => onSelect(item.id)}
                                     >
                                         {item.label}

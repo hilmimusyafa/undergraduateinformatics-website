@@ -53,7 +53,7 @@ export function SideBar({ isOpen, onClose }: SideBarProps) {
                             onClick={onClose}
                             className={cn(
                                 buttonVariants({ variant: 'ghost' }),
-                                'text-muted-foreground active:bg-muted h-auto w-full justify-start py-3.5 pr-0 pl-3 text-base'
+                                'text-muted-foreground active:bg-muted h-auto w-full justify-start py-3.5 pr-0 pl-3 text-lg md:text-base'
                             )}
                         >
                             Masuk

@@ -17,7 +17,7 @@ export function PostCard({ post }: PostCardProps) {
                     variant="underline"
                     to="/posts/$slug"
                     params={{ slug: post.slug }}
-                    className="line-clamp-2 block text-base leading-6 whitespace-normal"
+                    className="line-clamp-2 block leading-6 whitespace-normal"
                 >
                     {post.title}
                 </TextLink>
@@ -30,7 +30,7 @@ export function PostCard({ post }: PostCardProps) {
                     <TextLink
                         key={tag.id}
                         variant="fade"
-                        className="text-muted-foreground hover:text-foreground inline text-sm"
+                        className="text-muted-foreground hover:text-foreground inline text-sm md:text-sm"
                         to="/tags/$slug"
                         params={{ slug: tag.slug }}
                     >
