@@ -28,6 +28,10 @@
         "links": {
             "title": "Tautan Penting - Portal Informasi Sarjana Informatika",
             "description": "Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University"
+        },
+        "postSearch": {
+            "title": "Cari Informasi - Portal Informasi Sarjana Informatika",
+            "description": "Cari informasi perkuliahan di Program Studi Sarjana Informatika Telkom University."
         }
     }
 }

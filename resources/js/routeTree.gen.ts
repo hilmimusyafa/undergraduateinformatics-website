@@ -21,6 +21,7 @@ import { Route as AdminInformasiRouteImport } from './routes/admin/informasi'
 import { Route as AdminReservationRouteImport } from './routes/admin/reservation'
 import { Route as AdminUploadRouteImport } from './routes/admin/upload'
 import { Route as SitePostsSlugRouteImport } from './routes/_site/posts.$slug'
+import { Route as SitePostsSearchRouteImport } from './routes/_site/posts.search'
 import { Route as SiteTagsIndexRouteImport } from './routes/_site/tags.index'
 import { Route as SiteTagsSlugRouteImport } from './routes/_site/tags.$slug'
 
@@ -91,6 +92,11 @@ const SitePostsSlugRoute = SitePostsSlugRouteImport.update({
   path: '/posts/$slug',
   getParentRoute: () => SiteRoute,
 } as any)
+const SitePostsSearchRoute = SitePostsSearchRouteImport.update({
+  id: '/posts/search',
+  path: '/posts/search',
+  getParentRoute: () => SiteRoute,
+} as any)
 const SiteTagsIndexRoute = SiteTagsIndexRouteImport.update({
   id: '/tags/',
   path: '/tags/',
@@ -114,6 +120,7 @@ export interface FileRoutesByFullPath {
   '/admin/upload': typeof AdminUploadRoute
   '/admin/': typeof AdminIndexRoute
   '/posts/$slug': typeof SitePostsSlugRoute
+  '/posts/search': typeof SitePostsSearchRoute
   '/tags/$slug': typeof SiteTagsSlugRoute
   '/tags/': typeof SiteTagsIndexRoute
 }
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/': typeof SiteIndexRoute
   '/admin': typeof AdminIndexRoute
   '/posts/$slug': typeof SitePostsSlugRoute
+  '/posts/search': typeof SitePostsSearchRoute
   '/tags/$slug': typeof SiteTagsSlugRoute
   '/tags': typeof SiteTagsIndexRoute
 }
@@ -145,6 +153,7 @@ export interface FileRoutesById {
   '/_site/': typeof SiteIndexRoute
   '/admin/': typeof AdminIndexRoute
   '/_site/posts/$slug': typeof SitePostsSlugRoute
+  '/_site/posts/search': typeof SitePostsSearchRoute
   '/_site/tags/$slug': typeof SiteTagsSlugRoute
   '/_site/tags/': typeof SiteTagsIndexRoute
 }
@@ -162,6 +171,7 @@ export interface FileRouteTypes {
     | '/admin/upload'
     | '/admin/'
     | '/posts/$slug'
+    | '/posts/search'
     | '/tags/$slug'
     | '/tags/'
   fileRoutesByTo: FileRoutesByTo
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/posts/$slug'
+    | '/posts/search'
     | '/tags/$slug'
     | '/tags'
   id:
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/_site/'
     | '/admin/'
     | '/_site/posts/$slug'
+    | '/_site/posts/search'
     | '/_site/tags/$slug'
     | '/_site/tags/'
   fileRoutesById: FileRoutesById
@@ -287,6 +299,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SitePostsSlugRouteImport
       parentRoute: typeof SiteRoute
     }
+    '/_site/posts/search': {
+      id: '/_site/posts/search'
+      path: '/posts/search'
+      fullPath: '/posts/search'
+      preLoaderRoute: typeof SitePostsSearchRouteImport
+      parentRoute: typeof SiteRoute
+    }
     '/_site/tags/': {
       id: '/_site/tags/'
       path: '/tags'
@@ -330,6 +349,7 @@ interface SiteRouteChildren {
   SiteReservationRoute: typeof SiteReservationRoute
   SiteIndexRoute: typeof SiteIndexRoute
   SitePostsSlugRoute: typeof SitePostsSlugRoute
+  SitePostsSearchRoute: typeof SitePostsSearchRoute
   SiteTagsSlugRoute: typeof SiteTagsSlugRoute
   SiteTagsIndexRoute: typeof SiteTagsIndexRoute
 }
@@ -340,6 +360,7 @@ const SiteRouteChildren: SiteRouteChildren = {
   SiteReservationRoute: SiteReservationRoute,
   SiteIndexRoute: SiteIndexRoute,
   SitePostsSlugRoute: SitePostsSlugRoute,
+  SitePostsSearchRoute: SitePostsSearchRoute,
   SiteTagsSlugRoute: SiteTagsSlugRoute,
   SiteTagsIndexRoute: SiteTagsIndexRoute,
 }
