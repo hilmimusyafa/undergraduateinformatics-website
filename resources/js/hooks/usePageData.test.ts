@@ -8,7 +8,17 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { usePageData } from './usePageData';
 
-vi.mock('axios');
+vi.mock('axios', async () => {
+    const actual = await vi.importActual<typeof import('axios')>('axios');
+
+    return {
+        ...actual,
+        default: {
+            ...actual.default,
+            get: vi.fn(),
+        },
+    };
+});
 
 describe('usePageData', () => {
     let queryClient: QueryClient;
@@ -65,5 +75,20 @@ describe('usePageData', () => {
             expect(result.current.data).toEqual(fetchedPayload);
         });
         expect(axios.get).toHaveBeenCalledWith('/api/home');
+    });
+
+    it('reports a 404 error without calling axios when the server sends the not-found marker', async () => {
+        (window as any).__INITIAL_DATA__ = { notFound: true };
+
+        const { result } = renderHook(() => usePageData('/api/home'), {
+            wrapper: createWrapper(),
+        });
+
+        await waitFor(() => {
+            expect(result.current.isError).toBe(true);
+        });
+        expect(axios.get).not.toHaveBeenCalled();
+        expect((result.current.error as any).response?.status).toBe(404);
+        expect((window as any).__INITIAL_DATA__).toBeNull();
     });
 });
