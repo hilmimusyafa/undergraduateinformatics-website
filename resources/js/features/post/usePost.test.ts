@@ -59,7 +59,9 @@ describe('usePost', () => {
         renderUsePost('pendaftaran-beasiswa-2026');
 
         await waitFor(() => {
-            expect(axios.get).toHaveBeenCalledWith('/api/posts/pendaftaran-beasiswa-2026');
+            expect(axios.get).toHaveBeenCalledWith('/api/posts/pendaftaran-beasiswa-2026', {
+                params: undefined,
+            });
         });
     });
 
