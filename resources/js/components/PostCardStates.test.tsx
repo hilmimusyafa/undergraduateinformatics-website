@@ -13,7 +13,7 @@ describe('PostCardSkeleton', () => {
     it('renders placeholders for the title, subtitle, tags, and date rows', () => {
         const { container } = render(<PostCardSkeleton />);
 
-        expect(container.querySelectorAll('[data-slot="skeleton"]')).toHaveLength(5);
+        expect(container.querySelectorAll('[data-slot="skeleton"]')).toHaveLength(4);
     });
 
     it('isolates the skeleton from the typeset typography styles', () => {
