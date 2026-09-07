@@ -16,6 +16,7 @@ use App\Http\Controllers\ApiReservationScheduleController;
 use App\Http\Controllers\ApiReservationLinkController;
 use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\LinkController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\TagController;
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,8 @@ Route::get('/home', [HomePageController::class, 'apiIndex']);
 
 Route::get('/tags', [TagController::class, 'index']);
 Route::get('/tags/{slug}', [TagController::class, 'show']);
+
+Route::get('/posts/{slug}', [PostController::class, 'show']);
 
 Route::get('/links', [LinkController::class, 'index']);
 
