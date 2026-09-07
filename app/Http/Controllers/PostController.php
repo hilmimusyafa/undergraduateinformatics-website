@@ -134,20 +134,6 @@ class PostController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $slugOrId)
-    {
-        // Fetch targeted post data
-        $post = Post::whereSlugOrId($slugOrId)->firstOrFail();
-
-        // Return post detail view with data
-        return view("PostPage", [
-            'post' => $post
-        ]);
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)

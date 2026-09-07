@@ -11,11 +11,13 @@ class PostResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'slug' => $this->slug,
             'title' => $this->title,
             'subtitle' => $this->subtitle,
             'body' => $this->body,
-            'image' => $this->image,
+            'image' => $this->image ? url($this->image) : null,
             'tags' => TagSummaryResource::collection($this->whenLoaded('tags')),
+            'created_at' => $this->created_at?->toIso8601String(),
             'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
