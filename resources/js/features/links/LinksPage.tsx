@@ -1,4 +1,4 @@
-import { PageError } from '@/components/PageError';
+import { ErrorState } from '@/components/ErrorState';
 
 import { LinksContent } from './LinksContent';
 import { LinksSkeleton } from './LinksStates';
@@ -12,7 +12,7 @@ export function LinksPage() {
     }
 
     if (query.isError) {
-        return <PageError />;
+        return <ErrorState />;
     }
 
     const sections = query.data;

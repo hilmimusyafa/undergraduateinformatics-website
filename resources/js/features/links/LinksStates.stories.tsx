@@ -1,6 +1,6 @@
 import type { Story } from '@ladle/react';
 
-import { PageError } from '@/components/PageError';
+import { ErrorState } from '@/components/ErrorState';
 
 import { LinksContent } from './LinksContent';
 import { LinksSkeleton } from './LinksStates';
@@ -18,5 +18,5 @@ LoadingMobileTablet.meta = { width: 'medium' };
 export const Empty: Story = () => <LinksContent sections={[]} />;
 Empty.meta = { width: 'large' };
 
-export const Error: Story = () => <PageError />;
+export const Error: Story = () => <ErrorState />;
 Error.meta = { width: 'large' };

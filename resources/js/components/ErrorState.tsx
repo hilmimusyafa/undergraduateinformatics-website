@@ -1,6 +1,6 @@
 import { ArticleContainer } from '@/components/ArticleContainer';
 
-export function PageError() {
+export function ErrorState() {
     return (
         <ArticleContainer>
             <p role="alert" className="text-muted-foreground">
