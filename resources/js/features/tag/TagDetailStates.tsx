@@ -1,3 +1,4 @@
+import { ArticleContainer } from '@/components/ArticleContainer';
 import { MainAsideLayout } from '@/components/MainAsideLayout';
 import { PostCardSkeleton } from '@/components/PostCardStates';
 import { TableOfContentsSkeleton } from '@/components/TableOfContentsStates';
@@ -39,5 +40,16 @@ export function TagDetailSkeleton() {
             }
             asideContent={<TableOfContentsSkeleton />}
         />
+    );
+}
+
+export function TagNotFound() {
+    return (
+        <ArticleContainer>
+            <h1>Topik tidak ditemukan</h1>
+            <p className="text-muted-foreground">
+                Topik mungkin sudah dihapus atau alamatnya salah.
+            </p>
+        </ArticleContainer>
     );
 }

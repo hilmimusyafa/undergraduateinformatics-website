@@ -3,6 +3,7 @@ import type { Story, StoryDefault } from '@ladle/react';
 import { RouterHarness } from '@/components/RouterHarness';
 
 import { TagDetailContent } from './TagDetailContent';
+import { TagNotFound } from './TagDetailStates';
 import { type TagWithPosts } from './types';
 
 const tagFixture: TagWithPosts = {
@@ -62,3 +63,9 @@ export const DetailEmpty: Story = () => (
     </RouterHarness>
 );
 DetailEmpty.meta = { width: 'large' };
+
+export const NotFound: Story = () => (
+    <RouterHarness>
+        <TagNotFound />
+    </RouterHarness>
+);

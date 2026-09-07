@@ -211,6 +211,8 @@ class TagControllerTest extends TestCase
         $response = $this->get('/tags/tidak-ada');
 
         $response->assertStatus(404);
+        $response->assertViewIs('app');
+        $response->assertSee('window.__INITIAL_DATA__ = {"notFound":true};', false);
     }
 
     public function test_api_tag_detail_returns_tag_with_posts(): void

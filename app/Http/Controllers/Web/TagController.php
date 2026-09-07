@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Services\Tags\TagsDataService;
 use App\Support\PageMeta;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class TagController extends Controller
@@ -27,9 +29,17 @@ class TagController extends Controller
         return view('app', PageMeta::viewData($request, 'tagList', $jsonLd, $tagsData));
     }
 
-    public function show(Request $request, string $slugOrId): View
+    public function show(Request $request, string $slugOrId): View|Response
     {
-        $tagData = app(TagsDataService::class)->resolveDetail($slugOrId);
+        try {
+            $tagData = app(TagsDataService::class)->resolveDetail($slugOrId);
+        } catch (ModelNotFoundException) {
+            return response()->view(
+                'app',
+                PageMeta::viewData($request, 'notFound', [], ['notFound' => true], null, null),
+                404
+            );
+        }
 
         $tag = $tagData['data'];
 

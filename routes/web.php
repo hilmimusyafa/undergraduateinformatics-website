@@ -126,7 +126,7 @@ Route::fallback(function (Request $request) {
 
     return response()->view(
         'app',
-        PageMeta::viewData($request, 'notFound', [], [], null, null),
+        PageMeta::viewData($request, 'notFound', [], ['notFound' => true], null, null),
         404
     );
 });
