@@ -1,7 +1,10 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TopBar } from './TopBar';
+
+const { navigateMock } = vi.hoisted(() => ({ navigateMock: vi.fn() }));
 
 vi.mock('@tanstack/react-router', async () => {
     const actual =
@@ -18,6 +21,7 @@ vi.mock('@tanstack/react-router', async () => {
             function MockedLink({ to, ...props }: any) {
                 return <Comp href={to} {...props} />;
             },
+        useNavigate: () => navigateMock,
     };
 });
 
@@ -59,5 +63,20 @@ describe('TopBar', () => {
         screen.getByRole('button', { name: 'Toggle navigation menu' }).click();
 
         expect(onToggleSidebar).toHaveBeenCalledTimes(1);
+    });
+
+    it('navigates to the search page and clears the input when Enter is pressed', async () => {
+        const user = userEvent.setup();
+
+        render(<TopBar isSidebarOpen={false} onToggleSidebar={() => undefined} />);
+
+        const input = screen.getByPlaceholderText('Cari...');
+        await user.type(input, 'beasiswa{enter}');
+
+        expect(navigateMock).toHaveBeenCalledWith({
+            to: '/posts/search',
+            search: { q: 'beasiswa' },
+        });
+        expect(input).toHaveValue('');
     });
 });
