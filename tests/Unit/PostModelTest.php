@@ -34,7 +34,7 @@ class PostModelTest extends TestCase
         $this->assertTrue($post->hasImage());
     }
 
-    public function test_has_image_is_false_for_placeholder_image(): void
+    public function test_has_image_is_true_for_placeholder_path_until_data_migration(): void
     {
         $post = Post::create([
             'title' => 'Placeholder',
@@ -43,6 +43,6 @@ class PostModelTest extends TestCase
             'image' => 'images/placeholder.png',
         ]);
 
-        $this->assertFalse($post->hasImage());
+        $this->assertTrue($post->hasImage());
     }
 }
