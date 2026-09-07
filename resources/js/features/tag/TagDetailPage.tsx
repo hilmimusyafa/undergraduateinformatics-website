@@ -1,3 +1,6 @@
+import { isAxiosError } from 'axios';
+
+import { NotFoundPage } from '@/components/NotFoundPage';
 import { PageError } from '@/components/PageError';
 
 import { TagDetailContent } from './TagDetailContent';
@@ -12,6 +15,10 @@ export function TagDetailPage({ slug }: { slug: string }) {
     }
 
     if (query.isError) {
+        if (isAxiosError(query.error) && query.error.response?.status === 404) {
+            return <NotFoundPage />;
+        }
+
         return <PageError />;
     }
 

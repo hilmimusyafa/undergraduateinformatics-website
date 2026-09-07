@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\TagController as WebTagController;
+use App\Support\PageMeta;
 
 Route::get('/', [HomePageController::class, 'index'])->name('home');
 
@@ -116,4 +117,16 @@ Route::prefix('admin')->group(function () {
         Route::get('edit-password-recovery-questions', [AdminController::class, 'editPasswordRecoveryQuestion'])->name('editPasswordRecoveryQuestion');
         Route::post('update-password-recovery-questions', [AdminController::class, 'updatePasswordRecoveryQuestion'])->name('updatePasswordRecoveryQuestion');
     });
+});
+
+Route::fallback(function (Request $request) {
+    if ($request->is('admin/*') || $request->is('api/*')) {
+        abort(404);
+    }
+
+    return response()->view(
+        'app',
+        PageMeta::viewData($request, 'notFound', [], [], null, null),
+        404
+    );
 });

@@ -19,6 +19,8 @@ vi.mock('axios', async () => {
     };
 });
 
+const { navigateMock } = vi.hoisted(() => ({ navigateMock: vi.fn() }));
+
 vi.mock('@tanstack/react-router', async () => {
     const actual =
         await vi.importActual<typeof import('@tanstack/react-router')>('@tanstack/react-router');
@@ -34,6 +36,7 @@ vi.mock('@tanstack/react-router', async () => {
 
                 return <Comp href={href} {...props} />;
             },
+        useNavigate: () => navigateMock,
     };
 });
 
@@ -188,6 +191,16 @@ describe('TagDetailPage', () => {
                 {},
                 { timeout: 3000 }
             )
+        ).toBeInTheDocument();
+    });
+
+    it('shows the not found page when the tag does not exist', async () => {
+        vi.mocked(axios.get).mockRejectedValue(axiosError(404));
+
+        renderPage();
+
+        expect(
+            await screen.findByRole('heading', { name: 'Halaman Tidak Ditemukan' }, { timeout: 3000 })
         ).toBeInTheDocument();
     });
 
