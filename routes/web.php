@@ -15,6 +15,7 @@ use App\Models\ReservationSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
 use App\Http\Controllers\Web\FeedbackController;
+use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\TagController as WebTagController;
 use App\Support\PageMeta;
 use App\Http\Controllers\Web\PostController as WebPostController;
@@ -23,9 +24,9 @@ Route::get('/', [HomePageController::class, 'index'])->name('home');
 
 Route::get('/tags', [WebTagController::class, 'index'])->name('tags.index');
 Route::get('/tags/{slug}', [WebTagController::class, 'show'])->name('viewTag');
+Route::get('/posts/search', [SearchController::class, 'index'])->name('posts.search');
 Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('viewPost');
 Route::get('/links', [LinkController::class, 'index'])->name('home.links');
-Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search');
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('viewFeedback');
 
 /*
