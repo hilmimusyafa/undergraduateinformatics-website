@@ -7,8 +7,9 @@ export interface Post {
     subtitle: string;
     body: string;
     image: string | null;
+    created_at: string;
     updated_at: string;
     tags: Tag[];
 }
 
-export type PostSummary = Omit<Post, 'body' | 'image'>;
+export type PostSummary = Omit<Post, 'body' | 'image' | 'created_at'>;
