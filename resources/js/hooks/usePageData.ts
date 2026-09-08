@@ -58,7 +58,7 @@ export function usePageData<TQueryFnData = unknown, TData = TQueryFnData>(
             return { data: null, endpoint: null, paramsKey: null };
         }
 
-if (isNotFoundMarker(globalInitialData)) {
+        if (isNotFoundMarker(globalInitialData)) {
             return { data: NOT_FOUND_MARKER, endpoint: null, paramsKey: null };
         }
 
