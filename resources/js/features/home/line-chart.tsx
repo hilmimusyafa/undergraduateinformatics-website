@@ -41,6 +41,7 @@ export function LineChart({ labels, values }: LineChartProps) {
                         tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
                         tickMargin={16}
                         height={38}
+                        interval={0}
                     />
                     <YAxis
                         tickLine={false}

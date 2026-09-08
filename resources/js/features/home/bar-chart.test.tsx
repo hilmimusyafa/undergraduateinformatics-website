@@ -20,7 +20,9 @@ vi.mock('recharts', () => {
         Bar: MockBar,
         Cell: MockCell,
         CartesianGrid: () => <div data-testid="grid" />,
-        XAxis: ({ dataKey }: any) => <div data-testid="x-axis" data-datakey={dataKey} />,
+        XAxis: ({ dataKey, interval }: any) => (
+            <div data-testid="x-axis" data-datakey={dataKey} data-interval={interval} />
+        ),
         YAxis: () => <div data-testid="y-axis" />,
         Tooltip: ({ content, trigger, active }: any) => (
             <div data-testid="tooltip" data-trigger={trigger} data-active={String(active)}>
@@ -62,5 +64,11 @@ describe('BarChart', () => {
         const tooltip = screen.getByTestId('tooltip');
         expect(tooltip).toHaveAttribute('data-trigger', 'hover');
         expect(ChartTooltip).toBeTruthy();
+    });
+
+    it('forces every x-axis label to render', () => {
+        render(<BarChart labels={labels} values={values} />);
+
+        expect(screen.getByTestId('x-axis')).toHaveAttribute('data-interval', '0');
     });
 });

@@ -13,7 +13,9 @@ vi.mock('recharts', () => {
         LineChart: ({ children }: any) => <div data-testid="line-chart">{children}</div>,
         Line: MockLine,
         CartesianGrid: () => <div data-testid="grid" />,
-        XAxis: () => <div data-testid="x-axis" />,
+        XAxis: ({ interval }: any) => (
+            <div data-testid="x-axis" data-interval={interval} />
+        ),
         YAxis: () => <div data-testid="y-axis" />,
         Tooltip: ({ trigger, active }: any) => (
             <div data-testid="tooltip" data-trigger={trigger} data-active={String(active)} />
@@ -41,5 +43,11 @@ describe('LineChart', () => {
         render(<LineChart labels={labels} values={values} />);
 
         expect(screen.getByTestId('tooltip')).toHaveAttribute('data-trigger', 'hover');
+    });
+
+    it('forces every x-axis label to render', () => {
+        render(<LineChart labels={labels} values={values} />);
+
+        expect(screen.getByTestId('x-axis')).toHaveAttribute('data-interval', '0');
     });
 });
