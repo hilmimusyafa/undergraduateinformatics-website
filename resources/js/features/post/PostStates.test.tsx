@@ -22,15 +22,14 @@ describe('PostStates', () => {
         const { container } = renderSkeleton();
         const skeletons = container.querySelectorAll('[data-slot="skeleton"]');
 
-        expect(skeletons).toHaveLength(8);
+        expect(skeletons).toHaveLength(7);
         expect(skeletons[0]).toHaveClass('h-9');
-        expect(skeletons[1]).toHaveClass('h-9');
-        expect(skeletons[2]).toHaveClass('h-7');
-        expect(skeletons[3]).toHaveClass('w-full');
+        expect(skeletons[1]).toHaveClass('h-7');
+        expect(skeletons[2]).toHaveClass('w-full');
+        expect(skeletons[3]).toHaveClass('h-5');
         expect(skeletons[4]).toHaveClass('h-5');
         expect(skeletons[5]).toHaveClass('h-5');
-        expect(skeletons[6]).toHaveClass('h-5');
-        expect(skeletons[7]).toHaveClass('w-1/2');
+        expect(skeletons[6]).toHaveClass('w-1/2');
     });
 
     it('renders the post not-found message', () => {

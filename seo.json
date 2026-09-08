@@ -25,6 +25,10 @@
             "title": "Masukan - Portal Informasi Sarjana Informatika",
             "description": "Sampaikan pengaduan, keluhan, atau aspirasi terkait layanan akademik maupun non-akademik Program Studi Sarjana Informatika Telkom University"
         },
+        "reservation": {
+            "title": "Reservasi - Portal Informasi Sarjana Informatika",
+            "description": "Ajukan reservasi pertemuan dengan Program Studi Sarjana Informatika Telkom University"
+        },
         "links": {
             "title": "Tautan Penting - Portal Informasi Sarjana Informatika",
             "description": "Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University"

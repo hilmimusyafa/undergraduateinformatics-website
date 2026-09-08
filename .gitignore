@@ -21,5 +21,6 @@ yarn-error.log
 /.ladle
 /build
 /public/mockServiceWorker.js
+/public/beritaacara
 
 /.serena

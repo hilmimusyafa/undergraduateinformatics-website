@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Reservation\BeritaAcaraPdfGenerator;
 use Illuminate\Http\Request;
 use App\Models\ReservationSchedule;
 use Illuminate\Support\Facades\Validator;
@@ -81,23 +82,11 @@ class ApiReservationScheduleController extends Controller
 
         $schedule = ReservationSchedule::create($data);
 
-        try {
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.berita_acara', ['schedule' => $schedule]);
-            
-            $fileName = 'berita_acara_' . $schedule->id . '_' . time() . '.pdf';
-            $directory = public_path('beritaacara');
-            
-            if (!file_exists($directory)) {
-                mkdir($directory, 0755, true);
-            }
-            
-            $pdfPath = $directory . '/' . $fileName;
-            $pdf->save($pdfPath);
-            
-            $schedule->document_link = url('beritaacara/' . $fileName);
+        $documentLink = app(BeritaAcaraPdfGenerator::class)->generate($schedule);
+
+        if ($documentLink) {
+            $schedule->document_link = $documentLink;
             $schedule->save();
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('PDF Generation failed: ' . $e->getMessage());
         }
 
         return response()->json([
@@ -204,19 +193,9 @@ class ApiReservationScheduleController extends Controller
         $oldDocumentLink = $schedule->document_link;
         $schedule->update($data);
 
-        try {
-            $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.berita_acara', ['schedule' => $schedule]);
-            
-            $fileName = 'berita_acara_' . $schedule->id . '_' . time() . '.pdf';
-            $directory = public_path('beritaacara');
-            
-            if (!file_exists($directory)) {
-                mkdir($directory, 0755, true);
-            }
-            
-            $pdfPath = $directory . '/' . $fileName;
-            $pdf->save($pdfPath);
-            
+        $documentLink = app(BeritaAcaraPdfGenerator::class)->generate($schedule);
+
+        if ($documentLink) {
             if ($oldDocumentLink) {
                 $urlPath = parse_url($oldDocumentLink, PHP_URL_PATH);
                 if ($urlPath) {
@@ -227,11 +206,9 @@ class ApiReservationScheduleController extends Controller
                     }
                 }
             }
-            
-            $schedule->document_link = url('beritaacara/' . $fileName);
+
+            $schedule->document_link = $documentLink;
             $schedule->save();
-        } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('PDF Generation failed on update: ' . $e->getMessage());
         }
 
         return response()->json([

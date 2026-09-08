@@ -7,7 +7,7 @@ use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 
-final class MsFormsClient
+class MsFormsClient
 {
     private const ALLOWED_HOST_SUFFIXES = ['office.com', 'microsoft.com', 'microsoft'];
 

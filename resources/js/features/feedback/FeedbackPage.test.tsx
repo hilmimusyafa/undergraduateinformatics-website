@@ -305,18 +305,24 @@ describe('FeedbackPage', () => {
         });
     });
 
-    it('scrolls to the top when moving between sections', async () => {
+    it('scrolls to the first question of the section when moving between sections', async () => {
+        const scrollIntoView = vi.mocked(Element.prototype.scrollIntoView);
+        scrollIntoView.mockClear();
+
         renderSection();
 
         await screen.findByText('Form Umpan Balik Test');
         await userEvent.click(screen.getByRole('radio', { name: 'Tidak' }));
         await userEvent.click(screen.getByRole('button', { name: /Lanjut/ }));
 
-        expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+        expect(await screen.findByLabelText(/Nama Lengkap/)).toBeInTheDocument();
+        expect(scrollIntoView).toHaveBeenCalled();
 
+        scrollIntoView.mockClear();
         await userEvent.click(screen.getByRole('button', { name: /Kembali/ }));
 
-        expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+        expect(screen.getByRole('radio', { name: 'Tidak' })).toBeInTheDocument();
+        expect(scrollIntoView).toHaveBeenCalled();
     });
 
     it('shows an error message when submitting fails', async () => {

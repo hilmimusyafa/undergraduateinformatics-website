@@ -22,7 +22,7 @@ final class RefreshMsFormsDefinition extends Command
         }
 
         try {
-            app(FormDefinitionService::class)->refresh($feedbackLink);
+            app(FormDefinitionService::class)->refresh($feedbackLink->link);
         } catch (MsFormsException) {
             $this->warn('Unable to refresh the MS Forms definition; the existing cache is kept.');
 
