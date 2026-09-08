@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\LinkController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\ReservationController;
 use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\ApiAuthController;
@@ -62,6 +63,9 @@ Route::apiResource('passwordRecovery', ApiPasswordRecoveryController::class);
 Route::apiResource('editPasswordRecovery', ApiEditPasswordRecoveryController::class)->middleware('auth:sanctum');
 Route::apiResource('feedbackLink', ApiFeedbackLinkController::class)->middleware('auth:sanctum');
 Route::prefix('reservation')->group(function () {
+    Route::get('availability', [ReservationController::class, 'availability']);
+    Route::get('/', [ReservationController::class, 'show']);
+    Route::post('/', [ReservationController::class, 'store'])->middleware('throttle:10,1');
     Route::apiResource('link', ApiReservationLinkController::class);
     // ->middleware('auth:sanctum');
     Route::apiResource('schedule', ApiReservationScheduleController::class);
