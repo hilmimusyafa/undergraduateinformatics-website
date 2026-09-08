@@ -1,5 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
+import { seoHead } from '@/lib/seo';
+
 export const Route = createFileRoute('/_site/reservation')({
-    component: () => null,
+    head: () => seoHead('reservation'),
 });

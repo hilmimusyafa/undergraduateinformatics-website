@@ -55,7 +55,9 @@ const SiteReservationRoute = SiteReservationRouteImport.update({
   id: '/reservation',
   path: '/reservation',
   getParentRoute: () => SiteRoute,
-} as any)
+} as any).lazy(() =>
+  import('./routes/_site/reservation.lazy').then((d) => d.Route),
+)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/',
   path: '/',

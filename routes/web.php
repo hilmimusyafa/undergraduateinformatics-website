@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LinkController;
 use App\Http\Controllers\Web\PostController as WebPostController;
+use App\Http\Controllers\Web\ReservationController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\TagController as WebTagController;
 use App\Models\DashboardDataset;
@@ -28,6 +29,7 @@ Route::get('/posts/search', [SearchController::class, 'index'])->name('posts.sea
 Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('posts.show');
 Route::get('/links', [LinkController::class, 'index'])->name('links.index');
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
+Route::get('/reservation', [ReservationController::class, 'show'])->name('reservation.show');
 
 /*
  * Admin uses Laravel's regular web stack: session authentication, named routes,
