@@ -8,11 +8,12 @@ export async function routerModuleMock(overrides: Record<string, unknown> = {}) 
     return {
         ...actual,
         createLink: (Comp: any) =>
-            function MockedLink({ to, params, ...props }: any) {
-                const href =
+            function MockedLink({ to, params, hash, ...props }: any) {
+                let href =
                     typeof to === 'string' && params
                         ? to.replace(/\$[^/]+/g, (key: string) => params[key.slice(1)] ?? key)
                         : to;
+                if (hash) href = `${href}#${hash}`;
 
                 return <Comp href={href} {...props} />;
             },
