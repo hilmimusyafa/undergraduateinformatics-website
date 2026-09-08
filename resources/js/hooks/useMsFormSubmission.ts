@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 
@@ -13,6 +13,7 @@ export function useMsFormSubmission(
     questions: MsFormQuestion[]
 ) {
     const [submitError, setSubmitError] = useState<string | null>(null);
+    const [fieldErrors, setFieldErrors] = useState<Record<string, string[]> | null>(null);
 
     const submitForm = useMutation({
         mutationFn: async (values: MsFormValues) => {
@@ -22,16 +23,27 @@ export function useMsFormSubmission(
         },
         onError: (error) => {
             const status = axios.isAxiosError(error) ? error.response?.status : undefined;
+            const data = axios.isAxiosError(error)
+                ? (error.response?.data as Record<string, unknown> | undefined)
+                : undefined;
+            const errors = data?.errors as Record<string, string[]> | undefined;
+
+            setFieldErrors(errors && typeof errors === 'object' ? errors : null);
 
             setSubmitError(
                 status === 404
                     ? 'Formulir sedang tidak tersedia.'
-                    : 'Gagal mengirim jawaban. Silakan coba beberapa saat lagi.'
+                    : errors
+                      ? null
+                      : 'Gagal mengirim jawaban. Silakan coba beberapa saat lagi.'
             );
         },
     });
 
-    const resetSubmitError = () => setSubmitError(null);
+    const resetSubmitError = useCallback(() => {
+        setSubmitError(null);
+        setFieldErrors(null);
+    }, []);
 
-    return { submitForm, submitError, resetSubmitError };
+    return { submitForm, submitError, fieldErrors, resetSubmitError };
 }

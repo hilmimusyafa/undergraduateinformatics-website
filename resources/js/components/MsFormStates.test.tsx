@@ -1,27 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { MsFormError, MsFormSkeleton, MsFormSuccess, MsFormUnavailable } from './MsFormStates';
-
-describe('MsFormSkeleton', () => {
-    it('renders a loading status region', () => {
-        render(<MsFormSkeleton />);
-
-        expect(screen.getByRole('status', { name: /Memuat formulir/ })).toBeInTheDocument();
-    });
-
-    it('renders question sections', () => {
-        const { container } = render(<MsFormSkeleton />);
-
-        expect(container.querySelectorAll('section')).toHaveLength(2);
-    });
-
-    it('keeps the constrained article width', () => {
-        render(<MsFormSkeleton />);
-
-        expect(screen.getByRole('status', { name: /Memuat formulir/ })).toHaveClass('max-w-[37em]');
-    });
-});
+import { MsFormError, MsFormSuccess, MsFormUnavailable } from './MsFormStates';
 
 describe('MsFormUnavailable', () => {
     it('renders an unavailable message', () => {

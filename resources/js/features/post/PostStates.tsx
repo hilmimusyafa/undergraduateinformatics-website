@@ -12,9 +12,6 @@ export function PostSkeleton() {
                 <h1>
                     <Skeleton className="h-9 w-full" />
                 </h1>
-                <h1 className="mt-1">
-                    <Skeleton className="h-9 w-full" />
-                </h1>
                 <h2 className="mt-2">
                     <Skeleton className="h-7 w-full" />
                 </h2>

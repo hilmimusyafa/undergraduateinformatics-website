@@ -28,12 +28,19 @@ export interface MsFormQuestion {
     choices: MsFormChoice[];
 }
 
+export interface ReservationMetadata {
+    dateQuestionId: string;
+    shiftQuestionId: string;
+    allowedDays: number[];
+}
+
 export interface MsFormPayload {
     link: string;
     title: MsRichText;
     description: MsRichText | null;
     sections?: MsFormSection[];
     questions: MsFormQuestion[];
+    reservation?: ReservationMetadata;
 }
 
 export type MsFormAnswer = string | string[];

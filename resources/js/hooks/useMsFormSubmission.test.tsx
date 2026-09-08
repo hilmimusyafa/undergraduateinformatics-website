@@ -43,9 +43,9 @@ const wrapper = ({ children }: { children: ReactNode }) => {
     return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 };
 
-function axiosError(status: number) {
+function axiosError(status: number, data: Record<string, unknown> = {}) {
     const error = new AxiosError('Request failed');
-    error.response = { status, data: {} } as AxiosResponse;
+    error.response = { status, data } as AxiosResponse;
     return error;
 }
 
@@ -119,5 +119,47 @@ describe('useMsFormSubmission', () => {
         });
 
         expect(result.current.submitError).toBeNull();
+    });
+
+    it('exposes server field errors from a 422 response', async () => {
+        vi.mocked(axios.post).mockRejectedValue(
+            axiosError(422, { errors: { date: ['The schedule is already full.'] } })
+        );
+
+        const { result } = renderHook(() => useMsFormSubmission('/api/feedback', [], []), {
+            wrapper,
+        });
+
+        act(() => {
+            result.current.submitForm.mutate({});
+        });
+
+        await waitFor(() => {
+            expect(result.current.fieldErrors).toEqual({
+                date: ['The schedule is already full.'],
+            });
+        });
+
+        expect(result.current.submitError).toBeNull();
+    });
+
+    it('shows the generic message when a 422 has no field errors', async () => {
+        vi.mocked(axios.post).mockRejectedValue(axiosError(422));
+
+        const { result } = renderHook(() => useMsFormSubmission('/api/feedback', [], []), {
+            wrapper,
+        });
+
+        act(() => {
+            result.current.submitForm.mutate({});
+        });
+
+        await waitFor(() => {
+            expect(result.current.submitError).toBe(
+                'Gagal mengirim jawaban. Silakan coba beberapa saat lagi.'
+            );
+        });
+
+        expect(result.current.fieldErrors).toBeNull();
     });
 });
