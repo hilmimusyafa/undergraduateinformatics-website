@@ -4,7 +4,7 @@ import { RouterHarness } from '@/components/RouterHarness';
 import { type Post } from '@/types/post';
 
 import { PostContent } from './PostContent';
-import { PostNotFound, PostSkeleton } from './PostStates';
+import { PostNotFound } from './PostStates';
 
 const postFixture: Post = {
     id: 1,
@@ -68,9 +68,6 @@ export const DetailRichText: Story = () => (
     </RouterHarness>
 );
 DetailRichText.meta = { width: 'large' };
-
-export const DetailLoading: Story = () => <PostSkeleton />;
-DetailLoading.meta = { width: 'large' };
 
 export const NotFound: Story = () => (
     <RouterHarness>

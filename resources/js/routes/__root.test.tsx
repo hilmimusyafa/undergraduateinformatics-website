@@ -22,11 +22,12 @@ describe('RootLayout', () => {
             },
         });
         (window as any).__INITIAL_DATA__ = {
-            title: 'Beranda - Portal Informasi',
-            description: 'Deskripsi Portal',
-            tags: [],
-            posts: [],
-            sections: [],
+            status: 'success',
+            data: {
+                latest_posts: [],
+                latest_links: [],
+                dashboard: [],
+            },
         };
     });
 
