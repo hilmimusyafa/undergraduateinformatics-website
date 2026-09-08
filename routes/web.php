@@ -34,7 +34,7 @@ Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.sho
  * Blade views, and standard form submissions.  The public site remains served
  * by its existing React/Vite entry point.
  */
-Route::prefix('admin')->group(function () {
+Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('login', [AdminController::class, 'loginForm'])->name('login');
         Route::post('login', [AdminController::class, 'login'])->name('loginAttempt');
@@ -72,7 +72,7 @@ Route::prefix('admin')->group(function () {
                 'datasets' => $datasets,
                 'dashboardTablesReady' => $dashboardTablesReady,
             ]);
-        })->name('admin.dashboard');
+        })->name('dashboard');
         Route::get('reservation', function () {
             $reservationTableReady = Schema::hasTable('reservation_schedules');
 
@@ -84,28 +84,28 @@ Route::prefix('admin')->group(function () {
                     ? ReservationSchedule::latest()->get()
                     : collect(),
             ]);
-        })->name('admin.reservation');
+        })->name('reservation');
 
         Route::get('form-link', fn () => view('AdminDashboard.feedback', [
             'feedbackLink' => FeedbackLink::query()->first(),
             'reservationLink' => Schema::hasTable('reservation_links')
                 ? ReservationLink::query()->first()
                 : null,
-        ]))->name('admin.form-link');
+        ]))->name('form-link');
         Route::put('form-link/feedback', function (Request $request) {
             $validated = $request->validate(['feedback_link' => ['required', 'url']]);
             $feedbackLink = FeedbackLink::query()->firstOrCreate([], ['link' => '']);
             $feedbackLink->update(['link' => $validated['feedback_link']]);
 
             return redirect()->route('admin.form-link')->with('success', 'Link feedback berhasil diperbarui.');
-        })->name('admin.form-link.feedback.update');
+        })->name('form-link.feedback.update');
         Route::put('form-link/reservation', function (Request $request) {
             $validated = $request->validate(['reservation_link' => ['required', 'url']]);
             $reservationLink = ReservationLink::query()->firstOrCreate([], ['link' => '']);
             $reservationLink->update(['link' => $validated['reservation_link']]);
 
             return redirect()->route('admin.form-link')->with('success', 'Link reservasi berhasil diperbarui.');
-        })->name('admin.form-link.reservation.update');
+        })->name('form-link.reservation.update');
 
         Route::get('logout', [AdminController::class, 'logout'])->name('logout');
         Route::resource('posts', PostController::class)->except(['show']);

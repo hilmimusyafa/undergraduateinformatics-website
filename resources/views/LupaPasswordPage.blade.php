@@ -9,10 +9,10 @@
         </div>
         <div class="card-body">
             <div class="back">
-                <a href="{{ Auth::check() ? route('posts.index') : route('login') }}"><i
+                <a href="{{ Auth::check() ? route('admin.posts.index') : route('admin.login') }}"><i
                         class="fa-solid fa-arrow-left fa-lg"></i>Kembali</a>
             </div>
-            <form method="POST" action="{{ route('submitEmailRecovery') }}">
+            <form method="POST" action="{{ route('admin.submitEmailRecovery') }}">
                 @csrf
                 <div class="email-field">
                     <label for="email" class="form-label">Masukkan Email yang Terdaftar</label>

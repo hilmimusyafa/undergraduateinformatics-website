@@ -74,7 +74,7 @@ class TagController extends Controller
         $data = Tag::where('id','=',$tag->id)->get();
         if ($data) {
             $request->session()->flash('success', 'Tag berhasil ditambahkan!');
-            return redirect()->route('tags.index');
+            return redirect()->route('admin.tags.index');
         } else {
             return back()->withErrors([
                 'message' => 'Terdapat kesalahan'
@@ -145,7 +145,7 @@ class TagController extends Controller
         $data = Tag::where('id','=',$tag->id)->get();
         if ($data) {
             $request->session()->flash('success', 'Tag berhasil diupdate!');
-            return redirect()->route('tags.index');
+            return redirect()->route('admin.tags.index');
         } else {
             return back()->withErrors([
                 'message' => 'Terdapat kesalahan'
@@ -173,6 +173,6 @@ class TagController extends Controller
 
         // Redirect to admin tag index page with success
         request()->session()->flash('success', 'Tag berhasil dihapus!');
-        return redirect()->route('tags.index');
+        return redirect()->route('admin.tags.index');
     }
 }

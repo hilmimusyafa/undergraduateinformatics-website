@@ -5,7 +5,7 @@
 @section('content')
     <div class="admin col-md-9">
         <div class="kembali">
-            <a href="{{ route('tags.index') }}">
+            <a href="{{ route('admin.tags.index') }}">
                 <i class="fa-solid fa-arrow-left"></i>Kembali
             </a>
         </div>
@@ -14,7 +14,7 @@
         </div>
         <div class="form row">
             @include('partials.Alerts')
-            <form method="POST" action="{{ route('tags.update', ['tag' => $tag->id]) }}" enctype="multipart/form-data"
+            <form method="POST" action="{{ route('admin.tags.update', ['tag' => $tag->id]) }}" enctype="multipart/form-data"
                 class="d-flex">
                 @csrf
                 @method('PUT')

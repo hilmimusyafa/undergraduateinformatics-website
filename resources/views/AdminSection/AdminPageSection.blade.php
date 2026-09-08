@@ -10,20 +10,20 @@
             @include('partials.Alerts')
             <div class="d-flex">
                 <div class="col-md">
-                    <a href="{{ route('sections.create') }}">
+                    <a href="{{ route('admin.sections.create') }}">
                         <button class="btn btn-secondary">
                             <i class="fa-solid fa-plus"></i> Tambah Section
                         </button>
                     </a>
 
-                    <a href="{{ route('sections.changeOrder') }}">
+                    <a href="{{ route('admin.sections.changeOrder') }}">
                         <button class="btn btn-warning">
                             <i class="fa-solid fa-sort"></i> Ganti Urutan Section
                         </button>
                     </a>
                 </div>
                 <div class="col-md-3">
-                    <form method="GET" action="{{ route('sections.index') }}" class='d-flex'>
+                    <form method="GET" action="{{ route('admin.sections.index') }}" class='d-flex'>
                         <input class="form-control" name="search" type="search" placeholder="Cari"
                             value="{{ request()->get('search') }}" aria-label="Search">
                         {{-- <a href="#">
@@ -48,7 +48,7 @@
                         <tr>
                             <td>{{ $section->name }}</td>
                             <td class="aksi"><a class="edit"
-                                    href="{{ route('sections.edit', ['section' => $section->id]) }}">Edit</a>
+                                    href="{{ route('admin.sections.edit', ['section' => $section->id]) }}">Edit</a>
                                 <a class="delete" href="#" data-bs-toggle="modal"
                                     data-bs-target="#confirmModal-{{ $section->id }}">Delete</a>
                             </td>
@@ -70,7 +70,7 @@
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Batal</button>
                                         <form id="delete-form-{{ $section->id }}"
-                                            action="{{ route('sections.destroy', ['section' => $section->id]) }}"
+                                            action="{{ route('admin.sections.destroy', ['section' => $section->id]) }}"
                                             method="POST">
                                             @csrf
                                             @method('DELETE')

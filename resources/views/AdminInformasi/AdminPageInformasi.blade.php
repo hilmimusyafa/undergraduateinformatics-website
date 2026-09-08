@@ -9,14 +9,14 @@
                 <h1>Manajemen Informasi</h1>
                 <div class="d-flex">
                     <div class="col-md">
-                        <a href="{{ route('posts.create') }}">
+                        <a href="{{ route('admin.posts.create') }}">
                             <button class="btn btn-secondary">
                                 <i class="fa-solid fa-plus"></i> Tambah Informasi
                             </button>
                         </a>
                     </div>
                     <div class="col-md-3">
-                        <form method="GET" action="{{ route('posts.index') }}" class='d-flex'>
+                        <form method="GET" action="{{ route('admin.posts.index') }}" class='d-flex'>
                             <input class="form-control" name="search" type="search" placeholder="Cari"
                                 value="{{ request()->get('search') }}" aria-label="Search">
                         </form>
@@ -57,7 +57,7 @@
                                 </ol>
                             </td>
                             <td class="aksi"><a class="edit"
-                                    href="{{ route('posts.edit', ['post' => $data]) }}">Edit</a>
+                                    href="{{ route('admin.posts.edit', ['post' => $data]) }}">Edit</a>
                                 <a class="delete" href="#" data-bs-toggle="modal"
                                     data-bs-target="#confirmModal-{{ $data->id }}">Delete</a>
                             </td>
@@ -79,7 +79,7 @@
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Batal</button>
                                         <form id="delete-form-{{ $data->id }}"
-                                            action="{{ route('posts.destroy', ['post' => $data->id]) }}" method="POST">
+                                            action="{{ route('admin.posts.destroy', ['post' => $data->id]) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Hapus</button>

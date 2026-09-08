@@ -10,14 +10,14 @@
             @include('partials.Alerts')
             <div class="d-flex">
                 <div class="col-md">
-                    <a href="{{ route('tags.create') }}">
+                    <a href="{{ route('admin.tags.create') }}">
                         <button class="btn btn-secondary">
                             <i class="fa-solid fa-plus"></i> Tambah Tag
                         </button>
                     </a>
                 </div>
                 <div class="col-md-3">
-                    <form method="GET" action="{{ route('tags.index') }}" class='d-flex'>
+                    <form method="GET" action="{{ route('admin.tags.index') }}" class='d-flex'>
                         <input class="form-control" name="search" type="search" placeholder="Cari"
                             value="{{ request()->get('search') }}" aria-label="Search">
                         {{-- <a href="#">
@@ -47,10 +47,10 @@
                             {{-- <td><img src="/images/imgCard.svg" alt=""></td> --}}
                             <td class="aksi">
                                 @if ($tag->name == 'S1 Informatika')
-                                    <a class="edit" href="{{ route('tags.edit', ['tag' => $tag->id]) }}">Edit Tag
+                                    <a class="edit" href="{{ route('admin.tags.edit', ['tag' => $tag->id]) }}">Edit Tag
                                         Description</a>
                                 @else()
-                                    <a class="edit" href="{{ route('tags.edit', ['tag' => $tag->id]) }}">Edit</a>
+                                    <a class="edit" href="{{ route('admin.tags.edit', ['tag' => $tag->id]) }}">Edit</a>
                                     <a class="delete" href="#" data-bs-toggle="modal"
                                         data-bs-target="#confirmModal-{{ $tag->id }}">Delete</a>
                                 @endif
@@ -72,7 +72,7 @@
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Batal</button>
                                         <form id="delete-form-{{ $tag->id }}"
-                                            action="{{ route('tags.destroy', ['tag' => $tag->id]) }}" method="POST">
+                                            action="{{ route('admin.tags.destroy', ['tag' => $tag->id]) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Hapus</button>

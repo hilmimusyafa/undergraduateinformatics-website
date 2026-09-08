@@ -9,7 +9,7 @@
         </div>
         <div class="form row">
             @include('partials.alerts')
-            <form method="POST" action="{{ route('updatePasswordRecoveryQuestion') }}" class="d-flex">
+            <form method="POST" action="{{ route('admin.updatePasswordRecoveryQuestion') }}" class="d-flex">
                 @csrf
                 <div class="col-md-6">
                     <div class="mb-3">

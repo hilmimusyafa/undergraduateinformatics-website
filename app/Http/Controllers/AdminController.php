@@ -58,7 +58,7 @@ class AdminController extends Controller
                 'user_id' => $user->id
             ]);
         } else {
-            return redirect()->to(route('forgotPassword'));
+            return redirect()->to(route('admin.forgotPassword'));
         }
     }
 
@@ -72,7 +72,7 @@ class AdminController extends Controller
                 'user_id' => $user->id
             ]);
         } else {
-            return redirect()->to(route('forgotPassword'));
+            return redirect()->to(route('admin.forgotPassword'));
         }
         
     }
@@ -84,10 +84,10 @@ class AdminController extends Controller
     {
         $user = User::all()->where('email', $request->email)->first();
         if ($user) {
-            return redirect()->to(route('questionForm'))->with('user', $user);
+            return redirect()->to(route('admin.questionForm'))->with('user', $user);
         } else {
             request()->session()->flash('error', 'User tidak ditemukan!');
-            return redirect()->to(route('forgotPassword'));
+            return redirect()->to(route('admin.forgotPassword'));
         }
     }
     
@@ -101,14 +101,14 @@ class AdminController extends Controller
             $first_answer = strtolower($user->password_recovery->first_answer); // strtolower() is used to make the answer case insensitive (e.g. "A" and "a" are the same
             $second_answer = strtolower($user->password_recovery->second_answer);
             if ($first_answer == $request->first_answer && $second_answer == $request->second_answer) {
-                return redirect()->to(route('passwordRecoveryForm'))->with('user', $user);
+                return redirect()->to(route('admin.passwordRecoveryForm'))->with('user', $user);
             } else {
                 request()->session()->flash('error', 'Jawaban tidak sesuai!');
-                return redirect()->to(route('questionForm'))->with('user', $user);
+                return redirect()->to(route('admin.questionForm'))->with('user', $user);
             }
         } else {
             request()->session()->flash('error', 'Sesi telah kadaluarsa!');
-            return redirect()->to(route('forgotPassword'));
+            return redirect()->to(route('admin.forgotPassword'));
         }
     }
 
@@ -123,13 +123,13 @@ class AdminController extends Controller
                 $user->password = bcrypt($request->new_password);
                 $user->save();
                 request()->session()->flash('success', 'Password berhasil diganti!');
-                return redirect()->to(route('login'));
+                return redirect()->to(route('admin.login'));
             }
             request()->session()->flash('error', 'Password tidak sesuai!');
-            return redirect()->to(route('passwordRecoveryForm'))->with('user', $user);
+            return redirect()->to(route('admin.passwordRecoveryForm'))->with('user', $user);
         } else {
             request()->session()->flash('error', 'Sesi telah kadaluarsa!');
-            return redirect()->to(route('forgotPassword'));
+            return redirect()->to(route('admin.forgotPassword'));
         }
     }
 
@@ -151,7 +151,7 @@ class AdminController extends Controller
             ]);
         } else {
             request()->session()->flash('error', 'Silakan login terlebih dahulu!');
-            return redirect()->to(route('login'));
+            return redirect()->to(route('admin.login'));
         }
     }
 
@@ -168,10 +168,10 @@ class AdminController extends Controller
             $user->password_recovery->second_answer = strtolower($request->second_answer);
             $user->password_recovery->save();
             request()->session()->flash('success', 'Pertanyaan berhasil diupdate!');
-            return redirect()->to(route('editPasswordRecoveryQuestion'));
+            return redirect()->to(route('admin.editPasswordRecoveryQuestion'));
         } else {
             request()->session()->flash('error', 'Silakan login terlebih dahulu!');
-            return redirect()->to(route('login'));
+            return redirect()->to(route('admin.login'));
         }
     }
 

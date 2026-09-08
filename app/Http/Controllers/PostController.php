@@ -125,7 +125,7 @@ class PostController extends Controller
         $data = Post::where('id','=',$post->id)->get();
         if ($data) {
             $request->session()->flash('success', 'Post berhasil ditambahkan!');
-            return redirect()->route('posts.index');
+            return redirect()->route('admin.posts.index');
         } else {
             return back()->withErrors([
                 'message' => 'Terdapat kesalahan'
@@ -223,7 +223,7 @@ class PostController extends Controller
         $data = Post::where('id','=',$post->id)->get();
         if ($data) {
             $request->session()->flash('success', 'Post berhasil diupdate!');
-            return redirect()->route('posts.index');
+            return redirect()->route('admin.posts.index');
         } else {
             return back()->withErrors([
                 'message' => 'Terdapat kesalahan'
@@ -253,7 +253,7 @@ class PostController extends Controller
 
         // Redirect to admin post index page with success
         request()->session()->flash('success', 'Post berhasil dihapus!');
-        return redirect()->route('posts.index');
+        return redirect()->route('admin.posts.index');
     }
 
     /**

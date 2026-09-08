@@ -46,7 +46,7 @@ class LinkController extends Controller
         $sections = ImportantSection::all()->sortBy('name');
 
         if ($sections->isEmpty()) {
-            return redirect()->route('sections.create')
+            return redirect()->route('admin.sections.create')
                 ->withError('Silahkan buat section link terlebih dahulu');
         }
 
@@ -82,7 +82,7 @@ class LinkController extends Controller
         $data = ImportantLink::where('id','=',$link->id)->get();
         if ($data) {
             $request->session()->flash('success', 'Link berhasil ditambahkan!');
-            return redirect()->route('links.index');
+            return redirect()->route('admin.links.index');
         } else {
             return back()->withError('Terdapat kesalahan');
         }
@@ -139,7 +139,7 @@ class LinkController extends Controller
         $data = ImportantLink::where('id','=',$link->id)->get();
         if ($data) {
             $request->session()->flash('success', 'Link berhasil diupdate!');
-            return redirect()->route('links.index');
+            return redirect()->route('admin.links.index');
         } else {
             return back()->withError('Terdapat kesalahan');
         }
@@ -158,6 +158,6 @@ class LinkController extends Controller
 
         // Redirect to admin important links index page with success
         request()->session()->flash('success', 'Link berhasil dihapus!');
-        return redirect()->route('links.index');
+        return redirect()->route('admin.links.index');
     }
 }

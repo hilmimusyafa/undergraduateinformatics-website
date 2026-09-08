@@ -5,7 +5,7 @@
 @section('content')
     <div class="admin col-md-9">
         <div class="kembali">
-            <a href="{{ route('sections.index') }}">
+            <a href="{{ route('admin.sections.index') }}">
                 <i class="fa-solid fa-arrow-left"></i>Kembali
             </a>
         </div>
@@ -14,7 +14,7 @@
         </div>
         <div class="form row">
             @include('partials.Alerts')
-            <form method="POST" action="{{ route('sections.update', ['section' => $section->id]) }}" class="d-flex">
+            <form method="POST" action="{{ route('admin.sections.update', ['section' => $section->id]) }}" class="d-flex">
                 @csrf
                 @method('PUT')
                 <div class="col-md-6">

@@ -33,7 +33,7 @@
                     </form>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ Auth::check() ? route('posts.index') : route('login') }}" class="btn-login">
+                    <a href="{{ Auth::check() ? route('admin.posts.index') : route('admin.login') }}" class="btn-login">
                         <div class="btn btn-light text-center">Admin</div>
                     </a>
                 </li>

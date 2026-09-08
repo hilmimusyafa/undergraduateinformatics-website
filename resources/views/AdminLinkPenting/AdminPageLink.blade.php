@@ -10,14 +10,14 @@
             @include('partials.Alerts')
             <div class="d-flex">
                 <div class="col-md">
-                    <a href="{{ route('links.create') }}">
+                    <a href="{{ route('admin.links.create') }}">
                         <button class="btn btn-secondary">
                             <i class="fa-solid fa-plus"></i> Tambah Link Penting
                         </button>
                     </a>
                 </div>
                 <div class="col-md-3">
-                    <form method="GET" action="{{ route('links.index') }}" class='d-flex'>
+                    <form method="GET" action="{{ route('admin.links.index') }}" class='d-flex'>
                         <input class="form-control" name="search" type="search" placeholder="Cari"
                             value="{{ request()->get('search') }}" aria-label="Search">
                         {{-- <a href="#">
@@ -50,7 +50,7 @@
                                 </a>
                             </td>
                             <td class="aksi"><a class="edit"
-                                    href="{{ route('links.edit', ['link' => $link->id]) }}">Edit</a>
+                                    href="{{ route('admin.links.edit', ['link' => $link->id]) }}">Edit</a>
                                 <a class="delete" href="#" data-bs-toggle="modal"
                                     data-bs-target="#confirmModal-{{ $link->id }}">Delete</a>
                             </td>
@@ -73,7 +73,7 @@
                                         <button type="button" class="btn btn-secondary"
                                             data-bs-dismiss="modal">Batal</button>
                                         <form id="delete-form-{{ $link->id }}"
-                                            action="{{ route('links.destroy', ['link' => $link->id]) }}" method="POST">
+                                            action="{{ route('admin.links.destroy', ['link' => $link->id]) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Hapus</button>

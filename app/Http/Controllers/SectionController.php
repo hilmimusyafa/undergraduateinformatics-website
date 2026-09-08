@@ -68,7 +68,7 @@ class SectionController extends Controller
         }
 
         $request->session()->flash('success', 'Urutan berhasil diperbarui!');
-        return redirect()->route('sections.index');
+        return redirect()->route('admin.sections.index');
     }
 
 
@@ -109,7 +109,7 @@ class SectionController extends Controller
         $data = ImportantSection::where('id','=',$section->id)->get();
         if ($data) {
             $request->session()->flash('success', 'Section berhasil ditambahkan!');
-            return redirect()->route('sections.index');
+            return redirect()->route('admin.sections.index');
         } else {
             return back()->withErrors([
                 'message' => 'Terdapat kesalahan'
@@ -169,7 +169,7 @@ class SectionController extends Controller
         $data = ImportantSection::where('id','=',$section->id)->get();
         if ($data) {
             $request->session()->flash('success', 'Section berhasil diupdate!');
-            return redirect()->route('sections.index');
+            return redirect()->route('admin.sections.index');
         } else {
             return back()->withErrors([
                 'message' => 'Terdapat kesalahan'
@@ -193,6 +193,6 @@ class SectionController extends Controller
 
         // Redirect to admin important sections index page with success
         request()->session()->flash('success', 'Section berhasil dihapus!');
-        return redirect()->route('sections.index');
+        return redirect()->route('admin.sections.index');
     }
 }
