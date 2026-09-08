@@ -1,26 +1,26 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\TagController;
-use App\Http\Controllers\SectionController;
 use App\Http\Controllers\LinkController as AdminLinkController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\TagController;
+use App\Http\Controllers\Web\FeedbackController;
+use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LinkController;
-use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\Web\PostController as WebPostController;
+use App\Http\Controllers\Web\SearchController;
+use App\Http\Controllers\Web\TagController as WebTagController;
 use App\Models\DashboardDataset;
 use App\Models\FeedbackLink;
 use App\Models\ReservationLink;
 use App\Models\ReservationSchedule;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
-use App\Http\Controllers\Web\FeedbackController;
-use App\Http\Controllers\Web\SearchController;
-use App\Http\Controllers\Web\TagController as WebTagController;
 use App\Support\PageMeta;
-use App\Http\Controllers\Web\PostController as WebPostController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
-Route::get('/', [HomePageController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/tags', [WebTagController::class, 'index'])->name('tags.index');
 Route::get('/tags/{slug}', [WebTagController::class, 'show'])->name('tags.show');
