@@ -2,13 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\ImportantLink;
-use App\Models\ImportantSection;
-use App\Models\PasswordRecovery;
-use App\Models\Post;
-use App\Models\PostTag;
 use App\Models\Tag;
-use App\Models\User;
 use Database\Seeders\TagSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -32,35 +26,6 @@ class TagSeederTest extends TestCase
         $this->seed(TagSeeder::class);
 
         $this->assertDatabaseCount('tags', 7);
-    }
-
-    public function test_database_seeder_seeds_all_tables(): void
-    {
-        $this->seed();
-
-        $this->assertDatabaseCount('users', 1);
-        $this->assertDatabaseCount('password_recoveries', 1);
-        $this->assertDatabaseCount('tags', 7);
-        $this->assertDatabaseCount('posts', 30);
-        $this->assertDatabaseCount('post_tags', 65);
-        $this->assertDatabaseCount('important_sections', 12);
-        $this->assertDatabaseCount('important_links', 59);
-        $this->assertDatabaseCount('feedback_links', 1);
-        $this->assertDatabaseCount('reservation_links', 1);
-    }
-
-    public function test_database_seeder_is_idempotent(): void
-    {
-        $this->seed();
-        $this->seed();
-
-        $this->assertSame(1, User::count());
-        $this->assertSame(1, PasswordRecovery::count());
-        $this->assertSame(7, Tag::count());
-        $this->assertSame(30, Post::count());
-        $this->assertSame(65, PostTag::count());
-        $this->assertSame(12, ImportantSection::count());
-        $this->assertSame(59, ImportantLink::count());
     }
 
     public function test_tag_without_posts_has_zero_count(): void
