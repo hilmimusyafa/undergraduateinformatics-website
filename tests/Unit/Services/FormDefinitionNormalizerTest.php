@@ -180,4 +180,31 @@ final class FormDefinitionNormalizerTest extends TestCase
         $this->assertSame(['text' => 'A'], $result['questions'][0]['title']);
         $this->assertNull($result['questions'][0]['subtitle']);
     }
+
+    public function test_does_not_append_other_choice_when_allow_other_answer_is_enabled(): void
+    {
+        $raw = [
+            'title' => 'T',
+            'questions' => [
+                [
+                    'id' => 'q1',
+                    'type' => 'Question.Choice',
+                    'title' => 'Waktu Pertemuan',
+                    'required' => true,
+                    'allowMultipleValues' => false,
+                    'questionInfo' => json_encode([
+                        'Choices' => [
+                            ['Description' => '09:00'],
+                            ['Description' => '13:00'],
+                        ],
+                        'AllowOtherAnswer' => true,
+                    ]),
+                ],
+            ],
+        ];
+
+        $result = (new FormDefinitionNormalizer)->normalize($raw);
+
+        $this->assertSame(['09:00', '13:00'], array_column($result['questions'][0]['choices'], 'value'));
+    }
 }
