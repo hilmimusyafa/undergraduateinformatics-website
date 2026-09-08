@@ -2,11 +2,17 @@ import { type ReactNode } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { HomePagePayload } from './index';
+import { HomePage } from '@/features/home/HomePage';
+import { type DashboardDataset, type HomePayload } from '@/features/home/types';
+import { seoPage } from '@/lib/seo';
+import { axiosError } from '@/test/mocks';
+import { type LinkSummary } from '@/types/link';
+import { type PostSummary } from '@/types/post';
+
 import { Route } from './index';
 
 vi.mock('axios', async () => {
@@ -20,6 +26,57 @@ vi.mock('axios', async () => {
         },
     };
 });
+
+vi.mock('embla-carousel-react', () => {
+    return {
+        default: () => [vi.fn(), undefined],
+    };
+});
+
+vi.mock('@tanstack/react-router', async () => {
+    const { routerModuleMock } = await import('@/test/mocks');
+
+    return routerModuleMock();
+});
+
+const dashboardFixture: DashboardDataset = {
+    id: 1,
+    title: 'Mahasiswa per Angkatan',
+    chart_type: 'bar',
+    x_label: 'Angkatan',
+    y_label: 'Jumlah',
+    labels: ['2022', '2023'],
+    values: [240, 255],
+};
+
+const postFixture: PostSummary = {
+    id: 7,
+    slug: 'pengumuman-beasiswa-2026',
+    title: 'Pengumuman Beasiswa 2026',
+    subtitle: 'Pendaftaran beasiswa dibuka hingga akhir bulan.',
+    updated_at: '2026-09-05T12:00:00.000Z',
+    tags: [{ id: 1, slug: 'beasiswa', name: 'Beasiswa' }],
+};
+
+const linkFixture: LinkSummary = {
+    id: 7,
+    name: 'Portal Akademik',
+    link: 'https://portal.telkomuniversity.ac.id/',
+    updated_at: '2026-09-05T12:00:00.000Z',
+    section: { id: 2, name: 'Akademik' },
+};
+
+function homePayload(data: Partial<HomePayload['data']> = {}): HomePayload {
+    return {
+        status: 'success',
+        data: {
+            latest_posts: [],
+            latest_links: [],
+            dashboard: [],
+            ...data,
+        },
+    };
+}
 
 function renderHome() {
     const Component = Route.options.component as () => ReactNode;
@@ -44,48 +101,96 @@ describe('HomePage route', () => {
         delete (window as any).__INITIAL_DATA__;
     });
 
-    it('renders the placeholder heading', async () => {
+    it('renders the greeting and all home sections once the data loads', async () => {
         vi.mocked(axios.get).mockResolvedValue({
-            data: {} as HomePagePayload,
+            data: homePayload(),
         });
 
         renderHome();
 
-        expect(await screen.findByRole('heading', { name: 'Hello World' })).toBeInTheDocument();
+        expect(
+            await screen.findByRole('heading', {
+                name: 'Selamat Datang di Portal Informasi Sarjana Informatika',
+            })
+        ).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Informasi Terbaru' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Tautan Terbaru' })).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Statistik Mahasiswa' })).toBeInTheDocument();
     });
 
-    it('sets the document title and description from the api payload', async () => {
+    it('renders latest posts, latest links, and dashboard charts from the payload', async () => {
         vi.mocked(axios.get).mockResolvedValue({
-            data: {
-                title: 'Beranda - Portal Informasi',
-                description: 'Sumber informasi resmi.',
-            } as HomePagePayload,
+            data: homePayload({
+                latest_posts: [postFixture],
+                latest_links: [linkFixture],
+                dashboard: [dashboardFixture],
+            }),
         });
 
         renderHome();
 
-        await waitFor(() => {
-            expect(document.title).toContain('Beranda - Portal Informasi');
-            expect(
-                document.querySelector('meta[name="description"]')?.getAttribute('content')
-            ).toBe('Sumber informasi resmi.');
-        });
+        expect(
+            await screen.findByRole('heading', { name: 'Pengumuman Beasiswa 2026' })
+        ).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: 'Portal Akademik' })).toHaveAttribute(
+            'href',
+            'https://portal.telkomuniversity.ac.id/'
+        );
+        expect(screen.getByRole('link', { name: 'Informasi Terbaru' })).toHaveAttribute(
+            'href',
+            '/posts/search'
+        );
+        expect(screen.getByRole('link', { name: 'Tautan Terbaru' })).toHaveAttribute(
+            'href',
+            '/links'
+        );
+        expect(screen.getByRole('heading', { name: 'Mahasiswa per Angkatan' })).toBeInTheDocument();
     });
 
-    it('falls back to the shared home meta when the payload omits it', async () => {
-        vi.mocked(axios.get).mockResolvedValue({
-            data: {} as HomePagePayload,
-        });
+    it('sets the page title via the head option', () => {
+        const head = Route.options.head as unknown as (context: unknown) => {
+            meta?: { title?: string }[];
+        };
+
+        expect(head).toBeDefined();
+
+        const result = head({});
+        expect(result.meta?.[0]?.title).toBe(seoPage('home').title);
+    });
+
+    it('sets the page description via the head option', () => {
+        const head = Route.options.head as unknown as (context: unknown) => {
+            meta?: { title?: string; name?: string; content?: string }[];
+        };
+
+        const result = head({});
+        const description = result.meta?.find((entry) => entry.name === 'description');
+        expect(description?.content).toBe(seoPage('home').description);
+    });
+
+    it('renders the home page as its component', () => {
+        expect(Route.options.component).toBe(HomePage);
+    });
+
+    it('renders a skeleton while the page is loading', async () => {
+        vi.mocked(axios.get).mockReturnValue(new Promise(() => undefined));
 
         renderHome();
 
-        await waitFor(() => {
-            expect(document.title).toBe('Beranda - Portal Informasi Sarjana Informatika');
-            expect(
-                document.querySelector('meta[name="description"]')?.getAttribute('content')
-            ).toBe(
-                'Portal resmi Program Studi Sarjana Informatika Telkom University untuk informasi perkuliahan peserta didik.'
-            );
-        });
+        expect(screen.getByRole('status', { name: 'Memuat beranda' })).toBeInTheDocument();
+    });
+
+    it('shows an error message when the request fails', async () => {
+        vi.mocked(axios.get).mockRejectedValue(axiosError(500));
+
+        renderHome();
+
+        expect(
+            await screen.findByText(
+                'Terjadi kesalahan saat memuat halaman. Silakan coba lagi.',
+                {},
+                { timeout: 3000 }
+            )
+        ).toBeInTheDocument();
     });
 });
