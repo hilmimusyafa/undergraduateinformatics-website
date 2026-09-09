@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\FeedbackLink;
+use App\Models\ReservationLink;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -17,8 +18,10 @@ class RefreshMsFormsDefinitionTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Cache::flush();
         Http::preventStrayRequests();
         FeedbackLink::query()->delete();
+        ReservationLink::query()->delete();
     }
 
     public function test_command_warms_the_cached_form_definition(): void
@@ -28,7 +31,7 @@ class RefreshMsFormsDefinitionTest extends TestCase
 
         $this->artisan('msforms:refresh-definition')->assertSuccessful();
 
-        $cacheKey = 'msforms-definition:' . md5($feedbackLink->link);
+        $cacheKey = 'msforms-definition:'.md5($feedbackLink->link);
 
         $this->assertNotNull(Cache::get($cacheKey));
         $this->assertSame($feedbackLink->link, Cache::get($cacheKey)['link']);
@@ -44,7 +47,7 @@ class RefreshMsFormsDefinitionTest extends TestCase
         Http::fake(['https://forms.office.com/r/*' => Http::response('', 500)]);
         $feedbackLink = FeedbackLink::create(['link' => 'https://forms.office.com/r/abc123']);
 
-        $cacheKey = 'msforms-definition:' . md5($feedbackLink->link);
+        $cacheKey = 'msforms-definition:'.md5($feedbackLink->link);
         Cache::put($cacheKey, ['link' => $feedbackLink->link, 'stale' => true]);
 
         $this->artisan('msforms:refresh-definition')->assertFailed();
