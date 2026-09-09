@@ -8,12 +8,12 @@ use App\Services\MsForms\MsFormsClient;
 use App\Services\MsForms\MsFormsException;
 use App\Services\MsForms\MsFormsRequestException;
 use App\Services\MsForms\ResolvedFormTarget;
-use App\Services\Reservation\BeritaAcaraPdfGenerator;
 use App\Services\Reservation\ReservationAnswerMapper;
 use App\Services\Reservation\ReservationFormUnavailableException;
 use App\Services\Reservation\ReservationMappingException;
 use App\Services\Reservation\ReservationSubmissionService;
 use App\Services\Reservation\ReservationValidationException;
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
@@ -59,7 +59,6 @@ class ReservationSubmissionServiceTest extends TestCase
 
     private function service(
         ?MsFormsClient $client = null,
-        ?BeritaAcaraPdfGenerator $pdf = null,
     ): ReservationSubmissionService {
         $client ??= $this->mock(MsFormsClient::class, function ($mock) {
             $mock->shouldReceive('resolve')
@@ -67,13 +66,8 @@ class ReservationSubmissionServiceTest extends TestCase
             $mock->shouldReceive('submitAnswers')->zeroOrMoreTimes();
         });
 
-        $pdf ??= $this->mock(BeritaAcaraPdfGenerator::class, function ($mock) {
-            $mock->shouldReceive('generate')->andReturn(url('beritaacara/test.pdf'));
-        });
-
         return new ReservationSubmissionService(
             app(ReservationAnswerMapper::class),
-            $pdf,
             $client,
         );
     }
@@ -89,7 +83,7 @@ class ReservationSubmissionServiceTest extends TestCase
         $this->assertSame('09:00:00', $schedule->shift);
         $this->assertSame('Budi', $schedule->requested_by);
         $this->assertSame('Ruang 101', $schedule->meeting_room);
-        $this->assertSame(url('beritaacara/test.pdf'), $schedule->document_link);
+        $this->assertNull($schedule->document_link);
         $this->assertDatabaseHas('reservation_schedules', [
             'date' => '2026-09-10',
             'shift' => '09:00:00',
@@ -229,7 +223,7 @@ class ReservationSubmissionServiceTest extends TestCase
         ReservationLink::create(['link' => 'https://forms.office.com/r/abc123']);
 
         $pdoException = new \PDOException('SQLSTATE[23000]: Integrity constraint violation', 23000);
-        $queryException = new \Illuminate\Database\QueryException('sqlite', 'insert into reservation_schedules', [], $pdoException);
+        $queryException = new QueryException('sqlite', 'insert into reservation_schedules', [], $pdoException);
 
         ReservationSchedule::saving(function () use ($queryException) {
             throw $queryException;
@@ -250,7 +244,7 @@ class ReservationSubmissionServiceTest extends TestCase
     {
         ReservationLink::create(['link' => 'https://forms.office.com/r/abc123']);
 
-        $queryException = new \Illuminate\Database\QueryException(
+        $queryException = new QueryException(
             'sqlite',
             'insert into reservation_schedules',
             [],

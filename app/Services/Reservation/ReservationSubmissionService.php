@@ -6,6 +6,7 @@ use App\Models\ReservationLink;
 use App\Models\ReservationSchedule;
 use App\Services\MsForms\MsFormsClient;
 use App\Services\MsForms\MsFormsException;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 
@@ -13,10 +14,8 @@ final class ReservationSubmissionService
 {
     public function __construct(
         private readonly ReservationAnswerMapper $mapper,
-        private readonly BeritaAcaraPdfGenerator $pdfGenerator,
         private readonly MsFormsClient $msFormsClient,
-    ) {
-    }
+    ) {}
 
     public function submit(array $answers): ?ReservationSchedule
     {
@@ -24,7 +23,7 @@ final class ReservationSubmissionService
 
         $link = ReservationLink::configured()->first();
 
-        if (!$link) {
+        if (! $link) {
             throw new ReservationFormUnavailableException('Reservation form is unavailable.');
         }
 
@@ -40,7 +39,7 @@ final class ReservationSubmissionService
                 now()->toIso8601String()
             );
         } catch (MsFormsException $e) {
-            Log::error('Reservation form submit failed: ' . $e->getMessage());
+            Log::error('Reservation form submit failed: '.$e->getMessage());
 
             throw $e;
         }
@@ -55,16 +54,9 @@ final class ReservationSubmissionService
                 );
             }
 
-            Log::critical('Reservation stored in Microsoft Forms but the local record failed to save: ' . $e->getMessage() . ' — attributes: ' . json_encode($attributes));
+            Log::critical('Reservation stored in Microsoft Forms but the local record failed to save: '.$e->getMessage().' — attributes: '.json_encode($attributes));
 
             return null;
-        }
-
-        $documentLink = $this->pdfGenerator->generate($schedule);
-
-        if ($documentLink) {
-            $schedule->document_link = $documentLink;
-            $schedule->save();
         }
 
         return $schedule;
@@ -81,7 +73,7 @@ final class ReservationSubmissionService
             );
         }
 
-        if (!in_array($day, config('reservation.allowed_days', []), true)) {
+        if (! in_array($day, config('reservation.allowed_days', []), true)) {
             throw new ReservationValidationException(
                 ['date' => ['The reservation date must be a Monday, Tuesday, Thursday, or Friday.']],
                 'The reservation date is not available.'
@@ -101,7 +93,7 @@ final class ReservationSubmissionService
 
     private function isUniqueViolation(\Throwable $e): bool
     {
-        $pdo = $e instanceof \Illuminate\Database\QueryException ? $e->getPrevious() : $e;
+        $pdo = $e instanceof QueryException ? $e->getPrevious() : $e;
 
         return $pdo instanceof \PDOException && (string) $pdo->getCode() === '23000';
     }
