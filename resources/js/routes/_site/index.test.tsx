@@ -115,7 +115,9 @@ describe('HomePage route', () => {
         ).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: 'Informasi Terbaru' })).toBeInTheDocument();
         expect(screen.getByRole('heading', { name: 'Tautan Terbaru' })).toBeInTheDocument();
-        expect(screen.getByRole('heading', { name: 'Statistik Mahasiswa' })).toBeInTheDocument();
+        expect(
+            await screen.findByRole('heading', { name: 'Statistik Mahasiswa' })
+        ).toBeInTheDocument();
     });
 
     it('renders latest posts, latest links, and dashboard charts from the payload', async () => {
@@ -144,7 +146,9 @@ describe('HomePage route', () => {
             'href',
             '/links'
         );
-        expect(screen.getByRole('heading', { name: 'Mahasiswa per Angkatan' })).toBeInTheDocument();
+        expect(
+            await screen.findByRole('heading', { name: 'Mahasiswa per Angkatan' })
+        ).toBeInTheDocument();
     });
 
     it('sets the page title via the head option', () => {

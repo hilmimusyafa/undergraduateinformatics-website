@@ -1,7 +1,13 @@
-import { DashboardCharts } from './DashboardCharts';
+import { lazy, Suspense } from 'react';
+
+import { DashboardChartsSkeleton } from './DashboardChartsStates';
 import { LatestLinks } from './LatestLinks';
 import { LatestPosts } from './LatestPosts';
 import { type HomeData } from './types';
+
+const DashboardCharts = lazy(() =>
+    import('./DashboardCharts').then((module) => ({ default: module.DashboardCharts }))
+);
 
 export function HomeContent({ data }: { data: HomeData }) {
     const { latest_posts, latest_links, dashboard } = data;
@@ -25,7 +31,9 @@ export function HomeContent({ data }: { data: HomeData }) {
                 <LatestLinks links={latest_links} />
             </div>
 
-            <DashboardCharts datasets={dashboard} />
+            <Suspense fallback={<DashboardChartsSkeleton />}>
+                <DashboardCharts datasets={dashboard} />
+            </Suspense>
         </div>
     );
 }

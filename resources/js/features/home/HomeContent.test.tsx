@@ -89,11 +89,15 @@ describe('HomeContent', () => {
         );
     });
 
-    it('renders the dashboard charts', () => {
+    it('renders the dashboard charts', async () => {
         render(<HomeContent data={homeData()} />);
 
-        expect(screen.getByRole('heading', { name: 'Statistik Mahasiswa' })).toBeInTheDocument();
-        expect(screen.getByRole('heading', { name: 'Mahasiswa per Angkatan' })).toBeInTheDocument();
+        expect(
+            await screen.findByRole('heading', { name: 'Statistik Mahasiswa' })
+        ).toBeInTheDocument();
+        expect(
+            screen.getByRole('heading', { name: 'Mahasiswa per Angkatan' })
+        ).toBeInTheDocument();
     });
 
     it('renders empty messages when there are no posts or links', () => {
@@ -103,9 +107,9 @@ describe('HomeContent', () => {
         expect(screen.getByText('Belum ada tautan penting.')).toBeInTheDocument();
     });
 
-    it('renders an empty message when there is no dashboard data', () => {
+    it('renders an empty message when there is no dashboard data', async () => {
         render(<HomeContent data={homeData({ dashboard: [] })} />);
 
-        expect(screen.getByText('Belum ada data statistik.')).toBeInTheDocument();
+        expect(await screen.findByText('Belum ada data statistik.')).toBeInTheDocument();
     });
 });
