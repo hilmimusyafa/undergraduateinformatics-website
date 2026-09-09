@@ -133,7 +133,7 @@ describe('TagListPage', () => {
     });
 
     it('does not nest a div inside a p in the skeleton', async () => {
-        let resolveGet: (value: { data: TagsPayload }) => void = () => undefined;
+        let resolveGet: (value: { data: TagWithCountsPayload }) => void = () => undefined;
         vi.mocked(axios.get).mockReturnValue(
             new Promise((resolve) => {
                 resolveGet = resolve;

@@ -9,9 +9,9 @@
         </div>
         <div class="card-body">
             <div class="back">
-                <a href="{{ route('forgotPassword') }}"><i class="fa-solid fa-arrow-left fa-lg"></i>Kembali</a>
+                <a href="{{ route('admin.forgotPassword') }}"><i class="fa-solid fa-arrow-left fa-lg"></i>Kembali</a>
             </div>
-            <form method="POST" action="{{ route('submitAnswerRecovery') }}">
+            <form method="POST" action="{{ route('admin.submitAnswerRecovery') }}">
                 @csrf
                 <div class="pertanyaan-field">
                     <label for="pertanyaan1" class="form-label">{{ $first_question }}</label>

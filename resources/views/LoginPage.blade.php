@@ -13,7 +13,7 @@
             <div class="back">
                 <a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i>Kembali ke website</a>
             </div>
-            <form method="POST" action="{{ route('loginAttempt') }}">
+            <form method="POST" action="{{ route('admin.loginAttempt') }}">
                 @csrf
                 <div class="auth-field">
                     <label for="email" class="form-label">Email</label>
@@ -27,7 +27,7 @@
                 </div>
                 <div class="auth-actions">
                     <div class="lupa-password">
-                        <a href="{{ route('forgotPassword') }}" class="text-decoration-none">Lupa Password?</a>
+                        <a href="{{ route('admin.forgotPassword') }}" class="text-decoration-none">Lupa Password?</a>
                     </div>
                     <button type="submit" class="btn btn-danger"><i class="fa-solid fa-right-to-bracket"></i> Login</button>
                 </div>

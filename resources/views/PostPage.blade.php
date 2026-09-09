@@ -23,7 +23,7 @@
                     {{ $post->hasBeenUpdated() ? '| ' . $post->updated_at->format('j F Y') . ' (Edited)' : '' }}</p>
                 <div class="postingan-tag">
                     @foreach ($post->tags as $tag)
-                        <a href="{{ route('viewTag', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a>
+                        <a href="{{ route('tags.show', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a>
                     @endforeach
                 </div>
             </div>

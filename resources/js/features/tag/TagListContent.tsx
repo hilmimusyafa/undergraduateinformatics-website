@@ -14,7 +14,7 @@ export function TagListContent({ tags }: { tags: TagWithCount[] }) {
             {tags.length === 0 ? (
                 <p
                     role="status"
-                    className="text-muted-foreground mt-[calc(var(--typeset-flow)*1.4)]"
+                    className="text-muted-foreground mt-8 md:mt-7"
                 >
                     Belum ada topik.
                 </p>

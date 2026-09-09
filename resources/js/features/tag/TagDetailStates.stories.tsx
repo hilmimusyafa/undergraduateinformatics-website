@@ -1,6 +1,6 @@
 import type { Story } from '@ladle/react';
 
-import { PageError } from '@/components/PageError';
+import { ErrorState } from '@/components/ErrorState';
 
 import { TagDetailSkeleton } from './TagDetailStates';
 
@@ -10,4 +10,4 @@ export default {
 
 export const DetailLoading: Story = () => <TagDetailSkeleton />;
 
-export const DetailError: Story = () => <PageError />;
+export const DetailError: Story = () => <ErrorState />;

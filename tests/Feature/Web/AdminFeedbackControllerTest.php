@@ -32,7 +32,7 @@ class AdminFeedbackControllerTest extends TestCase
 
     public function test_form_link_page_requires_authentication(): void
     {
-        $this->get('/admin/form-link')->assertRedirect(route('login'));
+        $this->get('/admin/form-link')->assertRedirect(route('admin.login'));
     }
 
     public function test_form_link_page_renders_both_links(): void

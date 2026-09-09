@@ -1,0 +1,153 @@
+{
+    "title": "Reservation Form",
+    "formsProRTTitle": "Reservation Form",
+    "description": "Reserve a meeting room session with the study program.",
+    "formsProRTDescription": "Reserve a meeting room session with the study program.",
+    "descriptiveQuestions": [],
+    "questions": [
+        {
+            "id": "r10000000000000000000000000000001",
+            "title": "Tanggal Pertemuan",
+            "formsProRTQuestionTitle": "Tanggal Pertemuan",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.DateTime",
+            "required": true,
+            "order": 1000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Date\":true,\"Time\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000002",
+            "title": "Sesi",
+            "formsProRTQuestionTitle": "Sesi",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.Choice",
+            "required": true,
+            "order": 2000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Choices\":[{\"Description\":\"09:00\"},{\"Description\":\"13:00\"},{\"Description\":\"15:00\"}],\"ChoiceType\":1}"
+        },
+        {
+            "id": "r10000000000000000000000000000003",
+            "title": "Nama Pengaju",
+            "formsProRTQuestionTitle": "Nama Pengaju",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": true,
+            "order": 3000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000004",
+            "title": "Ruang Pertemuan",
+            "formsProRTQuestionTitle": "Ruang Pertemuan",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 4000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000005",
+            "title": "Program Studi",
+            "formsProRTQuestionTitle": "Program Studi",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 5000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000006",
+            "title": "Jumlah Peserta",
+            "formsProRTQuestionTitle": "Jumlah Peserta",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 6000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000007",
+            "title": "Agenda",
+            "formsProRTQuestionTitle": "Agenda",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 7000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":true}"
+        },
+        {
+            "id": "r10000000000000000000000000000008",
+            "title": "Kota",
+            "formsProRTQuestionTitle": "Kota",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 8000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000009",
+            "title": "Nama Pihak Program Studi",
+            "formsProRTQuestionTitle": "Nama Pihak Program Studi",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 9000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000010",
+            "title": "Jabatan Pihak Program Studi",
+            "formsProRTQuestionTitle": "Jabatan Pihak Program Studi",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 10000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000011",
+            "title": "Nama Pihak Terkait",
+            "formsProRTQuestionTitle": "Nama Pihak Terkait",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 11000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        },
+        {
+            "id": "r10000000000000000000000000000012",
+            "title": "Jabatan Pihak Terkait",
+            "formsProRTQuestionTitle": "Jabatan Pihak Terkait",
+            "subtitle": null,
+            "formsProRTSubtitle": null,
+            "type": "Question.TextField",
+            "required": false,
+            "order": 12000000,
+            "allowMultipleValues": null,
+            "questionInfo": "{\"Multiline\":false}"
+        }
+    ]
+}

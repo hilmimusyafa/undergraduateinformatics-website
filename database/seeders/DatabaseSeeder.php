@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ImportantLinkSeeder::class,
             PostSeeder::class,
             PostTagSeeder::class,
+            DashboardDatasetSeeder::class,
         ]);
     }
 }

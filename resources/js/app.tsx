@@ -27,6 +27,7 @@ const router = createRouter({
     notFoundMode: 'root',
     defaultNotFoundComponent: NotFoundPage,
     defaultErrorComponent: ErrorPage,
+    scrollRestoration: true,
 });
 
 NProgress.configure({ showSpinner: false });

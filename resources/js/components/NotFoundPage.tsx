@@ -7,7 +7,7 @@ export function NotFoundPage() {
 
     return (
         <div className="flex min-h-[85vh] items-center justify-center px-4">
-            <div className="w-full max-w-[37em]">
+            <div className="max-w-[37em]">
                 <h1 className="text-foreground text-3xl leading-tight font-semibold">
                     Halaman Tidak Ditemukan
                 </h1>

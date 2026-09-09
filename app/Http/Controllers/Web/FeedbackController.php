@@ -20,7 +20,7 @@ class FeedbackController extends Controller
 
         if ($feedbackLink) {
             try {
-                $initialData = app(FormDefinitionService::class)->resolve($feedbackLink);
+                $initialData = app(FormDefinitionService::class)->resolve($feedbackLink->link);
             } catch (MsFormsException) {
                 $initialData = null;
             }

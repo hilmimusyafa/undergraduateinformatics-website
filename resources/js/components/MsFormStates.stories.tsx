@@ -1,12 +1,10 @@
 import type { Story } from '@ladle/react';
 
-import { MsFormError, MsFormSkeleton, MsFormSuccess, MsFormUnavailable } from './MsFormStates';
+import { MsFormError, MsFormSuccess, MsFormUnavailable } from './MsFormStates';
 
 export default {
     title: 'Microsoft Form/States',
 };
-
-export const Loading: Story = () => <MsFormSkeleton />;
 
 export const Unavailable: Story = () => <MsFormUnavailable />;
 

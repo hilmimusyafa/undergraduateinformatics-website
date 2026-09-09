@@ -30,7 +30,7 @@
         });
 
         if (query.length >= 0) {
-            await fetch('{{ route('posts.create') }}?query=' + query + '&viewGenerated=' + viewGenerated +
+            await fetch('{{ route('admin.posts.create') }}?query=' + query + '&viewGenerated=' + viewGenerated +
                     urlString)
                 .then(response => response.text())
                 .then(data => {

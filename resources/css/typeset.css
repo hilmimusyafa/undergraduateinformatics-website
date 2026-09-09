@@ -371,9 +371,13 @@
     }
 
     /* Tables. Separators sit on cells, not tr:last-child: append-safe.
-       Bare tables stay real tables (keep their semantics) and wrap to fit. */
+       Bare tables stay real tables (keep their semantics); wide tables scroll
+       horizontally inside the column instead of overflowing the container. */
     &:where(table) {
+      display: block;
+      width: max-content;
       max-width: 100%;
+      overflow-x: auto;
       font-size: 1em;
       line-height: 1.5;
       font-variant-numeric: tabular-nums;
@@ -486,5 +490,25 @@
       )
     ) {
     margin-block-start: 0;
+  }
+
+  .typeset [data-rich-text] > :where(:first-child):not(
+      :where(
+        .not-typeset,
+        [data-not-typeset],
+        .not-typeset *,
+        [data-not-typeset] *
+      )
+    ) {
+    margin-block-start: 0;
+  }
+}
+
+@layer components {
+  .typeset-muted {
+    color: var(--typeset-muted);
+  }
+  .typeset-muted :is(h1, h2, h3, h4, h5, h6) {
+    color: var(--typeset-muted);
   }
 }

@@ -5,17 +5,29 @@ namespace App\Services\MsForms;
 use GuzzleHttp\Exception\TransferException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
-final class MsFormsClient
+class MsFormsClient
 {
     private const ALLOWED_HOST_SUFFIXES = ['office.com', 'microsoft.com', 'microsoft'];
 
+    private const TARGET_CACHE_TTL = 15;
+
     public function resolve(string $link): ResolvedFormTarget
+    {
+        return Cache::remember(
+            'msforms-target:'.md5($link),
+            now()->addMinutes(self::TARGET_CACHE_TTL),
+            fn () => $this->resolveUncached($link)
+        );
+    }
+
+    private function resolveUncached(string $link): ResolvedFormTarget
     {
         if (
             filter_var($link, FILTER_VALIDATE_URL) === false
-            || !in_array(strtolower((string) parse_url($link, PHP_URL_SCHEME)), ['http', 'https'], true)
+            || ! in_array(strtolower((string) parse_url($link, PHP_URL_SCHEME)), ['http', 'https'], true)
         ) {
             throw new MsFormsRequestException('Unable to load the form page');
         }
@@ -31,16 +43,17 @@ final class MsFormsClient
                 'Unable to load the form page'
             );
 
-            if ($response->failed() && !$response->redirect()) {
+            if ($response->failed() && ! $response->redirect()) {
                 throw new MsFormsRequestException('Unable to load the form page');
             }
 
             if ($response->redirect()) {
                 $location = $response->header('Location');
-                if (!$location) {
+                if (! $location) {
                     throw new MsFormsRequestException('Redirect without a target');
                 }
                 $pageUrl = $this->resolveLocation($pageUrl, $location);
+
                 continue;
             }
 
@@ -103,7 +116,7 @@ final class MsFormsClient
     {
         try {
             return $request();
-        } catch (ConnectionException | TransferException $e) {
+        } catch (ConnectionException|TransferException $e) {
             throw new MsFormsRequestException($failureMessage);
         }
     }
@@ -113,7 +126,7 @@ final class MsFormsClient
         $host = strtolower((string) parse_url($url, PHP_URL_HOST));
 
         foreach (self::ALLOWED_HOST_SUFFIXES as $suffix) {
-            if ($host === $suffix || str_ends_with($host, '.' . $suffix)) {
+            if ($host === $suffix || str_ends_with($host, '.'.$suffix)) {
                 return;
             }
         }
@@ -127,14 +140,14 @@ final class MsFormsClient
             return $location;
         }
 
-        return rtrim(parse_url($currentUrl, PHP_URL_SCHEME) . '://' . parse_url($currentUrl, PHP_URL_HOST), '/') . '/' . ltrim($location, '/');
+        return rtrim(parse_url($currentUrl, PHP_URL_SCHEME).'://'.parse_url($currentUrl, PHP_URL_HOST), '/').'/'.ltrim($location, '/');
     }
 
     private function parseTarget(string $html): ResolvedFormTarget
     {
         preg_match('/"prefetchFormUrl"\s*:\s*"(https:[^"]+)"/', $html, $matches);
 
-        if (!isset($matches[1])) {
+        if (! isset($matches[1])) {
             throw new MsFormsParseException('Form definition URL not found in the page');
         }
 

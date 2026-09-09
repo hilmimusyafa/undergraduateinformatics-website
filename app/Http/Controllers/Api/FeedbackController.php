@@ -26,7 +26,7 @@ class FeedbackController extends Controller
         }
 
         try {
-            $payload = app(FormDefinitionService::class)->resolve($feedbackLink);
+            $payload = app(FormDefinitionService::class)->resolve($feedbackLink->link);
 
             return response()->json([
                 'status' => 'success',

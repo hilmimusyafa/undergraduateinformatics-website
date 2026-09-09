@@ -7,6 +7,7 @@ use App\Services\MsForms\MsFormsParseException;
 use App\Services\MsForms\MsFormsRequestException;
 use App\Services\MsForms\ResolvedFormTarget;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Tests\TestCase;
 
@@ -17,7 +18,8 @@ class MsFormsClientTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client = new MsFormsClient();
+        Cache::flush();
+        $this->client = new MsFormsClient;
         Http::preventStrayRequests();
     }
 
@@ -155,7 +157,7 @@ class MsFormsClientTest extends TestCase
     public function test_fetch_form_definition_wraps_connection_exception(): void
     {
         Http::fake([
-            'https://forms.cloud.microsoft/formapi/api/*/users/*/light/runtimeForms*' => fn () => throw new \Illuminate\Http\Client\ConnectionException('cURL error 6: Could not resolve host'),
+            'https://forms.cloud.microsoft/formapi/api/*/users/*/light/runtimeForms*' => fn () => throw new ConnectionException('cURL error 6: Could not resolve host'),
         ]);
 
         $target = new ResolvedFormTarget(
@@ -187,7 +189,7 @@ class MsFormsClientTest extends TestCase
 
         Http::assertSent(function ($request) {
             return str_contains($request->url(), "/forms('FORM123')/responses")
-                && !str_contains($request->url(), '/light')
+                && ! str_contains($request->url(), '/light')
                 && $request['startDate'] === '2026-08-25T00:00:00+00:00'
                 && $request['submitDate'] === '2026-08-25T00:00:00+00:00'
                 && $request['answers'] === json_encode([['questionId' => 'r1', 'answer1' => 'Budi']]);

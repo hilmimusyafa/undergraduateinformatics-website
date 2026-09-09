@@ -1,4 +1,4 @@
-import { PageError } from '@/components/PageError';
+import { ErrorState } from '@/components/ErrorState';
 
 import { TagListContent } from './TagListContent';
 import { TagListSkeleton } from './TagListStates';
@@ -12,7 +12,7 @@ export function TagListPage() {
     }
 
     if (query.isError) {
-        return <PageError />;
+        return <ErrorState />;
     }
 
     return <TagListContent tags={query.data} />;

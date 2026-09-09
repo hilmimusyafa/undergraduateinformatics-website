@@ -30,4 +30,18 @@ class AdminLoginTest extends TestCase
 
         $response->assertSessionHas('error');
     }
+
+    public function test_authenticated_user_visiting_login_is_redirected_to_admin_dashboard(): void
+    {
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('password'),
+            'password_recovery_id' => 1,
+        ]);
+
+        $response = $this->actingAs(User::first())->get('/admin/login');
+
+        $response->assertRedirect(route('admin.dashboard'));
+    }
 }

@@ -21,4 +21,21 @@ class PostSeederTest extends TestCase
         $this->assertGreaterThan(0, $nullImages);
         $this->assertGreaterThan(0, $placeholderImages);
     }
+
+    public function test_seeder_writes_rich_text_bodies(): void
+    {
+        $this->seed(PostSeeder::class);
+
+        $posts = Post::all();
+
+        $this->assertNotEmpty($posts);
+
+        foreach ($posts as $post) {
+            $this->assertMatchesRegularExpression(
+                '/<(p|h[1-6]|ul|ol|table)[\s>]/',
+                $post->body,
+                "Post '{$post->title}' body should be rich text with a block-level element"
+            );
+        }
+    }
 }

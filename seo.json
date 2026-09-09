@@ -17,13 +17,25 @@
             "title": "Detail Label - Portal Informasi Sarjana Informatika",
             "description": "Informasi detail label beserta postingan terkait di Program Studi Sarjana Informatika Telkom University."
         },
+        "postDetail": {
+            "title": "Detail Informasi - Portal Informasi Sarjana Informatika",
+            "description": "Detail informasi perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University."
+        },
         "feedback": {
             "title": "Masukan - Portal Informasi Sarjana Informatika",
             "description": "Sampaikan pengaduan, keluhan, atau aspirasi terkait layanan akademik maupun non-akademik Program Studi Sarjana Informatika Telkom University"
         },
+        "reservation": {
+            "title": "Reservasi - Portal Informasi Sarjana Informatika",
+            "description": "Ajukan reservasi pertemuan dengan Program Studi Sarjana Informatika Telkom University"
+        },
         "links": {
             "title": "Tautan Penting - Portal Informasi Sarjana Informatika",
             "description": "Jelajahi tautan penting pendukung perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University"
+        },
+        "postSearch": {
+            "title": "Cari Informasi - Portal Informasi Sarjana Informatika",
+            "description": "Cari informasi perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University."
         }
     }
 }

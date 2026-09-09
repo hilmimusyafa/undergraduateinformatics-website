@@ -13,7 +13,7 @@ export function TextButton({ className, variant, ...props }: TextButtonProps) {
         <Button
             variant={textButtonVariant[variant]}
             className={cn(
-                'h-auto p-0 text-base',
+                'h-auto p-0 text-lg md:text-base',
                 variant === 'fade' &&
                     'text-foreground hover:text-muted-foreground hover:bg-transparent dark:hover:bg-transparent',
                 variant === 'underline' && 'text-blue-600',

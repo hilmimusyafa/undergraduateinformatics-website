@@ -5,7 +5,7 @@
 @section('content')
     <div class="admin col-md-9">
         <div class="kembali">
-            <a href="{{ route('sections.index') }}">
+            <a href="{{ route('admin.sections.index') }}">
                 <i class="fa-solid fa-arrow-left"></i>Kembali
             </a>
         </div>
@@ -14,118 +14,66 @@
             <h1>Pergantian Urutan Section</h1>
         </div>
 
-        <div class="form row">
+        <div class="form row form--wide">
             @include('partials.Alerts')
-            <form method="POST" action="{{ route('sections.updateOrder') }}" class="d-flex">
+            <p class="modern-page__desc">Gunakan tombol <i class="fa-solid fa-arrow-up"></i> / <i class="fa-solid fa-arrow-down"></i> untuk mengubah urutan, lalu simpan.</p>
+            <form method="POST" action="{{ route('admin.sections.updateOrder') }}" id="section-order-form">
                 @csrf
-                <div class="container">
-                    <div class="row fw-bold mb-2">
-                        <div class="col-6">Nama Section</div>
-                        <div class="col-6">Urutan Section</div>
-                    </div>
-
-                    @foreach ($sections as $section)
-                        <div class="row mb-2">
-                            <div class="col-5">
-                                {{ $section->name }}
+                <div class="section-order-list" id="section-order-list">
+                    @foreach ($sections as $index => $section)
+                        <div class="section-order-item" data-id="{{ $section->id }}">
+                            <span class="section-order-badge">{{ $index + 1 }}</span>
+                            <span class="section-order-name">{{ $section->name }}</span>
+                            <div class="section-order-actions">
+                                <button type="button" class="section-order-btn section-order-btn--up" title="Naikkan" aria-label="Naikkan"><i class="fa-solid fa-arrow-up"></i></button>
+                                <button type="button" class="section-order-btn section-order-btn--down" title="Turunkan" aria-label="Turunkan"><i class="fa-solid fa-arrow-down"></i></button>
                             </div>
-                            <div class="col-3">
-                                <input type="number"
-                                    name="order[{{ $section->id }}]"
-                                    class="form-control order-input"
-                                    placeholder="Enter order"
-                                    min="1">
-                            </div>
+                            <input type="hidden" name="order[{{ $section->id }}]" value="{{ $index + 1 }}">
                         </div>
                     @endforeach
-
-                    <div class="row mt-3">
-                        <div class="col-2">
-                            <button type="button" id="generateOrder" class="btn btn-warning">
-                                Isi Otomatis Urutan
-                            </button>
-                        </div>
-                        <div class="col-1">
-                            <button type="submit" id="submitBtn" class="btn btn-danger" disabled>
-                                Submit
-                            </button>
-                        </div>
-                    </div>
+                </div>
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" id="section-order-submit" class="modern-button modern-button--primary">Simpan Urutan</button>
+                    <a href="{{ route('admin.sections.index') }}" class="modern-button modern-button--soft">Batal</a>
                 </div>
             </form>
         </div>
     </div>
 
-
     <script>
-        const inputs = [...document.querySelectorAll('.order-input')];
-        const submitBtn = document.getElementById('submitBtn');
-        const generateBtn = document.getElementById('generateOrder');
-        const total = inputs.length;
+        (function () {
+            const list = document.getElementById('section-order-list');
+            const submitBtn = document.getElementById('section-order-submit');
 
-        function validateInputs() {
-            let values = inputs.map(input => input.value.trim());
-            let filled = values.every(val => val !== "");
-            let valid = true;
-
-            // reset invalid state
-            inputs.forEach(input => input.classList.remove('is-invalid'));
-
-            // duplicate check
-            let seen = new Set();
-            values.forEach((val, idx) => {
-                if (val !== "") {
-                    const num = parseInt(val, 10);
-
-                    if (isNaN(num)) {
-                        valid = false;
-                        inputs[idx].classList.add('is-invalid');
-                    }
-                    else if (num > total || num < 1) {
-                        valid = false;
-                        inputs[idx].classList.add('is-invalid');
-                    }
-                    else if (seen.has(num)) {
-                        valid = false;
-                        inputs[idx].classList.add('is-invalid');
-                    }
-                    seen.add(num);
-                }
-            });
-
-            submitBtn.disabled = !(filled && valid);
-        }
-
-        inputs.forEach(input => {
-            input.addEventListener('input', validateInputs);
-        });
-
-        generateBtn.addEventListener('click', function () {
-            let used = new Set();
-            inputs.forEach(input => {
-                if (input.value) {
-                    used.add(parseInt(input.value));
-                }
-            });
-
-            let available = [];
-            for (let i = 1; i <= total; i++) {
-                if (!used.has(i)) {
-                    available.push(i);
-                }
+            function refresh() {
+                const items = [...list.querySelectorAll('.section-order-item')];
+                items.forEach((item, index) => {
+                    item.querySelector('.section-order-badge').textContent = index + 1;
+                    item.querySelector('input[type="hidden"]').value = index + 1;
+                    item.querySelector('.section-order-btn--up').disabled = index === 0;
+                    item.querySelector('.section-order-btn--down').disabled = index === items.length - 1;
+                });
+                submitBtn.disabled = items.length === 0;
             }
 
-            inputs.forEach(input => {
-                if (!input.value) {
-                    input.value = available.shift();
+            list.addEventListener('click', (event) => {
+                const button = event.target.closest('.section-order-btn');
+                if (!button) return;
+                const item = button.closest('.section-order-item');
+                const items = [...list.querySelectorAll('.section-order-item')];
+                const index = items.indexOf(item);
+                const isUp = button.classList.contains('section-order-btn--up');
+                const target = isUp ? index - 1 : index + 1;
+                if (target < 0 || target >= items.length) return;
+                if (isUp) {
+                    list.insertBefore(item, items[target]);
+                } else {
+                    list.insertBefore(items[target], item);
                 }
+                refresh();
             });
 
-            validateInputs();
-        });
-
-        validateInputs();
+            refresh();
+        })();
     </script>
-
-
 @endsection

@@ -64,7 +64,7 @@ describe('useTagDetail', () => {
         renderUseTagDetail('beasiswa');
 
         await waitFor(() => {
-            expect(axios.get).toHaveBeenCalledWith('/api/tags/beasiswa');
+            expect(axios.get).toHaveBeenCalledWith('/api/tags/beasiswa', { params: undefined });
         });
     });
 

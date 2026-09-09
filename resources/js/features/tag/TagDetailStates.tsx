@@ -1,3 +1,4 @@
+import { ArticleContainer } from '@/components/ArticleContainer';
 import { MainAsideLayout } from '@/components/MainAsideLayout';
 import { PostCardSkeleton } from '@/components/PostCardStates';
 import { TableOfContentsSkeleton } from '@/components/TableOfContentsStates';
@@ -23,13 +24,13 @@ export function TagDetailSkeleton() {
                         <section
                             key={sectionIndex}
                             className={
-                                sectionIndex > 0 ? 'mt-[calc(var(--typeset-flow)*1.4)]' : undefined
+                                sectionIndex > 0 ? 'mt-8 md:mt-7' : undefined
                             }
                         >
                             <h2>
                                 <Skeleton className="h-7 w-1/2" />
                             </h2>
-                            <div className="mt-[var(--typeset-flow)] flex flex-col gap-4">
+                            <div className="mt-5.5 md:mt-5 flex flex-col gap-4">
                                 <PostCardSkeleton />
                                 <PostCardSkeleton />
                             </div>
@@ -39,5 +40,16 @@ export function TagDetailSkeleton() {
             }
             asideContent={<TableOfContentsSkeleton />}
         />
+    );
+}
+
+export function TagNotFound() {
+    return (
+        <ArticleContainer>
+            <h1>Topik tidak ditemukan</h1>
+            <p className="text-muted-foreground">
+                Topik mungkin sudah dihapus atau alamatnya salah.
+            </p>
+        </ArticleContainer>
     );
 }

@@ -1,4 +1,6 @@
-import { Link } from '@tanstack/react-router';
+import { useState } from 'react';
+
+import { Link, useNavigate } from '@tanstack/react-router';
 
 import { IconListSearch } from '@tabler/icons-react';
 import { X } from 'lucide-react';
@@ -14,8 +16,11 @@ interface TopBarProps {
 }
 
 export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
+    const navigate = useNavigate();
+    const [searchValue, setSearchValue] = useState('');
+
     return (
-        <nav className="sticky top-0 z-50 h-full max-h-18 w-full bg-white">
+        <nav className="sticky top-0 z-50 h-18 w-full bg-white">
             <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 py-3">
                 <Link to="/">
                     <img
@@ -43,7 +48,14 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
                             <NavItem variant="top" to="/reservation">
                                 Pertemuan
                             </NavItem>
-                            <SearchBar />
+                            <SearchBar
+                                value={searchValue}
+                                onChange={(event) => setSearchValue(event.target.value)}
+                                onSubmit={(value) => {
+                                    navigate({ to: '/posts/search', search: { q: value } });
+                                    setSearchValue('');
+                                }}
+                            />
                         </div>
                         <a
                             href="/admin/login"

@@ -74,6 +74,6 @@ class Post extends Model
      */
     public function hasImage()
     {
-        return $this->image !== null && $this->image !== 'images/placeholder.png';
+        return $this->image !== null;
     }
 }

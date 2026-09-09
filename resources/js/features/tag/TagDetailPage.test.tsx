@@ -1,8 +1,10 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { render, screen } from '@testing-library/react';
-import axios, { AxiosError, type AxiosResponse } from 'axios';
+import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { axiosError } from '@/test/mocks';
 
 import { TagDetailPage } from './TagDetailPage';
 import { type TagWithPostsPayload } from './types';
@@ -19,32 +21,13 @@ vi.mock('axios', async () => {
     };
 });
 
+const { navigateMock } = vi.hoisted(() => ({ navigateMock: vi.fn() }));
+
 vi.mock('@tanstack/react-router', async () => {
-    const actual =
-        await vi.importActual<typeof import('@tanstack/react-router')>('@tanstack/react-router');
+    const { routerModuleMock } = await import('@/test/mocks');
 
-    return {
-        ...actual,
-        createLink: (Comp: any) =>
-            function MockedLink({ to, params, ...props }: any) {
-                const href =
-                    typeof to === 'string' && params
-                        ? to.replace(/\$[^/]+/g, (key: string) => params[key.slice(1)] ?? key)
-                        : to;
-
-                return <Comp href={href} {...props} />;
-            },
-    };
+    return routerModuleMock({ useNavigate: () => navigateMock });
 });
-
-function axiosError(status: number, message?: string) {
-    const error = new AxiosError(message ?? 'Request failed');
-    error.response = {
-        status,
-        data: message ? { message } : {},
-    } as AxiosResponse;
-    return error;
-}
 
 const detailPayload: TagWithPostsPayload = {
     status: 'success',
@@ -188,6 +171,16 @@ describe('TagDetailPage', () => {
                 {},
                 { timeout: 3000 }
             )
+        ).toBeInTheDocument();
+    });
+
+    it('shows the tag not found state when the tag does not exist', async () => {
+        vi.mocked(axios.get).mockRejectedValue(axiosError(404));
+
+        renderPage();
+
+        expect(
+            await screen.findByRole('heading', { name: 'Topik tidak ditemukan' }, { timeout: 3000 })
         ).toBeInTheDocument();
     });
 
