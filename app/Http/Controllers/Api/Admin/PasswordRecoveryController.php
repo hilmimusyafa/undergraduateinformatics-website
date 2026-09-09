@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\PasswordRecovery;
 use Illuminate\Contracts\Support\ValidatedData;
 use Illuminate\Http\Request;
 
-class ApiPasswordRecoveryController extends Controller
+class PasswordRecoveryController extends Controller
 {
     /**
      * Display a listing of the resource.

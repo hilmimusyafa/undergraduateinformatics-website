@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\PostTag;
 use App\Models\Tag;
 use Illuminate\Support\Facades\File;
 
-class ApiPostController extends Controller
+class PostController extends Controller
 {
     /**
     * Show listings of posts resources

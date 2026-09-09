@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\ReservationLink;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ApiReservationLinkController extends Controller
+class ReservationLinkController extends Controller
 {
     /**
      * Display a listing of the resource.

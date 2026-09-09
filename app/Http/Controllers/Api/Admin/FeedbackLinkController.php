@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\FeedbackLink;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class ApiFeedbackLinkController extends Controller
+class FeedbackLinkController extends Controller
 {
     /**
      * Display a listing of the resource.

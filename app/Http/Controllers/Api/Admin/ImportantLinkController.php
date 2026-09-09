@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\ImportantLink;
 use Illuminate\Http\Request;
 
-class ApiImportantLinkController extends Controller
+class ImportantLinkController extends Controller
 {
     /**
      * Display a listing of the resource.

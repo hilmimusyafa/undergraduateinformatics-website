@@ -1,10 +1,13 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\LinkController as AdminLinkController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\SectionController;
-use App\Http\Controllers\TagController;
+use App\Http\Controllers\Web\Admin\AdminController;
+use App\Http\Controllers\Web\Admin\DashboardController;
+use App\Http\Controllers\Web\Admin\FormLinkController;
+use App\Http\Controllers\Web\Admin\LinkController as AdminLinkController;
+use App\Http\Controllers\Web\Admin\PostController;
+use App\Http\Controllers\Web\Admin\ReservationScheduleController;
+use App\Http\Controllers\Web\Admin\SectionController;
+use App\Http\Controllers\Web\Admin\TagController;
 use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LinkController;
@@ -13,8 +16,6 @@ use App\Http\Controllers\Web\ReservationController;
 use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\TagController as WebTagController;
 use App\Models\DashboardDataset;
-use App\Models\FeedbackLink;
-use App\Models\ReservationLink;
 use App\Models\ReservationSchedule;
 use App\Support\PageMeta;
 use Illuminate\Http\Request;
@@ -75,6 +76,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 'dashboardTablesReady' => $dashboardTablesReady,
             ]);
         })->name('dashboard');
+        Route::get('dashboard/upload', [DashboardController::class, 'upload'])->name('dashboard.upload');
+        Route::get('dashboard/create', [DashboardController::class, 'create'])->name('dashboard.create');
+        Route::get('dashboard/{id}/edit', [DashboardController::class, 'edit'])->name('dashboard.edit');
+        Route::post('dashboard/extract', [DashboardController::class, 'extract'])->name('dashboard.extract');
+        Route::post('dashboard/save', [DashboardController::class, 'save'])->name('dashboard.save');
+        Route::post('dashboard/store', [DashboardController::class, 'store'])->name('dashboard.store');
+        Route::post('dashboard/{id}/update', [DashboardController::class, 'update'])->name('dashboard.update');
+        Route::delete('dashboard/cleardata', [DashboardController::class, 'cleardata'])->name('dashboard.cleardata');
         Route::get('reservation', function () {
             $reservationTableReady = Schema::hasTable('reservation_schedules');
 
@@ -87,27 +96,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
                     : collect(),
             ]);
         })->name('reservation');
+        Route::get('reservation/create', [ReservationScheduleController::class, 'create'])->name('reservation.create');
+        Route::get('reservation/{id}/edit', [ReservationScheduleController::class, 'edit'])->name('reservation.edit');
+        Route::get('reservation/{id}', [ReservationScheduleController::class, 'show'])->name('reservation.show');
+        Route::post('reservation/store', [ReservationScheduleController::class, 'store'])->name('reservation.store');
+        Route::post('reservation/{id}/update', [ReservationScheduleController::class, 'update'])->name('reservation.update');
+        Route::delete('reservation/{id}', [ReservationScheduleController::class, 'destroy'])->name('reservation.destroy');
 
-        Route::get('form-link', fn () => view('AdminDashboard.feedback', [
-            'feedbackLink' => FeedbackLink::query()->first(),
-            'reservationLink' => Schema::hasTable('reservation_links')
-                ? ReservationLink::query()->first()
-                : null,
-        ]))->name('form-link');
-        Route::put('form-link/feedback', function (Request $request) {
-            $validated = $request->validate(['feedback_link' => ['required', 'url']]);
-            $feedbackLink = FeedbackLink::query()->firstOrCreate([], ['link' => '']);
-            $feedbackLink->update(['link' => $validated['feedback_link']]);
-
-            return redirect()->route('admin.form-link')->with('success', 'Link feedback berhasil diperbarui.');
-        })->name('form-link.feedback.update');
-        Route::put('form-link/reservation', function (Request $request) {
-            $validated = $request->validate(['reservation_link' => ['required', 'url']]);
-            $reservationLink = ReservationLink::query()->firstOrCreate([], ['link' => '']);
-            $reservationLink->update(['link' => $validated['reservation_link']]);
-
-            return redirect()->route('admin.form-link')->with('success', 'Link reservasi berhasil diperbarui.');
-        })->name('form-link.reservation.update');
+        Route::get('form-link', [FormLinkController::class, 'show'])->name('form-link');
+        Route::put('form-link/feedback', [FormLinkController::class, 'updateFeedback'])->name('form-link.feedback.update');
+        Route::put('form-link/reservation', [FormLinkController::class, 'updateReservation'])->name('form-link.reservation.update');
 
         Route::get('logout', [AdminController::class, 'logout'])->name('logout');
         Route::resource('posts', PostController::class)->except(['show']);
