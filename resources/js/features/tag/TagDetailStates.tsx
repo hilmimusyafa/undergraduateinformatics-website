@@ -24,13 +24,13 @@ export function TagDetailSkeleton() {
                         <section
                             key={sectionIndex}
                             className={
-                                sectionIndex > 0 ? 'mt-[calc(var(--typeset-flow)*1.4)]' : undefined
+                                sectionIndex > 0 ? 'mt-8 md:mt-7' : undefined
                             }
                         >
                             <h2>
                                 <Skeleton className="h-7 w-1/2" />
                             </h2>
-                            <div className="mt-[var(--typeset-flow)] flex flex-col gap-4">
+                            <div className="mt-5.5 md:mt-5 flex flex-col gap-4">
                                 <PostCardSkeleton />
                                 <PostCardSkeleton />
                             </div>

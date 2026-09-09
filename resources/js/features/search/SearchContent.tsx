@@ -26,25 +26,25 @@ export function SearchContent({ q, result, onSearch, onPageChange }: SearchConte
                 onSubmit={onSearch}
             />
             {hasQuery ? (
-                <p className="text-muted-foreground mt-[var(--typeset-flow)]">{meta.total} hasil</p>
+                <p className="text-muted-foreground mt-5.5 md:mt-5">{meta.total} hasil</p>
             ) : (
-                <p className="text-muted-foreground mt-[var(--typeset-flow)]">
+                <p className="text-muted-foreground mt-5.5 md:mt-5">
                     Masukkan kata kunci untuk mencari.
                 </p>
             )}
 
             {posts.length === 0 ? (
-                <p role="status" className="text-muted-foreground mt-[var(--typeset-flow)]">
+                <p role="status" className="text-muted-foreground mt-5.5 md:mt-5">
                     {hasQuery ? `Tidak ada hasil untuk “${q}”` : 'Belum ada informasi.'}
                 </p>
             ) : (
                 <>
-                    <div className="mt-[var(--typeset-flow)] flex flex-col gap-4">
+                    <div className="mt-5.5 md:mt-5 flex flex-col gap-4">
                         {posts.map((post) => (
                             <PostCard key={post.id} post={post} />
                         ))}
                     </div>
-                    <div className="mt-[var(--typeset-flow)] grid grid-cols-[1fr_auto_1fr] items-center">
+                    <div className="mt-5.5 md:mt-5 grid grid-cols-[1fr_auto_1fr] items-center">
                         <TextButton
                             variant="fade"
                             className="justify-self-start border-0"
