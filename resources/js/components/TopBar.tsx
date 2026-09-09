@@ -20,7 +20,7 @@ export function TopBar({ isSidebarOpen, onToggleSidebar }: TopBarProps) {
     const [searchValue, setSearchValue] = useState('');
 
     return (
-        <nav className="sticky top-0 z-50 h-full max-h-18 w-full bg-white">
+        <nav className="sticky top-0 z-50 h-18 w-full bg-white">
             <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between px-4 py-3">
                 <Link to="/">
                     <img
