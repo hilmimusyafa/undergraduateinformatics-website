@@ -25,7 +25,7 @@
                         <textarea type="text" name="second_question" class="form-control" id="link" required>{{ $second_question }}</textarea>
                     </div>
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-danger">Submit</button>
+                        <button type="submit" class="modern-button modern-button--primary">Submit</button>
                     </div>
                 </div>
                 <div class="col-md-6">

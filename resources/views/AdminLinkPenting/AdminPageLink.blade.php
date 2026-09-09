@@ -10,10 +10,8 @@
             @include('partials.Alerts')
             <div class="d-flex">
                 <div class="col-md">
-                    <a href="{{ route('admin.links.create') }}">
-                        <button class="btn btn-secondary">
-                            <i class="fa-solid fa-plus"></i> Tambah Link Penting
-                        </button>
+                    <a class="modern-button modern-button--soft" href="{{ route('admin.links.create') }}">
+                        <i class="fa-solid fa-plus"></i> Tambah Link Penting
                     </a>
                 </div>
                 <div class="col-md-3">
@@ -43,9 +41,9 @@
                     @foreach ($links as $link)
                         <tr>
                             <td>{{ $link->important_section->name }}</td>
-                            <td>{{ $link->name }}</td>
-                            <td class="text-truncate">
-                                <a href="{{ $link->link }}" target="_blank">
+                            <td><div class="cell-clamp">{{ $link->name }}</div></td>
+                            <td class="link-cell">
+                                <a href="{{ $link->link }}" target="_blank" title="{{ $link->link }}">
                                     {{ $link->link }}
                                 </a>
                             </td>
@@ -55,33 +53,6 @@
                                     data-bs-target="#confirmModal-{{ $link->id }}">Delete</a>
                             </td>
                         </tr>
-
-                        <div class="modal fade" id="confirmModal-{{ $link->id }}" tabindex="-1"
-                            aria-labelledby="confirmModalLabel-{{ $link->id }}" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="confirmModalLabel-{{ $link->id }}">
-                                            Konfirmasi</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Apakah yakin dihapus?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Batal</button>
-                                        <form id="delete-form-{{ $link->id }}"
-                                            action="{{ route('admin.links.destroy', ['link' => $link->id]) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Hapus</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     @endforeach
                 </tbody>
             </table>
@@ -89,5 +60,34 @@
                 @include('partials.Empty')
             @endif
         </div>
+
+        @foreach ($links as $link)
+            <div class="modal fade" id="confirmModal-{{ $link->id }}" tabindex="-1"
+                aria-labelledby="confirmModalLabel-{{ $link->id }}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmModalLabel-{{ $link->id }}">
+                                Konfirmasi</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Apakah yakin dihapus?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="modern-button modern-button--soft"
+                                data-bs-dismiss="modal">Batal</button>
+                            <form id="delete-form-{{ $link->id }}"
+                                action="{{ route('admin.links.destroy', ['link' => $link->id]) }}" method="POST">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="modern-button modern-button--danger">Hapus</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endforeach
     </div>
 @endsection

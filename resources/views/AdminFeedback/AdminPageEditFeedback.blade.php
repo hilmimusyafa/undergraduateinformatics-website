@@ -17,16 +17,14 @@
             <form method="POST" action="{{ route('feedback.update', ['feedback' => 1]) }}">
                 @csrf
                 @method('PUT')
-                <div class="col-md-6">
-                    <div class="mb-3">
-                        <label for="link" class="form-label">
-                            <h4>Link</h4>
-                        </label>
-                        <textarea type="text" class="form-control" name="new_feedback_link" id="link" required>{{ $feedbackLink->link }}</textarea>
-                    </div>
-                    <div class="mt-3">
-                        <button type="submit" class="btn btn-danger">Submit</button>
-                    </div>
+                <div class="mb-3">
+                    <label for="link" class="form-label">
+                        <h4>Link</h4>
+                    </label>
+                    <textarea type="text" class="form-control" name="new_feedback_link" id="link" required>{{ $feedbackLink->link }}</textarea>
+                </div>
+                <div class="mt-3">
+                    <button type="submit" class="modern-button modern-button--primary">Submit</button>
                 </div>
             </form>
         </div>
