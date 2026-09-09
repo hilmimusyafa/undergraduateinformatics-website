@@ -67,6 +67,7 @@ class ExcelExtractor
             $datasets[] = [
                 "title" => $sheetName,
                 "sheet_name" => $sheetName,
+                "chart_type" => $this->detectChartType($xLabel),
                 "x_label" => $xLabel,
                 "y_label" => $yLabel,
                 "items" => $items,
@@ -74,5 +75,29 @@ class ExcelExtractor
         }
 
         return $datasets;
+    }
+
+    public function detectChartType(string $header): string
+    {
+        $header = strtolower($header);
+
+        if (str_contains($header, 'tahun') || str_contains($header, 'angkatan')) {
+            return 'bar';
+        }
+
+        if (str_contains($header, 'bulan') || str_contains($header, 'tanggal')) {
+            return 'line';
+        }
+
+        if (
+            str_contains($header, 'daerah') ||
+            str_contains($header, 'provinsi') ||
+            str_contains($header, 'agama') ||
+            str_contains($header, 'gender')
+        ) {
+            return 'pie';
+        }
+
+        return 'bar';
     }
 }
