@@ -10,7 +10,7 @@
             <form method="POST" action="{{ route('admin.form-link.feedback.update') }}">
                 @csrf
                 @method('PUT')
-                <label for="feedback_link" class="form-label">URL tautan feedback (Google Forms, Microsoft Forms, dan lainnya)</label>
+                <label for="feedback_link" class="form-label">URL tautan feedback (Microsoft Forms)</label>
                 <div class="feedback-form-row">
                     <input id="feedback_link" name="feedback_link" type="url" class="form-control @error('feedback_link') is-invalid @enderror"
                         value="{{ old('feedback_link', $feedbackLink?->link) }}" placeholder="https://forms.office.com/..." required>
@@ -26,7 +26,7 @@
             <i class="fa-solid fa-comment-dots"></i>
             <div>
                 <h3>Informasi fitur</h3>
-                <p>Tautan yang disimpan akan digunakan pada halaman publik Feedback. Pastikan URL dapat diakses oleh publik.</p>
+                <p>Hanya tautan Microsoft Forms (forms.office.com) yang digunakan pada halaman publik Feedback. Pastikan URL dapat diakses oleh publik.</p>
                 @if ($feedbackLink?->link)
                     <a href="{{ $feedbackLink->link }}" target="_blank" rel="noopener noreferrer">Uji tautan saat ini <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                 @endif
