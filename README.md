@@ -65,11 +65,10 @@ Repository website Portal Informasi Sarjana Informatika Telkom University. Publi
 
    Pastikan `.env` memakai nilai produksi: `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL`, dan konfigurasi database yang benar.
 
-3. **Migrasi dan seed** (seed cukup sekali di awal)
+3. **Migrasi**
 
    ```bash
    php artisan migrate --force
-   php artisan db:seed --force
    ```
 
 4. **Cache konfigurasi**
