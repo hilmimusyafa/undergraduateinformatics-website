@@ -46,7 +46,7 @@ Route::get('/posts/{slug}', [PostController::class, 'show']);
 Route::get('/links', [LinkController::class, 'index']);
 
 Route::get('/feedback', [FeedbackController::class, 'show']);
-Route::post('/feedback', [FeedbackController::class, 'store']);
+Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('throttle:10,1');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
