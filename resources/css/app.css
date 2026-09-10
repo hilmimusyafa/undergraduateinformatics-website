@@ -219,6 +219,20 @@
     --sidebar-ring: oklch(0.556 0 0);
 }
 
+@layer components {
+    [data-rich-text] a {
+        @apply text-blue-600;
+    }
+
+    [data-rich-text] table {
+        scrollbar-width: none;
+    }
+
+    [data-rich-text] table::-webkit-scrollbar {
+        display: none;
+    }
+}
+
 @layer base {
     * {
         @apply border-border;
