@@ -25,7 +25,7 @@ describe('PostStates', () => {
         expect(skeletons).toHaveLength(7);
         expect(skeletons[0]).toHaveClass('h-9');
         expect(skeletons[1]).toHaveClass('h-7');
-        expect(skeletons[2]).toHaveClass('w-full');
+        expect(skeletons[2]).toHaveClass('aspect-4/3', 'w-full');
         expect(skeletons[3]).toHaveClass('h-5');
         expect(skeletons[4]).toHaveClass('h-5');
         expect(skeletons[5]).toHaveClass('h-5');

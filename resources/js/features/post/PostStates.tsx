@@ -6,7 +6,7 @@ export function PostSkeleton() {
         <div
             role="status"
             aria-label="Memuat detail informasi"
-            className="mx-auto w-full max-w-[37em] py-10 md:py-9"
+            className="mx-auto w-full max-w-[37em] py-[39.375px] md:py-8.75"
         >
             <article className="typeset typeset-article">
                 <h1>
@@ -16,14 +16,14 @@ export function PostSkeleton() {
                     <Skeleton className="h-7 w-full" />
                 </h2>
                 <div className="mt-6">
-                    <Skeleton className="h-[37em] w-full" />
+                    <Skeleton className="aspect-4/3 w-full" />
                 </div>
-                <div className="mt-10 space-y-2 md:mt-9">
+                <div className="mt-[39.375px] space-y-2 md:mt-[35px]">
                     <Skeleton className="h-5 w-full" />
                     <Skeleton className="h-5 w-full" />
                     <Skeleton className="h-5 w-full" />
                 </div>
-                <div className="mt-10 flex flex-wrap items-center gap-2 md:mt-9">
+                <div className="mt-[22.5px] flex flex-wrap items-center gap-2 md:mt-5">
                     <Skeleton className="h-5 w-1/2" />
                 </div>
             </article>
