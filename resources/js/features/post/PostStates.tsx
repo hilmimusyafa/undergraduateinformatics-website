@@ -15,15 +15,15 @@ export function PostSkeleton() {
                 <h2 className="mt-2">
                     <Skeleton className="h-7 w-full" />
                 </h2>
-                <div className="mt-8">
+                <div className="mt-6">
                     <Skeleton className="h-[37em] w-full" />
                 </div>
-                <div className="mt-12 space-y-2">
+                <div className="mt-10 space-y-2 md:mt-9">
                     <Skeleton className="h-5 w-full" />
                     <Skeleton className="h-5 w-full" />
                     <Skeleton className="h-5 w-full" />
                 </div>
-                <div className="mt-12 flex flex-wrap items-center gap-2">
+                <div className="mt-10 flex flex-wrap items-center gap-2 md:mt-9">
                     <Skeleton className="h-5 w-1/2" />
                 </div>
             </article>

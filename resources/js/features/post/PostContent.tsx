@@ -16,19 +16,21 @@ export function PostContent({ post }: PostContentProps) {
         <div className="mx-auto w-full max-w-[37em] py-10 md:py-9">
             <article className="typeset typeset-article">
                 <h1>{post.title}</h1>
-                <h2 className="text-muted-foreground mt-2 md:mt-2">{post.subtitle}</h2>
+                <p className="text-muted-foreground mt-2 text-[22.5px] leading-[1.4] md:mt-2 md:text-[20px]">
+                    {post.subtitle}
+                </p>
                 {post.image && (
                     <img
                         src={post.image}
                         alt={post.title}
-                        className="mt-8 max-h-[37em] w-full rounded-md object-contain"
+                        className="mt-6 max-h-[37em] w-full object-contain"
                         onError={(event) => {
                             event.currentTarget.style.display = 'none';
                         }}
                     />
                 )}
-                <RichText className="typeset-muted mt-12" html={post.body} />
-                <div className="mt-12 flex flex-wrap items-center gap-2 md:mt-12">
+                <RichText className="typeset-muted mt-10 md:mt-9" html={post.body} />
+                <div className="mt-10 flex flex-wrap items-center gap-2 md:mt-9">
                     <p className="text-muted-foreground my-0 text-base md:text-sm">
                         {isUpdated(post.created_at, post.updated_at) && 'Diperbarui '}
                         {format(post.updated_at, 'd MMM yyyy', { locale: id })}
