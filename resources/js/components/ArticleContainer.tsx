@@ -8,7 +8,7 @@ export function ArticleContainer({ className, ...divProps }: ArticleContainerPro
     return (
         <div
             className={cn(
-                'typeset typeset-article mx-auto w-full max-w-[37em] py-10 md:py-9',
+                'typeset typeset-article mx-auto w-full max-w-[37em] py-[39.375px] md:py-8.75',
                 className
             )}
             {...divProps}

@@ -118,7 +118,7 @@ export function MsFormView({ logic, title, description }: MsFormViewProps) {
                     </p>
                 )}
 
-                <div className="mt-10 flex items-center gap-2 md:mt-9">
+                <div className="mt-[39.375px] flex items-center gap-2 md:mt-8.75">
                     {!isFirstStep && (
                         <SecondaryButton
                             type="button"

@@ -18,7 +18,7 @@ export function PostSkeleton() {
                 <div className="mt-6">
                     <Skeleton className="aspect-4/3 w-full" />
                 </div>
-                <div className="mt-[39.375px] space-y-2 md:mt-[35px]">
+                <div className="mt-[39.375px] space-y-2 md:mt-8.75">
                     <Skeleton className="h-5 w-full" />
                     <Skeleton className="h-5 w-full" />
                     <Skeleton className="h-5 w-full" />

@@ -19,11 +19,11 @@ export function LatestLinks({ links }: LatestLinksProps) {
                 </TextLink>
             </h2>
             {links.length === 0 ? (
-                <p role="status" className="text-muted-foreground mt-5.5 md:mt-5">
+                <p role="status" className="text-muted-foreground mt-[22.5px] md:mt-5">
                     Belum ada tautan penting.
                 </p>
             ) : (
-                <ul className="mt-5.5 flex flex-col gap-4 md:mt-5">
+                <ul className="mt-[22.5px] flex flex-col gap-4 md:mt-5">
                     {links.map((link) => (
                         <li key={link.id}>
                             <LinkCard link={link} />

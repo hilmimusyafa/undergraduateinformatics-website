@@ -26,7 +26,7 @@ export function TocLayout({ title, description, items, emptyMessage, children }:
                     <h1>{title}</h1>
                     {description && <p className="text-muted-foreground">{description}</p>}
                     {items.length > 0 && (
-                        <div className="mt-10 md:mt-9 lg:hidden">
+                        <div className="mt-[39.375px] md:mt-8.75 lg:hidden">
                             <TableOfContents items={items} onSelect={scrollTo} />
                         </div>
                     )}

@@ -16,7 +16,7 @@ export function LinksSkeleton() {
                         <Skeleton className="h-7 w-full" />
                         <Skeleton className="h-7 w-full" />
                     </div>
-                    <div className="mt-10 md:mt-9 lg:hidden">
+                    <div className="mt-[39.375px] md:mt-8.75 lg:hidden">
                         <TableOfContentsSkeleton />
                     </div>
                     {Array.from({ length: skeletonSectionCount }, (_, sectionIndex) => (

@@ -29,14 +29,14 @@ export function PostContent({ post }: PostContentProps) {
                         }}
                     />
                 )}
-                <RichText className="typeset-muted mt-[39.375px] md:mt-[35px]" html={post.body} />
-                <div className="mt-[22.5px] flex flex-wrap items-center gap-3 md:mt-5">
+                <RichText className="typeset-muted mt-[39.375px] md:mt-8.75" html={post.body} />
+                <div className="mt-[22.5px] flex flex-wrap items-center gap-x-3 gap-y-0.5 md:mt-5">
                     <p className="text-muted-foreground my-0 text-lg leading-[31.5px] md:text-base md:leading-7">
                         {isUpdated(post.created_at, post.updated_at) && 'Diperbarui '}
                         {format(post.updated_at, 'd MMM yyyy', { locale: id })}
                     </p>
                     {post.tags.length > 0 && (
-                        <div className="flex flex-wrap items-center gap-3">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                             {post.tags.map((tag) => (
                                 <TextLink
                                     key={tag.id}

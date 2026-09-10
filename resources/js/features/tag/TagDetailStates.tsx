@@ -14,10 +14,10 @@ export function TagDetailSkeleton() {
                     <h1>
                         <Skeleton className="h-9 w-1/2" />
                     </h1>
-                    <div className="mt-5.5 md:mt-5">
+                    <div className="mt-[22.5px] md:mt-5">
                         <Skeleton className="h-7 w-full" />
                     </div>
-                    <div className="mt-10 md:mt-9 lg:hidden">
+                    <div className="mt-[39.375px] md:mt-8.75 lg:hidden">
                         <TableOfContentsSkeleton />
                     </div>
                     {[0, 1, 2, 3, 4].map((sectionIndex) => (
@@ -28,7 +28,7 @@ export function TagDetailSkeleton() {
                             <h2>
                                 <Skeleton className="h-7 w-1/2" />
                             </h2>
-                            <div className="mt-5.5 flex flex-col gap-4 md:mt-5">
+                            <div className="mt-[22.5px] flex flex-col gap-4 md:mt-5">
                                 <PostCardSkeleton />
                                 <PostCardSkeleton />
                             </div>

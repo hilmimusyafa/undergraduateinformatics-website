@@ -22,7 +22,9 @@ export function MainAsideLayout({
         >
             <ArticleContainer className="max-w-[37em] lg:mx-0">{mainContent}</ArticleContainer>
             <aside className="hidden w-full lg:block lg:max-w-3xs">
-                <div className={cn('mt-10 md:mt-9 lg:h-full', asideClassName)}>{asideContent}</div>
+                <div className={cn('mt-[39.375px] md:mt-8.75 lg:h-full', asideClassName)}>
+                    {asideContent}
+                </div>
             </aside>
         </div>
     );

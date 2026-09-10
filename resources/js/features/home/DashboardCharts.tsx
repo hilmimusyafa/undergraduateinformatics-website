@@ -45,13 +45,13 @@ export function DashboardCharts({ datasets }: DashboardChartsProps) {
 
     if (datasets.length === 0) {
         content = (
-            <p role="status" className="text-muted-foreground mt-5.5 md:mt-5">
+            <p role="status" className="text-muted-foreground mt-[22.5px] md:mt-5">
                 Belum ada data statistik.
             </p>
         );
     } else if (showGrid) {
         content = (
-            <div className="mt-5.5 grid grid-cols-2 gap-4 sm:gap-5 md:mt-5 md:gap-6 lg:grid-cols-3 lg:gap-8">
+            <div className="mt-[22.5px] grid grid-cols-2 gap-4 sm:gap-5 md:mt-5 md:gap-6 lg:grid-cols-3 lg:gap-8">
                 {datasets.map((dataset) => (
                     <ChartCard key={dataset.id} dataset={dataset} />
                 ))}
@@ -59,7 +59,7 @@ export function DashboardCharts({ datasets }: DashboardChartsProps) {
         );
     } else {
         content = (
-            <div className="mt-5.5 flex flex-col md:mt-5">
+            <div className="mt-[22.5px] flex flex-col md:mt-5">
                 <div ref={emblaRef} className="w-full overflow-hidden">
                     <div className="flex">
                         {datasets.map((dataset) => (

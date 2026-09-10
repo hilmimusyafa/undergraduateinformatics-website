@@ -26,25 +26,25 @@ export function SearchContent({ q, result, onSearch, onPageChange }: SearchConte
                 onSubmit={onSearch}
             />
             {hasQuery ? (
-                <p className="text-muted-foreground mt-5.5 md:mt-5">{meta.total} hasil</p>
+                <p className="text-muted-foreground mt-[22.5px] md:mt-5">{meta.total} hasil</p>
             ) : (
-                <p className="text-muted-foreground mt-5.5 md:mt-5">
+                <p className="text-muted-foreground mt-[22.5px] md:mt-5">
                     Masukkan kata kunci untuk mencari.
                 </p>
             )}
 
             {posts.length === 0 ? (
-                <p role="status" className="text-muted-foreground mt-5.5 md:mt-5">
+                <p role="status" className="text-muted-foreground mt-[22.5px] md:mt-5">
                     {hasQuery ? `Tidak ada hasil untuk “${q}”` : 'Belum ada informasi.'}
                 </p>
             ) : (
                 <>
-                    <div className="mt-5.5 flex flex-col gap-4 md:mt-5">
+                    <div className="mt-[22.5px] flex flex-col gap-4 md:mt-5">
                         {posts.map((post) => (
                             <PostCard key={post.id} post={post} />
                         ))}
                     </div>
-                    <div className="mt-5.5 grid grid-cols-[1fr_auto_1fr] items-center md:mt-5">
+                    <div className="mt-[22.5px] grid grid-cols-[1fr_auto_1fr] items-center md:mt-5">
                         <TextButton
                             variant="fade"
                             className="justify-self-start border-0"
@@ -53,7 +53,7 @@ export function SearchContent({ q, result, onSearch, onPageChange }: SearchConte
                         >
                             Kembali
                         </TextButton>
-                        <span className="text-muted-foreground text-lg md:text-base">
+                        <span className="text-muted-foreground text-lg leading-[31.5px] md:text-base md:leading-7">
                             {meta.current_page} dari {meta.last_page}
                         </span>
                         <TextButton

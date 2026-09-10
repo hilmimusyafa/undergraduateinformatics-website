@@ -45,7 +45,7 @@ export function FeedbackSkeleton() {
                     <Skeleton className="h-16 w-full" />
                 </FieldGroup>
             </section>
-            <div className="mt-10 flex items-center gap-2 md:mt-9">
+            <div className="mt-[39.375px] flex items-center gap-2 md:mt-8.75">
                 <Skeleton className="h-9 flex-1 md:w-24 md:flex-none" />
             </div>
         </ArticleContainer>
