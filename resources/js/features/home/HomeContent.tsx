@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 
 import { DashboardChartsSkeleton } from './DashboardChartsStates';
 import { LatestLinks } from './LatestLinks';

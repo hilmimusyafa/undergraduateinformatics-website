@@ -28,7 +28,7 @@ export function TagDetailContent({ tag }: { tag: TagWithPosts }) {
                     >
                         {group.label}
                     </h2>
-                    <div className="mt-5.5 md:mt-5 flex flex-col gap-4">
+                    <div className="mt-5.5 flex flex-col gap-4 md:mt-5">
                         {group.posts.map((post) => (
                             <PostCard key={post.id} post={post} />
                         ))}

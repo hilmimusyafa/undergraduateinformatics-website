@@ -12,10 +12,7 @@ export function TagListContent({ tags }: { tags: TagWithCount[] }) {
                 Telkom University.
             </p>
             {tags.length === 0 ? (
-                <p
-                    role="status"
-                    className="text-muted-foreground mt-8 md:mt-7"
-                >
+                <p role="status" className="text-muted-foreground mt-8 md:mt-7">
                     Belum ada topik.
                 </p>
             ) : (

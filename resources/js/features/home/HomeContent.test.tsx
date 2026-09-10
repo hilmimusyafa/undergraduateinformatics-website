@@ -95,9 +95,7 @@ describe('HomeContent', () => {
         expect(
             await screen.findByRole('heading', { name: 'Statistik Mahasiswa' })
         ).toBeInTheDocument();
-        expect(
-            screen.getByRole('heading', { name: 'Mahasiswa per Angkatan' })
-        ).toBeInTheDocument();
+        expect(screen.getByRole('heading', { name: 'Mahasiswa per Angkatan' })).toBeInTheDocument();
     });
 
     it('renders empty messages when there are no posts or links', () => {

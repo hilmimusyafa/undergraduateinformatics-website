@@ -13,9 +13,7 @@ vi.mock('recharts', () => {
         LineChart: ({ children }: any) => <div data-testid="line-chart">{children}</div>,
         Line: MockLine,
         CartesianGrid: () => <div data-testid="grid" />,
-        XAxis: ({ interval }: any) => (
-            <div data-testid="x-axis" data-interval={interval} />
-        ),
+        XAxis: ({ interval }: any) => <div data-testid="x-axis" data-interval={interval} />,
         YAxis: () => <div data-testid="y-axis" />,
         Tooltip: ({ trigger, active }: any) => (
             <div data-testid="tooltip" data-trigger={trigger} data-active={String(active)} />

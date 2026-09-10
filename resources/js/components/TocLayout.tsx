@@ -31,10 +31,7 @@ export function TocLayout({ title, description, items, emptyMessage, children }:
                         </div>
                     )}
                     {items.length === 0 ? (
-                        <p
-                            role="status"
-                            className="text-muted-foreground mt-8 md:mt-7"
-                        >
+                        <p role="status" className="text-muted-foreground mt-8 md:mt-7">
                             {emptyMessage}
                         </p>
                     ) : (

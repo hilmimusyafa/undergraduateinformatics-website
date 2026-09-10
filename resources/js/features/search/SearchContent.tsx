@@ -39,12 +39,12 @@ export function SearchContent({ q, result, onSearch, onPageChange }: SearchConte
                 </p>
             ) : (
                 <>
-                    <div className="mt-5.5 md:mt-5 flex flex-col gap-4">
+                    <div className="mt-5.5 flex flex-col gap-4 md:mt-5">
                         {posts.map((post) => (
                             <PostCard key={post.id} post={post} />
                         ))}
                     </div>
-                    <div className="mt-5.5 md:mt-5 grid grid-cols-[1fr_auto_1fr] items-center">
+                    <div className="mt-5.5 grid grid-cols-[1fr_auto_1fr] items-center md:mt-5">
                         <TextButton
                             variant="fade"
                             className="justify-self-start border-0"
