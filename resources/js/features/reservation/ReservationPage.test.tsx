@@ -39,6 +39,11 @@ const formPayload: MsFormPayload = {
     description: {
         text: 'Ajukan reservasi pertemuan dengan Program Studi Sarjana Informatika Telkom University.',
     },
+    reservation: {
+        dateQuestionId: 'tanggal',
+        shiftQuestionId: 'sesi',
+        allowedDays: [1, 2, 4, 5],
+    },
     sections: [
         {
             id: 'section-1',

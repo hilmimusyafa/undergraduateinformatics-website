@@ -43,6 +43,10 @@ export interface MsFormPayload {
     reservation?: ReservationMetadata;
 }
 
+export interface ReservationFormPayload extends MsFormPayload {
+    reservation: ReservationMetadata;
+}
+
 export type MsFormAnswer = string | string[];
 
 export type MsFormValues = Record<string, MsFormAnswer>;
