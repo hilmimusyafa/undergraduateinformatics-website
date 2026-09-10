@@ -50,7 +50,11 @@ function renderUseTagDetail(slug: string) {
 
     return renderHook(() => useTagDetail(slug), {
         wrapper: ({ children }) =>
-            React.createElement(QueryClientProvider, { client: queryClient }, children),
+            React.createElement(
+                QueryClientProvider,
+                { client: queryClient },
+                React.createElement(React.Suspense, { fallback: null }, children)
+            ),
     });
 }
 

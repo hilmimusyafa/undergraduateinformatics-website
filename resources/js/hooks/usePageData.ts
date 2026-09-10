@@ -1,9 +1,19 @@
 import { useEffect, useState } from 'react';
 
-import { type UseQueryOptions, type UseQueryResult, useQuery } from '@tanstack/react-query';
+import {
+    type QueryClient,
+    type UseQueryOptions,
+    type UseQueryResult,
+    type UseSuspenseQueryOptions,
+    type UseSuspenseQueryResult,
+    useQuery,
+    useSuspenseQuery,
+} from '@tanstack/react-query';
 
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import NProgress from 'nprogress';
+
+import { type ApiSuccessResponse } from '@/types/api';
 
 interface PageInitialData {
     data: unknown;
@@ -11,7 +21,19 @@ interface PageInitialData {
     paramsKey: string | null;
 }
 
-type QueryParams = Record<string, string | number | undefined>;
+export type QueryParams = Record<string, string | number | undefined>;
+
+export function pageQueryKey(apiEndpoint: string, params?: QueryParams) {
+    return [apiEndpoint, params];
+}
+
+export function isSuccessPayload<TData>(value: unknown): value is ApiSuccessResponse<TData> {
+    return (
+        typeof value === 'object' &&
+        value !== null &&
+        (value as { status?: unknown }).status === 'success'
+    );
+}
 
 function serializeParams(params?: QueryParams): string {
     if (!params) return '';
@@ -82,7 +104,7 @@ export function usePageData<TQueryFnData = unknown, TData = TQueryFnData>(
         initialState.paramsKey === paramsKey;
 
     return useQuery<TQueryFnData, Error, TData>({
-        queryKey: [apiEndpoint, params],
+        queryKey: pageQueryKey(apiEndpoint, params),
         queryFn: async () => {
             if (notFoundFromServer) {
                 throw createNotFoundError();
@@ -101,5 +123,38 @@ export function usePageData<TQueryFnData = unknown, TData = TQueryFnData>(
         staleTime: 30000,
         ...queryOptions,
         retry: notFoundFromServer ? false : (queryOptions.retry ?? 1),
+    });
+}
+
+export function useSuspensePageData<TQueryFnData = unknown, TData = TQueryFnData>(
+    apiEndpoint: string,
+    queryOptions: Omit<UseSuspenseQueryOptions<TQueryFnData, Error, TData>, 'queryKey'> = {},
+    params?: QueryParams
+): UseSuspenseQueryResult<TData, Error> {
+    return useSuspenseQuery<TQueryFnData, Error, TData>({
+        queryKey: pageQueryKey(apiEndpoint, params),
+        queryFn: () =>
+            axios.get(apiEndpoint, { params }).then((response) => response.data as TQueryFnData),
+        ...queryOptions,
+    });
+}
+
+export function ensurePageData<TData = unknown>(
+    queryClient: QueryClient,
+    apiEndpoint: string,
+    params?: QueryParams
+): Promise<TData> {
+    const initialData = (window as { __INITIAL_DATA__?: unknown }).__INITIAL_DATA__;
+
+    if (initialData !== undefined && initialData !== null) {
+        queryClient.setQueryData(pageQueryKey(apiEndpoint, params), initialData);
+        (window as { __INITIAL_DATA__?: unknown }).__INITIAL_DATA__ = null;
+        return Promise.resolve(initialData as TData);
+    }
+
+    return queryClient.ensureQueryData<TData>({
+        queryKey: pageQueryKey(apiEndpoint, params),
+        queryFn: () =>
+            axios.get(apiEndpoint, { params }).then((response) => response.data as TData),
     });
 }

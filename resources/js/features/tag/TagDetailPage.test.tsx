@@ -1,10 +1,10 @@
+import { Suspense } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { render, screen } from '@testing-library/react';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { axiosError } from '@/test/mocks';
 
 import { TagDetailPage } from './TagDetailPage';
 import { type TagWithPostsPayload } from './types';
@@ -74,7 +74,9 @@ function renderPage() {
 
     return render(
         <QueryClientProvider client={queryClient}>
-            <TagDetailPage slug="beasiswa" />
+            <Suspense fallback={null}>
+                <TagDetailPage slug="beasiswa" />
+            </Suspense>
         </QueryClientProvider>
     );
 }
@@ -141,47 +143,6 @@ describe('TagDetailPage', () => {
         expect(
             screen.queryByText('Informasi beasiswa dalam dan luar negeri')
         ).not.toBeInTheDocument();
-    });
-
-    it('renders a skeleton while loading', async () => {
-        let resolveGet: (value: { data: TagWithPostsPayload }) => void = () => undefined;
-        vi.mocked(axios.get).mockReturnValue(
-            new Promise((resolve) => {
-                resolveGet = resolve;
-            })
-        );
-
-        renderPage();
-
-        expect(screen.getByRole('status', { name: /Memuat detail topik/ })).toBeInTheDocument();
-
-        resolveGet({ data: detailPayload });
-
-        expect(await screen.findByRole('heading', { name: 'Beasiswa' })).toBeInTheDocument();
-    });
-
-    it('shows an error message when the request fails', async () => {
-        vi.mocked(axios.get).mockRejectedValue(axiosError(500));
-
-        renderPage();
-
-        expect(
-            await screen.findByText(
-                'Terjadi kesalahan saat memuat halaman. Silakan coba lagi.',
-                {},
-                { timeout: 3000 }
-            )
-        ).toBeInTheDocument();
-    });
-
-    it('shows the tag not found state when the tag does not exist', async () => {
-        vi.mocked(axios.get).mockRejectedValue(axiosError(404));
-
-        renderPage();
-
-        expect(
-            await screen.findByRole('heading', { name: 'Topik tidak ditemukan' }, { timeout: 3000 })
-        ).toBeInTheDocument();
     });
 
     it('shows an empty state with the intro and a message when the tag has no posts', async () => {

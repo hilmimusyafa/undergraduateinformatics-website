@@ -11,6 +11,10 @@ export function seoPage(pageKey: SeoPageKey) {
     return seoConfig.pages[pageKey];
 }
 
+export function seoTitle(title: string): string {
+    return `${title} - ${seoDefaults.title}`;
+}
+
 export function seoHead(
     pageKey: SeoPageKey,
     overrides: { title?: string; description?: string } = {}

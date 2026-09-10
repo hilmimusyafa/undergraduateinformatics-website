@@ -34,6 +34,7 @@ describe('RootLayout', () => {
     it('renders outlet wrapped in max-w-7xl mx-auto container', async () => {
         const router = createRouter({
             routeTree,
+            context: { queryClient },
         });
 
         const { container } = render(

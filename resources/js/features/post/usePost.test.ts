@@ -45,7 +45,11 @@ function renderUsePost(slug: string) {
 
     return renderHook(() => usePost(slug), {
         wrapper: ({ children }) =>
-            React.createElement(QueryClientProvider, { client: queryClient }, children),
+            React.createElement(
+                QueryClientProvider,
+                { client: queryClient },
+                React.createElement(React.Suspense, { fallback: null }, children)
+            ),
     });
 }
 
