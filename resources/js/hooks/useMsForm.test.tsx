@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, Suspense } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -27,7 +27,11 @@ const wrapper = ({ children }: { children: ReactNode }) => {
         },
     });
 
-    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+    return (
+        <QueryClientProvider client={queryClient}>
+            <Suspense fallback={null}>{children}</Suspense>
+        </QueryClientProvider>
+    );
 };
 
 describe('useMsForm', () => {

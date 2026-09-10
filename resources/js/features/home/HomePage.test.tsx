@@ -1,10 +1,11 @@
+import { Suspense } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { render, screen } from '@testing-library/react';
 import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { axiosError } from '@/test/mocks';
 import { type LinkSummary } from '@/types/link';
 import { type PostSummary } from '@/types/post';
 
@@ -83,7 +84,9 @@ function renderPage() {
 
     return render(
         <QueryClientProvider client={queryClient}>
-            <HomePage />
+            <Suspense fallback={null}>
+                <HomePage />
+            </Suspense>
         </QueryClientProvider>
     );
 }
@@ -143,27 +146,5 @@ describe('HomePage', () => {
 
         expect(await screen.findByText('Belum ada berita atau pengumuman.')).toBeInTheDocument();
         expect(screen.getByText('Belum ada tautan penting.')).toBeInTheDocument();
-    });
-
-    it('renders a skeleton while loading', async () => {
-        vi.mocked(axios.get).mockReturnValue(new Promise(() => undefined));
-
-        renderPage();
-
-        expect(screen.getByRole('status', { name: 'Memuat beranda' })).toBeInTheDocument();
-    });
-
-    it('shows an error message when the request fails', async () => {
-        vi.mocked(axios.get).mockRejectedValue(axiosError(500));
-
-        renderPage();
-
-        expect(
-            await screen.findByText(
-                'Terjadi kesalahan saat memuat halaman. Silakan coba lagi.',
-                {},
-                { timeout: 3000 }
-            )
-        ).toBeInTheDocument();
     });
 });

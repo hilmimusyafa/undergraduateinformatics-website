@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { render, screen } from '@testing-library/react';
-import axios, { AxiosError, type AxiosResponse } from 'axios';
+import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TagListPage } from './TagListPage';
@@ -37,15 +39,6 @@ vi.mock('@tanstack/react-router', async () => {
     };
 });
 
-function axiosError(status: number, message?: string) {
-    const error = new AxiosError(message ?? 'Request failed');
-    error.response = {
-        status,
-        data: message ? { message } : {},
-    } as AxiosResponse;
-    return error;
-}
-
 const tagsPayload: TagWithCountsPayload = {
     status: 'success',
     data: [
@@ -69,7 +62,9 @@ function renderPage() {
 
     return render(
         <QueryClientProvider client={queryClient}>
-            <TagListPage />
+            <Suspense fallback={null}>
+                <TagListPage />
+            </Suspense>
         </QueryClientProvider>
     );
 }
@@ -113,57 +108,6 @@ describe('TagListPage', () => {
             'href',
             '/tags/beasiswa'
         );
-    });
-
-    it('renders a skeleton while loading', async () => {
-        let resolveGet: (value: { data: TagWithCountsPayload }) => void = () => undefined;
-        vi.mocked(axios.get).mockReturnValue(
-            new Promise((resolve) => {
-                resolveGet = resolve;
-            })
-        );
-
-        renderPage();
-
-        expect(screen.getByRole('status', { name: /Memuat daftar topik/ })).toBeInTheDocument();
-
-        resolveGet({ data: tagsPayload });
-
-        expect(await screen.findByRole('heading', { name: 'Daftar Topik' })).toBeInTheDocument();
-    });
-
-    it('does not nest a div inside a p in the skeleton', async () => {
-        let resolveGet: (value: { data: TagWithCountsPayload }) => void = () => undefined;
-        vi.mocked(axios.get).mockReturnValue(
-            new Promise((resolve) => {
-                resolveGet = resolve;
-            })
-        );
-
-        const { container } = renderPage();
-
-        expect(screen.getByRole('status', { name: /Memuat daftar topik/ })).toBeInTheDocument();
-
-        const paragraphs = container.querySelectorAll('p');
-        paragraphs.forEach((paragraph) => {
-            expect(paragraph.querySelector('div')).toBeNull();
-        });
-
-        resolveGet({ data: tagsPayload });
-    });
-
-    it('shows an error message when the request fails', async () => {
-        vi.mocked(axios.get).mockRejectedValue(axiosError(500));
-
-        renderPage();
-
-        expect(
-            await screen.findByText(
-                'Terjadi kesalahan saat memuat halaman. Silakan coba lagi.',
-                {},
-                { timeout: 3000 }
-            )
-        ).toBeInTheDocument();
     });
 
     it('shows an empty state with the intro and a message when there are no tags', async () => {

@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { render, screen } from '@testing-library/react';
-import axios, { AxiosError, type AxiosResponse } from 'axios';
+import axios from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { LinksPage } from './LinksPage';
@@ -31,15 +33,6 @@ vi.mock('@tanstack/react-router', async () => {
             },
     };
 });
-
-function axiosError(status: number, message?: string) {
-    const error = new AxiosError(message ?? 'Request failed');
-    error.response = {
-        status,
-        data: message ? { message } : {},
-    } as AxiosResponse;
-    return error;
-}
 
 const linksPayload: LinksPayload = {
     status: 'success',
@@ -81,7 +74,9 @@ function renderPage() {
 
     return render(
         <QueryClientProvider client={queryClient}>
-            <LinksPage />
+            <Suspense fallback={null}>
+                <LinksPage />
+            </Suspense>
         </QueryClientProvider>
     );
 }
@@ -145,49 +140,6 @@ describe('LinksPage', () => {
         await screen.findByRole('heading', { name: 'Tautan Penting' });
 
         expect(screen.getByText('Belum ada tautan pada section ini.')).toBeInTheDocument();
-    });
-
-    it('renders a skeleton while loading', async () => {
-        let resolveGet: (value: { data: LinksPayload }) => void = () => undefined;
-        vi.mocked(axios.get).mockReturnValue(
-            new Promise((resolve) => {
-                resolveGet = resolve;
-            })
-        );
-
-        renderPage();
-
-        expect(
-            screen.getByRole('status', { name: /Memuat daftar tautan penting/ })
-        ).toBeInTheDocument();
-
-        resolveGet({ data: linksPayload });
-
-        expect(await screen.findByRole('heading', { name: 'Tautan Penting' })).toBeInTheDocument();
-    });
-
-    it('spaces the mobile table of contents skeleton below the intro', async () => {
-        vi.mocked(axios.get).mockReturnValue(new Promise(() => undefined));
-
-        renderPage();
-
-        const mobileToc = document.querySelector('.lg\\:hidden');
-        expect(mobileToc).not.toBeNull();
-        expect(mobileToc).toHaveClass('mt-10', 'md:mt-9');
-    });
-
-    it('shows an error message when the request fails', async () => {
-        vi.mocked(axios.get).mockRejectedValue(axiosError(500));
-
-        renderPage();
-
-        expect(
-            await screen.findByText(
-                'Terjadi kesalahan saat memuat halaman. Silakan coba lagi.',
-                {},
-                { timeout: 3000 }
-            )
-        ).toBeInTheDocument();
     });
 
     it('shows an empty state with the intro, a desktop Daftar Isi heading, and a message when there are no sections', async () => {

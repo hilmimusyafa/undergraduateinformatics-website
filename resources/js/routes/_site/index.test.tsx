@@ -1,4 +1,4 @@
-import { type ReactNode } from 'react';
+import { type ReactNode, Suspense } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -9,7 +9,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HomePage } from '@/features/home/HomePage';
 import { type DashboardDataset, type HomePayload } from '@/features/home/types';
 import { seoPage } from '@/lib/seo';
-import { axiosError } from '@/test/mocks';
 import { type LinkSummary } from '@/types/link';
 import { type PostSummary } from '@/types/post';
 
@@ -91,7 +90,9 @@ function renderHome() {
                 })
             }
         >
-            <Component />
+            <Suspense fallback={null}>
+                <Component />
+            </Suspense>
         </QueryClientProvider>
     );
 }
@@ -174,27 +175,5 @@ describe('HomePage route', () => {
 
     it('renders the home page as its component', () => {
         expect(Route.options.component).toBe(HomePage);
-    });
-
-    it('renders a skeleton while the page is loading', async () => {
-        vi.mocked(axios.get).mockReturnValue(new Promise(() => undefined));
-
-        renderHome();
-
-        expect(screen.getByRole('status', { name: 'Memuat beranda' })).toBeInTheDocument();
-    });
-
-    it('shows an error message when the request fails', async () => {
-        vi.mocked(axios.get).mockRejectedValue(axiosError(500));
-
-        renderHome();
-
-        expect(
-            await screen.findByText(
-                'Terjadi kesalahan saat memuat halaman. Silakan coba lagi.',
-                {},
-                { timeout: 3000 }
-            )
-        ).toBeInTheDocument();
     });
 });

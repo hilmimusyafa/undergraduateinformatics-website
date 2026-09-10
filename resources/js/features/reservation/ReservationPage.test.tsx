@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { render, screen, waitFor } from '@testing-library/react';
@@ -5,7 +7,6 @@ import userEvent from '@testing-library/user-event';
 import axios, { AxiosError, type AxiosResponse } from 'axios';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { type ApiSuccessResponse } from '@/types/api';
 import { type MsFormPayload } from '@/types/ms-forms';
 
 import { ReservationPage } from './ReservationPage';
@@ -82,7 +83,9 @@ function renderSection() {
 
     return render(
         <QueryClientProvider client={queryClient}>
-            <ReservationPage />
+            <Suspense fallback={null}>
+                <ReservationPage />
+            </Suspense>
         </QueryClientProvider>
     );
 }
@@ -181,49 +184,17 @@ describe('ReservationPage', () => {
         expect(await screen.findByText('Formulir sedang tidak tersedia.')).toBeInTheDocument();
     });
 
-    it('renders a skeleton while the form data is loading', async () => {
-        let resolveGet: (value: { data: ApiSuccessResponse<MsFormPayload> }) => void = () =>
-            undefined;
-        vi.mocked(axios.get).mockReturnValue(
-            new Promise((resolve) => {
-                resolveGet = resolve;
-            })
-        );
-
-        renderSection();
-
-        expect(screen.getByRole('status', { name: /Memuat formulir/ })).toBeInTheDocument();
-
-        resolveGet({ data: { status: 'success', data: formPayload } });
-
-        expect(await screen.findByText('Reservasi Pertemuan dengan Prodi')).toBeInTheDocument();
-    });
-
     it('shows a message when the link is set but questions are unavailable', async () => {
-        (window as any).__INITIAL_DATA__ = {
-            status: 'success',
-            data: { link: 'https://forms.office.com/r/reservation123' },
-        };
+        vi.mocked(axios.get).mockResolvedValue({
+            data: {
+                status: 'success',
+                data: { link: 'https://forms.office.com/r/reservation123' },
+            },
+        });
 
         renderSection();
 
         expect(await screen.findByText(/Formulir sedang tidak tersedia/)).toBeInTheDocument();
         expect(screen.queryByText('Reservasi Pertemuan dengan Prodi')).not.toBeInTheDocument();
-    });
-
-    it('shows a message when the form fails to load', async () => {
-        vi.mocked(axios.get).mockRejectedValue(
-            axiosError(422, 'Failed to load the form. Please try again later.')
-        );
-
-        renderSection();
-
-        expect(
-            await screen.findByText(
-                'Terjadi kesalahan saat memuat formulir. Silakan coba lagi.',
-                {},
-                { timeout: 3000 }
-            )
-        ).toBeInTheDocument();
     });
 });

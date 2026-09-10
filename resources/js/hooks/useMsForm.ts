@@ -1,6 +1,6 @@
 import { type ApiSuccessResponse } from '../types/api';
 import { type MsFormPayload } from '../types/ms-forms';
-import { usePageData } from './usePageData';
+import { useSuspensePageData } from './usePageData';
 
 export interface MsFormData extends MsFormPayload {
     isValid: boolean;
@@ -16,7 +16,7 @@ const selectMsForm = (response: ApiSuccessResponse<MsFormPayload>): MsFormData =
 };
 
 export function useMsForm(apiEndpoint: string) {
-    return usePageData<ApiSuccessResponse<MsFormPayload>, MsFormData>(apiEndpoint, {
+    return useSuspensePageData<ApiSuccessResponse<MsFormPayload>, MsFormData>(apiEndpoint, {
         select: selectMsForm,
     });
 }

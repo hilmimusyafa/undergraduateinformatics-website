@@ -1,32 +1,23 @@
 import { MsForm } from '@/components/MsForm';
-import { MsFormError, MsFormUnavailable } from '@/components/MsFormStates';
+import { MsFormUnavailable } from '@/components/MsFormStates';
 import { useMsForm } from '@/hooks/useMsForm';
 
 import { ReservationForm } from './ReservationForm';
-import { ReservationSkeleton } from './ReservationStates';
 
 export function ReservationPage() {
-    const query = useMsForm('/api/reservation');
+    const { data } = useMsForm('/api/reservation');
 
-    if (query.isPending) {
-        return <ReservationSkeleton />;
-    }
-
-    if (query.isError) {
-        return <MsFormError />;
-    }
-
-    if (!query.data.isValid) {
+    if (!data.isValid) {
         return <MsFormUnavailable />;
     }
 
-    if (!query.data.reservation) {
+    if (!data.reservation) {
         return (
             <MsForm
-                title={query.data.title}
-                description={query.data.description}
-                sections={query.data.sections}
-                questions={query.data.questions}
+                title={data.title}
+                description={data.description}
+                sections={data.sections}
+                questions={data.questions}
                 submitUrl="/api/reservation"
             />
         );
@@ -34,12 +25,12 @@ export function ReservationPage() {
 
     return (
         <ReservationForm
-            title={query.data.title}
-            description={query.data.description}
-            sections={query.data.sections}
-            questions={query.data.questions}
+            title={data.title}
+            description={data.description}
+            sections={data.sections}
+            questions={data.questions}
             submitUrl="/api/reservation"
-            reservation={query.data.reservation}
+            reservation={data.reservation}
         />
     );
 }
