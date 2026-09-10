@@ -187,10 +187,10 @@ export function MsFormField({ question, control }: MsFormFieldProps) {
             control={control}
             name={question.id}
             render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel id={`${question.id}-title`} className="sr-only">
+                <FieldSet data-invalid={fieldState.invalid}>
+                    <FieldLegend variant="label" className="sr-only" id={`${question.id}-title`}>
                         {question.title.text}
-                    </FieldLabel>
+                    </FieldLegend>
                     <RadioGroup
                         name={field.name}
                         value={field.value as string}
@@ -220,7 +220,7 @@ export function MsFormField({ question, control }: MsFormFieldProps) {
                         ))}
                     </RadioGroup>
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                </Field>
+                </FieldSet>
             )}
         />
     );
