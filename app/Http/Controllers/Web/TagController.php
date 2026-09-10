@@ -43,17 +43,18 @@ class TagController extends Controller
 
         $tag = $tagData['data'];
 
-        $title = $tag['name'] . ' - Portal Informasi Sarjana Informatika';
+        $title = $tag['name'] . ' - ' . PageMeta::load()['defaultTitle'];
         $description = $tag['description'] ?? '';
+        $metaDescription = $description !== '' ? $description : PageMeta::page('tagDetail')['description'];
 
         $jsonLd = [
             '@context' => 'https://schema.org',
             '@type' => 'CollectionPage',
             'name' => $title,
             'url' => $request->url(),
-            'description' => $description,
+            'description' => $metaDescription,
         ];
 
-        return view('app', PageMeta::viewData($request, 'tagDetail', $jsonLd, $tagData, $title, $description));
+        return view('app', PageMeta::viewData($request, 'tagDetail', $jsonLd, $tagData, $title, $metaDescription));
     }
 }

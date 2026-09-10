@@ -26,8 +26,9 @@ class PostController extends Controller
 
         $post = $postData['data'];
 
-        $title = $post['title'] . ' - Portal Informasi Sarjana Informatika';
+        $title = $post['title'] . ' - ' . PageMeta::load()['defaultTitle'];
         $description = $post['subtitle'] ?? '';
+        $metaDescription = $description !== '' ? $description : PageMeta::page('postDetail')['description'];
         $siteName = PageMeta::load()['siteName'];
         $ogImage = $post['image'] ? url($post['image']) : null;
 
@@ -45,6 +46,6 @@ class PostController extends Controller
             'dateModified' => $post['updated_at'],
         ];
 
-        return view('app', PageMeta::viewData($request, 'postDetail', $jsonLd, $postData, $title, $description, $ogImage));
+        return view('app', PageMeta::viewData($request, 'postDetail', $jsonLd, $postData, $title, $metaDescription, $ogImage));
     }
 }
