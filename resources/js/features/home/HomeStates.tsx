@@ -16,10 +16,10 @@ export function HomeSkeleton() {
                     <Skeleton className="h-9 w-full max-w-xl" />
                     <Skeleton className="h-9 w-full max-w-xl" />
                 </h1>
-                <p className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1">
                     <Skeleton className="h-5 w-full max-w-xl" />
                     <Skeleton className="h-5 w-full max-w-xl" />
-                </p>
+                </div>
             </div>
             <div className="grid gap-y-10 md:gap-y-9 lg:grid-cols-[minmax(0,1.8fr)_minmax(0,1fr)] lg:gap-x-12">
                 <div className="flex flex-col">
