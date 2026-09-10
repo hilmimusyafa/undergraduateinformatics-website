@@ -6,7 +6,7 @@ import { HomeSkeleton } from '@/features/home/HomeStates';
 import { ensurePageData } from '@/hooks/usePageData';
 import { seoHead } from '@/lib/seo';
 
-export const Route = createFileRoute('/_site/')({
+export const Route = createFileRoute('/_public/')({
     loader: ({ context }) => ensurePageData(context.queryClient, '/api/home'),
     head: () => seoHead('home'),
     pendingComponent: HomeSkeleton,

@@ -3,19 +3,19 @@ import { createFileRoute, notFound, useParams } from '@tanstack/react-router';
 import axios from 'axios';
 
 import { ErrorState } from '@/components/ErrorState';
-import { PostPage } from '@/features/post/PostPage';
-import { PostNotFound, PostSkeleton } from '@/features/post/PostStates';
-import { type PostPayload } from '@/features/post/types';
+import { TagDetailPage } from '@/features/tag/TagDetailPage';
+import { TagDetailSkeleton, TagNotFound } from '@/features/tag/TagDetailStates';
+import { type TagWithPostsPayload } from '@/features/tag/types';
 import { isSuccessPayload, pageQueryKey } from '@/hooks/usePageData';
 import { isNotFoundError } from '@/lib/errors';
 import { seoHead, seoTitle } from '@/lib/seo';
 
-export const Route = createFileRoute('/_site/posts/$slug')({
+export const Route = createFileRoute('/_public/tags/$slug')({
     loader: async ({ context, params }) => {
-        const endpoint = `/api/posts/${params.slug}`;
+        const endpoint = `/api/tags/${params.slug}`;
         const initialData = (window as { __INITIAL_DATA__?: unknown }).__INITIAL_DATA__;
 
-        if (isSuccessPayload<PostPayload['data']>(initialData)) {
+        if (isSuccessPayload<TagWithPostsPayload['data']>(initialData)) {
             context.queryClient.setQueryData(pageQueryKey(endpoint), initialData);
             clearInitialData();
             return initialData;
@@ -27,9 +27,10 @@ export const Route = createFileRoute('/_site/posts/$slug')({
         }
 
         try {
-            return await context.queryClient.ensureQueryData<PostPayload>({
+            return await context.queryClient.ensureQueryData<TagWithPostsPayload>({
                 queryKey: pageQueryKey(endpoint),
-                queryFn: () => axios.get<PostPayload>(endpoint).then((response) => response.data),
+                queryFn: () =>
+                    axios.get<TagWithPostsPayload>(endpoint).then((response) => response.data),
             });
         } catch (error) {
             if (isNotFoundError(error)) {
@@ -39,27 +40,27 @@ export const Route = createFileRoute('/_site/posts/$slug')({
         }
     },
     head: ({ loaderData }) => {
-        const post = loaderData?.data;
+        const tag = loaderData?.data;
 
-        return seoHead('postDetail', {
-            title: post ? seoTitle(post.title) : undefined,
-            description: post?.subtitle || undefined,
+        return seoHead('tagDetail', {
+            title: tag ? seoTitle(tag.name) : undefined,
+            description: tag?.description || undefined,
         });
     },
-    pendingComponent: PostSkeleton,
+    pendingComponent: TagDetailSkeleton,
     pendingMs: 0,
     pendingMinMs: 0,
-    errorComponent: PostErrorComponent,
-    notFoundComponent: PostNotFound,
-    component: PostRouteComponent,
+    errorComponent: TagErrorComponent,
+    notFoundComponent: TagNotFound,
+    component: TagDetailRouteComponent,
 });
 
-function PostRouteComponent() {
-    const { slug } = useParams({ from: '/_site/posts/$slug' });
-    return <PostPage slug={slug} />;
+function TagDetailRouteComponent() {
+    const { slug } = useParams({ from: '/_public/tags/$slug' });
+    return <TagDetailPage slug={slug} />;
 }
 
-function PostErrorComponent() {
+function TagErrorComponent() {
     return <ErrorState />;
 }
 

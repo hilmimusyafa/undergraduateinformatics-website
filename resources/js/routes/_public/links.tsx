@@ -6,7 +6,7 @@ import { LinksSkeleton } from '@/features/links/LinksStates';
 import { ensurePageData } from '@/hooks/usePageData';
 import { seoHead } from '@/lib/seo';
 
-export const Route = createFileRoute('/_site/links')({
+export const Route = createFileRoute('/_public/links')({
     loader: ({ context }) => ensurePageData(context.queryClient, '/api/links'),
     head: () => seoHead('links'),
     pendingComponent: LinksSkeleton,

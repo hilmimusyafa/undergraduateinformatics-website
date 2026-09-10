@@ -9,96 +9,96 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SiteRouteImport } from './routes/_site'
-import { Route as SiteIndexRouteImport } from './routes/_site/index'
-import { Route as SiteFeedbackRouteImport } from './routes/_site/feedback'
-import { Route as SiteLinksRouteImport } from './routes/_site/links'
-import { Route as SiteReservationRouteImport } from './routes/_site/reservation'
-import { Route as SitePostsSlugRouteImport } from './routes/_site/posts.$slug'
-import { Route as SitePostsSearchRouteImport } from './routes/_site/posts.search'
-import { Route as SiteTagsIndexRouteImport } from './routes/_site/tags.index'
-import { Route as SiteTagsSlugRouteImport } from './routes/_site/tags.$slug'
+import { Route as PublicRouteImport } from './routes/_public'
+import { Route as PublicIndexRouteImport } from './routes/_public/index'
+import { Route as PublicFeedbackRouteImport } from './routes/_public/feedback'
+import { Route as PublicLinksRouteImport } from './routes/_public/links'
+import { Route as PublicReservationRouteImport } from './routes/_public/reservation'
+import { Route as PublicPostsSlugRouteImport } from './routes/_public/posts.$slug'
+import { Route as PublicPostsSearchRouteImport } from './routes/_public/posts.search'
+import { Route as PublicTagsIndexRouteImport } from './routes/_public/tags.index'
+import { Route as PublicTagsSlugRouteImport } from './routes/_public/tags.$slug'
 
-const SiteRoute = SiteRouteImport.update({
-  id: '/_site',
+const PublicRoute = PublicRouteImport.update({
+  id: '/_public',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SiteIndexRoute = SiteIndexRouteImport.update({
+const PublicIndexRoute = PublicIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => SiteRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
-const SiteFeedbackRoute = SiteFeedbackRouteImport.update({
+const PublicFeedbackRoute = PublicFeedbackRouteImport.update({
   id: '/feedback',
   path: '/feedback',
-  getParentRoute: () => SiteRoute,
+  getParentRoute: () => PublicRoute,
 } as any).lazy(() =>
-  import('./routes/_site/feedback.lazy').then((d) => d.Route),
+  import('./routes/_public/feedback.lazy').then((d) => d.Route),
 )
-const SiteLinksRoute = SiteLinksRouteImport.update({
+const PublicLinksRoute = PublicLinksRouteImport.update({
   id: '/links',
   path: '/links',
-  getParentRoute: () => SiteRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
-const SiteReservationRoute = SiteReservationRouteImport.update({
+const PublicReservationRoute = PublicReservationRouteImport.update({
   id: '/reservation',
   path: '/reservation',
-  getParentRoute: () => SiteRoute,
+  getParentRoute: () => PublicRoute,
 } as any).lazy(() =>
-  import('./routes/_site/reservation.lazy').then((d) => d.Route),
+  import('./routes/_public/reservation.lazy').then((d) => d.Route),
 )
-const SitePostsSlugRoute = SitePostsSlugRouteImport.update({
+const PublicPostsSlugRoute = PublicPostsSlugRouteImport.update({
   id: '/posts/$slug',
   path: '/posts/$slug',
-  getParentRoute: () => SiteRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
-const SitePostsSearchRoute = SitePostsSearchRouteImport.update({
+const PublicPostsSearchRoute = PublicPostsSearchRouteImport.update({
   id: '/posts/search',
   path: '/posts/search',
-  getParentRoute: () => SiteRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
-const SiteTagsIndexRoute = SiteTagsIndexRouteImport.update({
+const PublicTagsIndexRoute = PublicTagsIndexRouteImport.update({
   id: '/tags/',
   path: '/tags/',
-  getParentRoute: () => SiteRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
-const SiteTagsSlugRoute = SiteTagsSlugRouteImport.update({
+const PublicTagsSlugRoute = PublicTagsSlugRouteImport.update({
   id: '/tags/$slug',
   path: '/tags/$slug',
-  getParentRoute: () => SiteRoute,
+  getParentRoute: () => PublicRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof SiteIndexRoute
-  '/feedback': typeof SiteFeedbackRoute
-  '/links': typeof SiteLinksRoute
-  '/reservation': typeof SiteReservationRoute
-  '/posts/$slug': typeof SitePostsSlugRoute
-  '/posts/search': typeof SitePostsSearchRoute
-  '/tags/$slug': typeof SiteTagsSlugRoute
-  '/tags/': typeof SiteTagsIndexRoute
+  '/': typeof PublicIndexRoute
+  '/feedback': typeof PublicFeedbackRoute
+  '/links': typeof PublicLinksRoute
+  '/reservation': typeof PublicReservationRoute
+  '/posts/$slug': typeof PublicPostsSlugRoute
+  '/posts/search': typeof PublicPostsSearchRoute
+  '/tags/$slug': typeof PublicTagsSlugRoute
+  '/tags/': typeof PublicTagsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/feedback': typeof SiteFeedbackRoute
-  '/links': typeof SiteLinksRoute
-  '/reservation': typeof SiteReservationRoute
-  '/': typeof SiteIndexRoute
-  '/posts/$slug': typeof SitePostsSlugRoute
-  '/posts/search': typeof SitePostsSearchRoute
-  '/tags/$slug': typeof SiteTagsSlugRoute
-  '/tags': typeof SiteTagsIndexRoute
+  '/feedback': typeof PublicFeedbackRoute
+  '/links': typeof PublicLinksRoute
+  '/reservation': typeof PublicReservationRoute
+  '/': typeof PublicIndexRoute
+  '/posts/$slug': typeof PublicPostsSlugRoute
+  '/posts/search': typeof PublicPostsSearchRoute
+  '/tags/$slug': typeof PublicTagsSlugRoute
+  '/tags': typeof PublicTagsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_site': typeof SiteRouteWithChildren
-  '/_site/feedback': typeof SiteFeedbackRoute
-  '/_site/links': typeof SiteLinksRoute
-  '/_site/reservation': typeof SiteReservationRoute
-  '/_site/': typeof SiteIndexRoute
-  '/_site/posts/$slug': typeof SitePostsSlugRoute
-  '/_site/posts/search': typeof SitePostsSearchRoute
-  '/_site/tags/$slug': typeof SiteTagsSlugRoute
-  '/_site/tags/': typeof SiteTagsIndexRoute
+  '/_public': typeof PublicRouteWithChildren
+  '/_public/feedback': typeof PublicFeedbackRoute
+  '/_public/links': typeof PublicLinksRoute
+  '/_public/reservation': typeof PublicReservationRoute
+  '/_public/': typeof PublicIndexRoute
+  '/_public/posts/$slug': typeof PublicPostsSlugRoute
+  '/_public/posts/search': typeof PublicPostsSearchRoute
+  '/_public/tags/$slug': typeof PublicTagsSlugRoute
+  '/_public/tags/': typeof PublicTagsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -123,115 +123,116 @@ export interface FileRouteTypes {
     | '/tags'
   id:
     | '__root__'
-    | '/_site'
-    | '/_site/feedback'
-    | '/_site/links'
-    | '/_site/reservation'
-    | '/_site/'
-    | '/_site/posts/$slug'
-    | '/_site/posts/search'
-    | '/_site/tags/$slug'
-    | '/_site/tags/'
+    | '/_public'
+    | '/_public/feedback'
+    | '/_public/links'
+    | '/_public/reservation'
+    | '/_public/'
+    | '/_public/posts/$slug'
+    | '/_public/posts/search'
+    | '/_public/tags/$slug'
+    | '/_public/tags/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  SiteRoute: typeof SiteRouteWithChildren
+  PublicRoute: typeof PublicRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/_site': {
-      id: '/_site'
+    '/_public': {
+      id: '/_public'
       path: ''
       fullPath: '/'
-      preLoaderRoute: typeof SiteRouteImport
+      preLoaderRoute: typeof PublicRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_site/': {
-      id: '/_site/'
+    '/_public/': {
+      id: '/_public/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof SiteIndexRouteImport
-      parentRoute: typeof SiteRoute
+      preLoaderRoute: typeof PublicIndexRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_site/feedback': {
-      id: '/_site/feedback'
+    '/_public/feedback': {
+      id: '/_public/feedback'
       path: '/feedback'
       fullPath: '/feedback'
-      preLoaderRoute: typeof SiteFeedbackRouteImport
-      parentRoute: typeof SiteRoute
+      preLoaderRoute: typeof PublicFeedbackRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_site/links': {
-      id: '/_site/links'
+    '/_public/links': {
+      id: '/_public/links'
       path: '/links'
       fullPath: '/links'
-      preLoaderRoute: typeof SiteLinksRouteImport
-      parentRoute: typeof SiteRoute
+      preLoaderRoute: typeof PublicLinksRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_site/reservation': {
-      id: '/_site/reservation'
+    '/_public/reservation': {
+      id: '/_public/reservation'
       path: '/reservation'
       fullPath: '/reservation'
-      preLoaderRoute: typeof SiteReservationRouteImport
-      parentRoute: typeof SiteRoute
+      preLoaderRoute: typeof PublicReservationRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_site/posts/$slug': {
-      id: '/_site/posts/$slug'
+    '/_public/posts/$slug': {
+      id: '/_public/posts/$slug'
       path: '/posts/$slug'
       fullPath: '/posts/$slug'
-      preLoaderRoute: typeof SitePostsSlugRouteImport
-      parentRoute: typeof SiteRoute
+      preLoaderRoute: typeof PublicPostsSlugRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_site/posts/search': {
-      id: '/_site/posts/search'
+    '/_public/posts/search': {
+      id: '/_public/posts/search'
       path: '/posts/search'
       fullPath: '/posts/search'
-      preLoaderRoute: typeof SitePostsSearchRouteImport
-      parentRoute: typeof SiteRoute
+      preLoaderRoute: typeof PublicPostsSearchRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_site/tags/': {
-      id: '/_site/tags/'
+    '/_public/tags/': {
+      id: '/_public/tags/'
       path: '/tags'
       fullPath: '/tags/'
-      preLoaderRoute: typeof SiteTagsIndexRouteImport
-      parentRoute: typeof SiteRoute
+      preLoaderRoute: typeof PublicTagsIndexRouteImport
+      parentRoute: typeof PublicRoute
     }
-    '/_site/tags/$slug': {
-      id: '/_site/tags/$slug'
+    '/_public/tags/$slug': {
+      id: '/_public/tags/$slug'
       path: '/tags/$slug'
       fullPath: '/tags/$slug'
-      preLoaderRoute: typeof SiteTagsSlugRouteImport
-      parentRoute: typeof SiteRoute
+      preLoaderRoute: typeof PublicTagsSlugRouteImport
+      parentRoute: typeof PublicRoute
     }
   }
 }
 
-interface SiteRouteChildren {
-  SiteFeedbackRoute: typeof SiteFeedbackRoute
-  SiteLinksRoute: typeof SiteLinksRoute
-  SiteReservationRoute: typeof SiteReservationRoute
-  SiteIndexRoute: typeof SiteIndexRoute
-  SitePostsSlugRoute: typeof SitePostsSlugRoute
-  SitePostsSearchRoute: typeof SitePostsSearchRoute
-  SiteTagsSlugRoute: typeof SiteTagsSlugRoute
-  SiteTagsIndexRoute: typeof SiteTagsIndexRoute
+interface PublicRouteChildren {
+  PublicFeedbackRoute: typeof PublicFeedbackRoute
+  PublicLinksRoute: typeof PublicLinksRoute
+  PublicReservationRoute: typeof PublicReservationRoute
+  PublicIndexRoute: typeof PublicIndexRoute
+  PublicPostsSlugRoute: typeof PublicPostsSlugRoute
+  PublicPostsSearchRoute: typeof PublicPostsSearchRoute
+  PublicTagsSlugRoute: typeof PublicTagsSlugRoute
+  PublicTagsIndexRoute: typeof PublicTagsIndexRoute
 }
 
-const SiteRouteChildren: SiteRouteChildren = {
-  SiteFeedbackRoute: SiteFeedbackRoute,
-  SiteLinksRoute: SiteLinksRoute,
-  SiteReservationRoute: SiteReservationRoute,
-  SiteIndexRoute: SiteIndexRoute,
-  SitePostsSlugRoute: SitePostsSlugRoute,
-  SitePostsSearchRoute: SitePostsSearchRoute,
-  SiteTagsSlugRoute: SiteTagsSlugRoute,
-  SiteTagsIndexRoute: SiteTagsIndexRoute,
+const PublicRouteChildren: PublicRouteChildren = {
+  PublicFeedbackRoute: PublicFeedbackRoute,
+  PublicLinksRoute: PublicLinksRoute,
+  PublicReservationRoute: PublicReservationRoute,
+  PublicIndexRoute: PublicIndexRoute,
+  PublicPostsSlugRoute: PublicPostsSlugRoute,
+  PublicPostsSearchRoute: PublicPostsSearchRoute,
+  PublicTagsSlugRoute: PublicTagsSlugRoute,
+  PublicTagsIndexRoute: PublicTagsIndexRoute,
 }
 
-const SiteRouteWithChildren = SiteRoute._addFileChildren(SiteRouteChildren)
+const PublicRouteWithChildren =
+  PublicRoute._addFileChildren(PublicRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  SiteRoute: SiteRouteWithChildren,
+  PublicRoute: PublicRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -5,11 +5,11 @@ import { Outlet, createFileRoute } from '@tanstack/react-router';
 import { SideBar } from '../components/SideBar';
 import { TopBar } from '../components/TopBar';
 
-export const Route = createFileRoute('/_site')({
-    component: SiteLayout,
+export const Route = createFileRoute('/_public')({
+    component: PublicLayout,
 });
 
-function SiteLayout() {
+function PublicLayout() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {

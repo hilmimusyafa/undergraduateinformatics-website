@@ -5,7 +5,7 @@ import { ReservationSkeleton } from '@/features/reservation/ReservationStates';
 import { ensurePageData } from '@/hooks/usePageData';
 import { seoHead } from '@/lib/seo';
 
-export const Route = createFileRoute('/_site/reservation')({
+export const Route = createFileRoute('/_public/reservation')({
     loader: ({ context }) => ensurePageData(context.queryClient, '/api/reservation'),
     head: () => seoHead('reservation'),
     pendingComponent: ReservationSkeleton,

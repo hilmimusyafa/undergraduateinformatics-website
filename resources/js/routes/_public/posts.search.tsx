@@ -19,7 +19,7 @@ const searchValidator = {
     },
 };
 
-export const Route = createFileRoute('/_site/posts/search')({
+export const Route = createFileRoute('/_public/posts/search')({
     validateSearch: searchValidator,
     loader: () => {
         const initialData = (window as { __INITIAL_DATA__?: unknown }).__INITIAL_DATA__;
