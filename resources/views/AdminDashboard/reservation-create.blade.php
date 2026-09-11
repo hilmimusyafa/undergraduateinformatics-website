@@ -3,29 +3,21 @@
 @section('title', 'Tambah Reservasi')
 
 @section('content')
-    <div class="admin col-md-9">
-        <div class="kembali">
-            <a href="{{ route('admin.reservation') }}">
-                <i class="fa-solid fa-arrow-left"></i>Kembali
-            </a>
-        </div>
-
-        <div class="top">
-            <h1>Form Penambahan Reservasi</h1>
-        </div>
+    <div class="admin modern-page">
+        <h2 class="modern-page__heading">Form Penambahan Reservasi</h2>
 
         <div class="form row form--wide">
             @include('partials.Alerts')
-            <div class="modern-notice modern-notice--info mb-4"><i class="fa-solid fa-circle-info"></i> Jadwal hanya dapat dibuat untuk hari Senin, Selasa, Kamis, atau Jumat. Sistem akan menolak sesi yang sudah terisi.</div>
+            <div class="modern-notice modern-notice--info mb-4">Jadwal hanya dapat dibuat untuk hari Senin, Selasa, Kamis, atau Jumat. Sistem akan menolak sesi yang sudah terisi.</div>
             <form method="POST" action="{{ route('admin.reservation.store') }}">
                 @csrf
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label"><h4>Tanggal</h4></label>
+                        <label class="form-label"><h4>Tanggal<span class="required-star">*</span></h4></label>
                         <input name="date" type="date" class="form-control" value="{{ old('date') }}" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label"><h4>Sesi</h4></label>
+                        <label class="form-label"><h4>Sesi<span class="required-star">*</span></h4></label>
                         <select name="shift" class="form-select" required>
                             <option value="" selected disabled>Pilih sesi</option>
                             <option value="09:00" @selected(old('shift') === '09:00')>09:00 WIB</option>
@@ -34,7 +26,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label"><h4>Diajukan oleh</h4></label>
+                        <label class="form-label"><h4>Diajukan oleh<span class="required-star">*</span></h4></label>
                         <input name="requested_by" class="form-control" value="{{ old('requested_by') }}" placeholder="Nama pemohon" required>
                     </div>
                     <div class="col-md-6">
@@ -74,7 +66,6 @@
                         <textarea name="agenda" class="form-control" placeholder="Jelaskan tujuan pertemuan">{{ old('agenda') }}</textarea>
                     </div>
                 </div>
-                <p class="reservation-form-hint"><i class="fa-solid fa-file-pdf"></i> Setelah disimpan, backend akan membuat berita acara dalam format PDF secara otomatis.</p>
                 <div class="mt-4 d-flex gap-2">
                     <button type="submit" class="modern-button modern-button--primary"><i class="fa-solid fa-calendar-plus"></i> Simpan Reservasi</button>
                     <a href="{{ route('admin.reservation') }}" class="modern-button modern-button--soft">Batal</a>

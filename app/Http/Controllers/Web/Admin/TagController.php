@@ -16,7 +16,7 @@ class TagController extends Controller
     public function index()
     {
         // Fetch tags data sorted by name
-        $tags = Tag::filter(request(['search']))->orderBy('name', 'asc')->get();
+        $tags = Tag::filter(request(['search']))->orderBy('name', 'asc')->paginate(10)->withQueryString();
         // Fetch tags data sorted by date created
         // $tags =  Tag::orderBy('created_at', 'desc')->get();
 

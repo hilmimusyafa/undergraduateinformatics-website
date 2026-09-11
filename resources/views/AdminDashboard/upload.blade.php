@@ -1,32 +1,21 @@
 @extends('layouts.adminlayout')
 
-@section('title', 'Upload Data Dashboard')
+@section('title', 'Upload Data Statistik Mahasiswa')
 
 @section('content')
     <div class="admin modern-page">
-        <div class="kembali">
-            <a href="{{ route('admin.dashboard') }}">
-                <i class="fa-solid fa-arrow-left"></i>Kembali
-            </a>
-        </div>
-        <div class="top">
-            <h1>Upload Data Dashboard</h1>
-        </div>
+        <h2 class="modern-page__heading">Upload Data Statistik Mahasiswa</h2>
 
         <div id="upload-alert" class="d-none" role="alert"></div>
 
         <section class="modern-card">
             <div class="upload-dropzone">
-                <i class="fa-solid fa-cloud-arrow-up"></i>
                 <p>Pilih file Excel (.xlsx, .xls) untuk diunggah</p>
                 <input id="excel_file" class="form-control" type="file" accept=".xlsx,.xls">
-                <button id="preview-button" class="modern-button modern-button--soft" type="button"><i class="fa-regular fa-eye"></i> Parse &amp; Preview</button>
             </div>
         </section>
 
-        <section id="preview" class="preview-section d-none">
-            <h3 class="preview-section__title"><i class="fa-regular fa-file-lines"></i> Hasil parse <span id="preview-count" class="preview-badge"></span></h3>
-            <p class="preview-help">Periksa dan sesuaikan data di bawah. Judul default diambil dari nama sheet dan bisa Anda ubah. Penyimpanan akan menggantikan dataset dashboard yang sebelumnya dipublikasikan.</p>
+        <section id="preview" class="d-none">
             <div id="preview-items" class="ds-editor-list"></div>
             <div class="mt-4">
                 <button id="save-button" class="modern-button modern-button--primary" type="button" disabled>
@@ -35,8 +24,45 @@
             </div>
         </section>
 
-        <div class="preview-section">
-            <button id="clear-button" class="modern-button modern-button--danger" type="button"><i class="fa-solid fa-trash"></i> Hapus Semua Data Grafik</button>
+        <div class="d-flex gap-2">
+            <button id="clear-button" class="modern-button modern-button--soft" type="button"><i class="fa-solid fa-trash"></i> Hapus Semua Data Grafik</button>
+            <a href="{{ route('admin.dashboard') }}" class="modern-button modern-button--soft">Batal</a>
+        </div>
+
+        <div class="modal fade" id="saveConfirmModal" tabindex="-1" aria-labelledby="saveConfirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="saveConfirmModalLabel">Konfirmasi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Simpan data ini? Dataset Statistik Mahasiswa yang sudah ada akan digantikan.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="modern-button modern-button--soft" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" id="save-confirm-btn" class="modern-button modern-button--primary">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="clearConfirmModal" tabindex="-1" aria-labelledby="clearConfirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="clearConfirmModalLabel">Konfirmasi</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Hapus semua data grafik di Statistik Mahasiswa?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="modern-button modern-button--soft" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" id="clear-confirm-btn" class="modern-button modern-button--primary">Hapus</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 @endsection
@@ -48,7 +74,6 @@
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
         const alertBox = document.getElementById('upload-alert');
         const fileInput = document.getElementById('excel_file');
-        const previewButton = document.getElementById('preview-button');
         const saveButton = document.getElementById('save-button');
         const preview = document.getElementById('preview');
         const previewItems = document.getElementById('preview-items');
@@ -108,11 +133,11 @@
                         <select class="ds-editor__type" aria-label="Tipe grafik">${typeOptions}</select>
                     </header>
                     <div class="ds-editor__body">
+                        <div class="ds-editor__preview"><canvas data-chart></canvas></div>
                         <div class="ds-editor__values">
                             ${rows}
                             <button type="button" class="ds-editor__add"><i class="fa-solid fa-plus"></i> Tambah data</button>
                         </div>
-                        <div class="ds-editor__preview"><canvas data-chart></canvas></div>
                     </div>
                 </article>`;
         }
@@ -170,13 +195,13 @@
             };
         }
 
-        previewButton.addEventListener('click', async () => {
+        fileInput.addEventListener('change', async () => {
             if (!fileInput.files.length) {
-                notify('Pilih file Excel terlebih dahulu.', 'warning');
                 return;
             }
 
-            setBusy(previewButton, true, 'Memproses file...');
+            fileInput.disabled = true;
+            notify('Memproses file...', 'info');
             try {
                 const data = new FormData();
                 data.append('excel_file', fileInput.files[0]);
@@ -186,33 +211,44 @@
 
                 parsedDatasets = result.datasets;
                 renderEditorList(previewItems, parsedDatasets);
-                document.getElementById('preview-count').textContent = `${result.datasets.length} dataset siap disimpan`;
+                const countEl = document.getElementById('preview-count');
+                if (countEl) countEl.textContent = `${result.datasets.length} dataset siap disimpan`;
                 preview.classList.remove('d-none');
                 saveButton.disabled = false;
                 notify('Data berhasil diparse. Sesuaikan jika perlu, lalu konfirmasi untuk menyimpan.');
             } catch (error) {
                 parsedDatasets = [];
                 saveButton.disabled = true;
+                preview.classList.add('d-none');
                 notify(error.message, 'danger');
             } finally {
-                setBusy(previewButton, false);
+                fileInput.disabled = false;
             }
         });
 
-        saveButton.addEventListener('click', async () => {
+        saveButton.addEventListener('click', () => {
             const collected = Array.from(previewItems.querySelectorAll('.ds-editor')).map(readEditorDataset);
             if (!collected.length) {
                 notify('Tidak ada dataset yang bisa disimpan.', 'danger');
                 return;
             }
-            if (!window.confirm('Simpan data ini? Dataset dashboard yang sudah ada akan digantikan.')) return;
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('saveConfirmModal')).show();
+        });
+
+        document.getElementById('save-confirm-btn').addEventListener('click', async () => {
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('saveConfirmModal')).hide();
+            const collected = Array.from(previewItems.querySelectorAll('.ds-editor')).map(readEditorDataset);
+            if (!collected.length) {
+                notify('Tidak ada dataset yang bisa disimpan.', 'danger');
+                return;
+            }
 
             setBusy(saveButton, true, 'Menyimpan...');
             try {
                 const response = await fetch('{{ route('admin.dashboard.save') }}', requestOptions('POST', JSON.stringify({ datasets: collected })));
                 const result = await response.json();
                 if (!response.ok || !result.success) throw new Error(result.message || 'Data gagal disimpan.');
-                notify('Data berhasil dipublikasikan.', 'success');
+                notify('Data Statistik Mahasiswa berhasil dipublikasikan.', 'success');
                 window.setTimeout(() => window.location.assign('{{ route('admin.dashboard') }}'), 600);
             } catch (error) {
                 setBusy(saveButton, false);
@@ -220,8 +256,12 @@
             }
         });
 
-        document.getElementById('clear-button').addEventListener('click', async () => {
-            if (!window.confirm('Hapus semua data grafik di dashboard?')) return;
+        document.getElementById('clear-button').addEventListener('click', () => {
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('clearConfirmModal')).show();
+        });
+
+        document.getElementById('clear-confirm-btn').addEventListener('click', async () => {
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('clearConfirmModal')).hide();
             try {
                 const response = await fetch('{{ route('admin.dashboard.cleardata') }}', requestOptions('DELETE'));
                 const result = await response.json();

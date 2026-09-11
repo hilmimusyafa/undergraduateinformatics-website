@@ -24,6 +24,16 @@ class ExcelExtractor
 
         $workbook = Excel::toArray([], $file);
 
+        $sheetNames = [];
+
+        try {
+            $path = $file instanceof UploadedFile ? $file->getPathname() : (string) $file;
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($path);
+            $sheetNames = $spreadsheet->getSheetNames();
+        } catch (\Throwable $e) {
+            $sheetNames = [];
+        }
+
         $datasets = [];
 
         foreach ($workbook as $sheetIndex => $rows) {
@@ -32,7 +42,10 @@ class ExcelExtractor
                 continue;
             }
 
-            $sheetName = "Sheet " . ($sheetIndex + 1);
+            $sheetName = trim((string) ($sheetNames[$sheetIndex] ?? "Sheet " . ($sheetIndex + 1)));
+            if ($sheetName === '') {
+                $sheetName = "Sheet " . ($sheetIndex + 1);
+            }
 
             $header = $rows[0];
 

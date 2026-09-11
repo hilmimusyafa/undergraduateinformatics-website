@@ -20,7 +20,7 @@ class ImportantLink extends Model
     public function scopeFilter($query, array $filters)
     {
         $query->when($filters['search'] ?? false, function($query, $search){
-            return $query -> where('name', 'like', '%' . request('search') . '%')
+            return $query -> where('important_links.name', 'like', '%' . request('search') . '%')
                 -> orWhereHas('important_section', function($q) {
                     $q->where('name', 'like', '%' . request('search') . '%');
                 });

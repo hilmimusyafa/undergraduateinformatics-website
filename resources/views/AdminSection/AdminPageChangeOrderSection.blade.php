@@ -3,20 +3,11 @@
 @section('title', 'Ganti Urutan Section')
 
 @section('content')
-    <div class="admin col-md-9">
-        <div class="kembali">
-            <a href="{{ route('admin.sections.index') }}">
-                <i class="fa-solid fa-arrow-left"></i>Kembali
-            </a>
-        </div>
+    <div class="admin modern-page">
+        <h2 class="modern-page__heading">Pergantian Urutan Section</h2>
 
-        <div class="top">
-            <h1>Pergantian Urutan Section</h1>
-        </div>
-
-        <div class="form row form--wide">
+        <div class="form row">
             @include('partials.Alerts')
-            <p class="modern-page__desc">Gunakan tombol <i class="fa-solid fa-arrow-up"></i> / <i class="fa-solid fa-arrow-down"></i> untuk mengubah urutan, lalu simpan.</p>
             <form method="POST" action="{{ route('admin.sections.updateOrder') }}" id="section-order-form">
                 @csrf
                 <div class="section-order-list" id="section-order-list">

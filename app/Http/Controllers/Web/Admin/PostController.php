@@ -17,7 +17,7 @@ class PostController extends Controller
     public function index()
     {
         // Fetch filtered posts data sorted by date updated
-        $posts = Post::filter(request(['search']))->orderBy('updated_at', 'desc')->get();
+        $posts = Post::filter(request(['search']))->orderBy('updated_at', 'desc')->paginate(10)->withQueryString();
 
         // Return admin posts index page with data
         return view("AdminInformasi.AdminPageInformasi", [

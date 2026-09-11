@@ -4,15 +4,7 @@
 
 @section('content')
     <div class="auth-card">
-        <div class="auth-card__header">
-            <img src="/images/Logo.png" alt="Bachelor of Informatics Telkom University">
-            <p>PORTAL ADMINISTRATOR</p>
-            <h1>Admin Login</h1>
-        </div>
-        <div class="auth-card__body">
-            <div class="back">
-                <a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left"></i>Kembali ke website</a>
-            </div>
+        <div class="auth-card__body" style="padding-top: 32px;">
             <form method="POST" action="{{ route('admin.loginAttempt') }}">
                 @csrf
                 <div class="auth-field">

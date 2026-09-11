@@ -1,5 +1,5 @@
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/vendor/chartjs/chart.js"></script>
     <script>
         (function () {
             const BERANDA_COLORS = ['#FE6B78', '#F73C4C', '#E51D2E', '#C01624', '#9F1521'];

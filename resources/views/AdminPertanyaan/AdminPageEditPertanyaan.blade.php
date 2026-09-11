@@ -3,12 +3,10 @@
 @section('title', 'Edit Pertanyaan')
 
 @section('content')
-    <div class="admin col-md-9">
-        <div class="top">
-            <h1>Form Pengeditan Pertanyaan untuk Lupa Password</h1>
-        </div>
+    <div class="admin modern-page">
+        <h2 class="modern-page__heading">Form Pengeditan Pertanyaan untuk Lupa Password</h2>
         <div class="form row">
-            @include('partials.alerts')
+            @include('partials.Alerts')
             <form method="POST" action="{{ route('admin.updatePasswordRecoveryQuestion') }}" class="d-flex">
                 @csrf
                 <div class="col-md-6">

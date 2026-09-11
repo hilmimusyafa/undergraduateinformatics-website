@@ -19,7 +19,7 @@ class SectionController extends Controller
         //     ->orderBy('order_number', 'asc')->with('important_links')->get();
         // Fetch important sections data sorted by name
         $sections = ImportantSection::filter(request(['search']))
-            ->orderBy('name', 'asc')->with('important_links')->get();
+            ->orderBy('name', 'asc')->with('important_links')->paginate(10)->withQueryString();
         // Fetch important sections data sorted by date
         // $sections = ImportantSection::with('important_links')->orderBy('created_at', 'desc')->get();
 

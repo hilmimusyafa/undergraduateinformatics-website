@@ -3,30 +3,22 @@
 @section('title', 'Edit Reservasi')
 
 @section('content')
-    <div class="admin col-md-9">
-        <div class="kembali">
-            <a href="{{ route('admin.reservation') }}">
-                <i class="fa-solid fa-arrow-left"></i>Kembali
-            </a>
-        </div>
-
-        <div class="top">
-            <h1>Form Pengeditan Reservasi</h1>
-        </div>
+    <div class="admin modern-page">
+        <h2 class="modern-page__heading">Form Pengeditan Reservasi</h2>
 
         <div class="form row form--wide">
             @include('partials.Alerts')
-            <p class="reservation-form-hint"><i class="fa-solid fa-circle-info"></i> Menyimpan perubahan akan memperbarui data dan membuat ulang berita acara PDF.</p>
+            <div class="modern-notice modern-notice--info mb-4">Menyimpan perubahan akan memperbarui data dan membuat ulang berita acara PDF.</div>
             <form method="POST" action="{{ route('admin.reservation.update', ['id' => $reservation->id]) }}">
                 @csrf
                 @method('PUT')
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label"><h4>Tanggal</h4></label>
+                        <label class="form-label"><h4>Tanggal<span class="required-star">*</span></h4></label>
                         <input name="date" type="date" class="form-control" value="{{ old('date', substr($reservation->date, 0, 10)) }}" required>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label"><h4>Sesi</h4></label>
+                        <label class="form-label"><h4>Sesi<span class="required-star">*</span></h4></label>
                         <select name="shift" class="form-select" required>
                             <option value="09:00" @selected(substr($reservation->shift, 0, 5) === '09:00')>09:00 WIB</option>
                             <option value="13:00" @selected(substr($reservation->shift, 0, 5) === '13:00')>13:00 WIB</option>
@@ -34,7 +26,7 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label"><h4>Diajukan oleh</h4></label>
+                        <label class="form-label"><h4>Diajukan oleh<span class="required-star">*</span></h4></label>
                         <input name="requested_by" class="form-control" value="{{ old('requested_by', $reservation->requested_by) }}" required>
                     </div>
                     <div class="col-md-6">

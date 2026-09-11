@@ -16,22 +16,6 @@ class ReservationScheduleController extends Controller
         return view('AdminDashboard.reservation-create');
     }
 
-    public function show(string $id)
-    {
-        $schedule = ReservationSchedule::findOrFail($id);
-
-        if (! $schedule->document_link) {
-            $documentLink = app(BeritaAcaraPdfGenerator::class)->generate($schedule);
-
-            if ($documentLink) {
-                $schedule->document_link = $documentLink;
-                $schedule->save();
-            }
-        }
-
-        return view('AdminDashboard.reservation-show', ['reservation' => $schedule]);
-    }
-
     public function edit(string $id)
     {
         $schedule = ReservationSchedule::findOrFail($id);

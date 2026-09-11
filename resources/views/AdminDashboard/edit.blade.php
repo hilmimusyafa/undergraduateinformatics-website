@@ -3,16 +3,8 @@
 @section('title', 'Edit Chart')
 
 @section('content')
-    <div class="admin col-md-9">
-        <div class="kembali">
-            <a href="{{ route('admin.dashboard') }}">
-                <i class="fa-solid fa-arrow-left"></i>Kembali
-            </a>
-        </div>
-
-        <div class="top">
-            <h1>Form Pengeditan Chart</h1>
-        </div>
+    <div class="admin modern-page">
+        <h2 class="modern-page__heading">Form Pengeditan Chart</h2>
 
         <div class="form row form--wide">
             @include('partials.Alerts')
@@ -21,7 +13,7 @@
                 @method('PUT')
                 <div class="row g-3 mb-3">
                     <div class="col-md-6">
-                        <label class="form-label"><h4>Judul Chart</h4></label>
+                        <label class="form-label"><h4>Judul Chart<span class="required-star">*</span></h4></label>
                         <input name="title" class="form-control" value="{{ old('title', $dataset->title) }}" required>
                     </div>
                     <div class="col-md-6">
@@ -33,23 +25,25 @@
                         </select>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label class="form-label"><h4>Data</h4></label>
-                    <div id="chart-data-rows" class="ds-editor__values">
-                        @php($rows = old('items', $dataset->items->map(fn ($item) => ['label' => $item->label, 'value' => $item->value])->all()))
-                        @foreach ($rows as $index => $row)
-                            <div class="ds-row">
-                                <input class="ds-row__label" type="text" name="items[{{ $index }}][label]" value="{{ $row['label'] ?? '' }}" placeholder="Label" aria-label="Label">
-                                <input class="ds-row__value" type="number" step="any" name="items[{{ $index }}][value]" value="{{ $row['value'] ?? '' }}" placeholder="0" aria-label="Nilai">
-                                <button type="button" class="ds-row__remove" title="Hapus baris" aria-label="Hapus baris"><i class="fa-solid fa-xmark"></i></button>
-                            </div>
-                        @endforeach
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <label class="form-label"><h4>Preview</h4></label>
+                        <div class="ds-editor__preview"><canvas id="chart-preview"></canvas></div>
                     </div>
-                    <button type="button" id="add-data-row" class="ds-editor__add"><i class="fa-solid fa-plus"></i> Tambah data</button>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label"><h4>Preview</h4></label>
-                    <div class="ds-editor__preview"><canvas id="chart-preview"></canvas></div>
+                    <div class="col-md-6">
+                        <label class="form-label"><h4>Data<span class="required-star">*</span></h4></label>
+                        <div id="chart-data-rows" class="ds-editor__values">
+                            @php($rows = old('items', $dataset->items->map(fn ($item) => ['label' => $item->label, 'value' => $item->value])->all()))
+                            @foreach ($rows as $index => $row)
+                                <div class="ds-row">
+                                    <input class="ds-row__label" type="text" name="items[{{ $index }}][label]" value="{{ $row['label'] ?? '' }}" placeholder="Label" aria-label="Label">
+                                    <input class="ds-row__value" type="number" step="any" name="items[{{ $index }}][value]" value="{{ $row['value'] ?? '' }}" placeholder="0" aria-label="Nilai">
+                                    <button type="button" class="ds-row__remove" title="Hapus baris" aria-label="Hapus baris"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            @endforeach
+                        </div>
+                        <button type="button" id="add-data-row" class="ds-editor__add"><i class="fa-solid fa-plus"></i> Tambah data</button>
+                    </div>
                 </div>
                 <div class="mt-4 d-flex gap-2">
                     <button type="submit" class="modern-button modern-button--primary"><i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan</button>

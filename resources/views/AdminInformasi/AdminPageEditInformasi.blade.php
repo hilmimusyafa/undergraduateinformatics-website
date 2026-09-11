@@ -3,15 +3,8 @@
 @section('title', 'Edit ' . $post->title)
 
 @section('content')
-    <div class="admin col-md-9">
-        <div class="kembali">
-            <a href="{{ route('admin.posts.index') }}">
-                <i class="fa-solid fa-arrow-left"></i>Kembali
-            </a>
-        </div>
-        <div class="top">
-            <h1>Form Pengeditan Informasi</h1>
-        </div>
+    <div class="admin modern-page">
+        <h2 class="modern-page__heading">Form Pengeditan Informasi</h2>
         <div class="form row form--wide">
             @include('partials.Alerts')
             <form method="POST" action="{{ route('admin.posts.update', ['post' => $post->id]) }}" enctype="multipart/form-data">
@@ -19,21 +12,21 @@
                 @csrf
                 <div class="mb-3">
                     <label for="judul" class="form-label">
-                        <h4>Judul</h4>
+                        <h4>Judul<span class="required-star">*</span></h4>
                     </label>
                     <input name="title" type="text" class="form-control" id="judul" value="{{ $post->title }}"
                         required>
                 </div>
                 <div class="mb-3">
                     <label for="subjudul" class="form-label">
-                        <h4>Sub-Judul</h4>
+                        <h4>Sub-Judul<span class="required-star">*</span></h4>
                     </label>
                     <input name="subtitle" type="text" class="form-control" id="subjudul"
                         value="{{ $post->subtitle }}" required>
                 </div>
                 <div class="mb-3">
                     <label for="deskripsi" class="form-label">
-                        <h4>Deskripsi</h4>
+                        <h4>Deskripsi<span class="required-star">*</span></h4>
                     </label>
                     <textarea name="body" type="text" class="form-control" id="deskripsi" required>{{ $post->body }}</textarea>
                 </div>
@@ -44,7 +37,7 @@
                             console.error(error);
                         });
                 </script>
-                <div class="row g-3 mt-1">
+                <div class="row g-3">
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="gambar" class="form-label">
@@ -64,10 +57,10 @@
                     <div class="col-md-6">
                         <div class="mb-3">
                             <label for="tag" class="form-label">
-                                <h4>Tag</h4>
+                                <h4>Tag<span class="required-star">*</span></h4>
                             </label>
                             <div class="dropdown" onclick="performSearch()">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                <button class="modern-button modern-button--neutral dropdown-toggle" type="button" id="dropdownMenuButton"
                                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Tag yang dipilih bisa lebih dari 1
                                 </button>
@@ -90,8 +83,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="mt-3">
+                <div class="mt-4 d-flex gap-2">
                     <button type="submit" class="modern-button modern-button--primary">Submit</button>
+                    <a href="{{ route('admin.posts.index') }}" class="modern-button modern-button--soft">Batal</a>
                 </div>
             </form>
         </div>

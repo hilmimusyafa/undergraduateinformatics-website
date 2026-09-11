@@ -30,27 +30,25 @@ export function PostContent({ post }: PostContentProps) {
                     />
                 )}
                 <RichText className="typeset-muted mt-[39.375px] md:mt-8.75" html={post.body} />
-                <div className="mt-[22.5px] flex flex-wrap items-center gap-x-3 gap-y-0.5 md:mt-5">
-                    <p className="text-muted-foreground my-0 text-lg leading-[31.5px] md:text-base md:leading-7">
-                        {isUpdated(post.created_at, post.updated_at) && 'Diperbarui '}
-                        {format(post.updated_at, 'd MMM yyyy', { locale: id })}
-                    </p>
-                    {post.tags.length > 0 && (
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                            {post.tags.map((tag) => (
-                                <TextLink
-                                    key={tag.id}
-                                    variant="fade"
-                                    to="/tags/$slug"
-                                    params={{ slug: tag.slug }}
-                                    className="text-muted-foreground hover:text-foreground inline text-lg no-underline md:text-base"
-                                >
-                                    {tag.name}
-                                </TextLink>
-                            ))}
-                        </div>
-                    )}
-                </div>
+                <p className="text-muted-foreground">
+                    {isUpdated(post.created_at, post.updated_at) && 'Diperbarui '}
+                    {format(post.updated_at, 'd MMM yyyy', { locale: id })}
+                </p>
+                {post.tags.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-x-3">
+                        {post.tags.map((tag) => (
+                            <TextLink
+                                key={tag.id}
+                                variant="fade"
+                                to="/tags/$slug"
+                                params={{ slug: tag.slug }}
+                                className="text-muted-foreground hover:text-foreground border-0 text-lg leading-[31.5px] no-underline md:text-base md:leading-7"
+                            >
+                                {tag.name}
+                            </TextLink>
+                        ))}
+                    </div>
+                )}
             </article>
         </div>
     );

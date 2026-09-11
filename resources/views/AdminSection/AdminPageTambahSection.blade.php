@@ -3,28 +3,22 @@
 @section('title', 'Tambah Section')
 
 @section('content')
-    <div class="admin col-md-9">
-        <div class="kembali">
-            <a href="{{ route('admin.sections.index') }}">
-                <i class="fa-solid fa-arrow-left"></i>Kembali
-            </a>
-        </div>
-        <div class="top">
-            <h1>Form Penambahan Section</h1>
-        </div>
+    <div class="admin modern-page">
+        <h2 class="modern-page__heading">Form Penambahan Section</h2>
         <div class="form row">
             @include('partials.Alerts')
             <form method="POST" action="{{ route('admin.sections.store') }}">
                 @csrf
                 <div class="mb-3">
                     <label for="namasection" class="form-label">
-                        <h4>Nama Section</h4>
+                        <h4>Nama Section<span class="required-star">*</span></h4>
                     </label>
                     <input name="name" type="text" class="form-control" id="namasection" required>
                 </div>
 
-                <div class="mt-3">
+                <div class="mt-4 d-flex gap-2">
                     <button type="submit" class="modern-button modern-button--primary">Submit</button>
+                    <a href="{{ route('admin.sections.index') }}" class="modern-button modern-button--soft">Batal</a>
                 </div>
             </form>
         </div>

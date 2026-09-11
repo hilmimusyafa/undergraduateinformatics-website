@@ -84,21 +84,36 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('dashboard/store', [DashboardController::class, 'store'])->name('dashboard.store');
         Route::post('dashboard/{id}/update', [DashboardController::class, 'update'])->name('dashboard.update');
         Route::delete('dashboard/cleardata', [DashboardController::class, 'cleardata'])->name('dashboard.cleardata');
-        Route::get('reservation', function () {
+        Route::get('reservation', function (Request $request) {
             $reservationTableReady = Schema::hasTable('reservation_schedules');
+            $reservationDetailsReady = $reservationTableReady
+                && Schema::hasColumn('reservation_schedules', 'meeting_room');
+            $search = trim((string) $request->get('search', ''));
+
+            $reservations = collect();
+            if ($reservationTableReady) {
+                $query = ReservationSchedule::latest();
+                if ($search !== '') {
+                    $query->where(function ($inner) use ($search) {
+                        $inner->where('requested_by', 'like', '%' . $search . '%')
+                            ->orWhere('meeting_room', 'like', '%' . $search . '%')
+                            ->orWhere('study_program', 'like', '%' . $search . '%')
+                            ->orWhere('date', 'like', '%' . $search . '%')
+                            ->orWhere('shift', 'like', '%' . $search . '%')
+                            ->orWhere('agenda', 'like', '%' . $search . '%');
+                    });
+                }
+                $reservations = $query->paginate(10)->withQueryString();
+            }
 
             return view('AdminDashboard.reservation', [
                 'reservationTableReady' => $reservationTableReady,
-                'reservationDetailsReady' => $reservationTableReady
-                    && Schema::hasColumn('reservation_schedules', 'meeting_room'),
-                'reservations' => $reservationTableReady
-                    ? ReservationSchedule::latest()->get()
-                    : collect(),
+                'reservationDetailsReady' => $reservationDetailsReady,
+                'reservations' => $reservations,
             ]);
         })->name('reservation');
         Route::get('reservation/create', [ReservationScheduleController::class, 'create'])->name('reservation.create');
         Route::get('reservation/{id}/edit', [ReservationScheduleController::class, 'edit'])->name('reservation.edit');
-        Route::get('reservation/{id}', [ReservationScheduleController::class, 'show'])->name('reservation.show');
         Route::post('reservation/store', [ReservationScheduleController::class, 'store'])->name('reservation.store');
         Route::post('reservation/{id}/update', [ReservationScheduleController::class, 'update'])->name('reservation.update');
         Route::delete('reservation/{id}', [ReservationScheduleController::class, 'destroy'])->name('reservation.destroy');

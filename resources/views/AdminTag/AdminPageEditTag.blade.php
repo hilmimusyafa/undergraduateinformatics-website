@@ -3,15 +3,8 @@
 @section('title', 'Edit ' . $tag->name)
 
 @section('content')
-    <div class="admin col-md-9">
-        <div class="kembali">
-            <a href="{{ route('admin.tags.index') }}">
-                <i class="fa-solid fa-arrow-left"></i>Kembali
-            </a>
-        </div>
-        <div class="top">
-            <h1>Form Pengeditan Tag</h1>
-        </div>
+    <div class="admin modern-page">
+        <h2 class="modern-page__heading">Form Pengeditan Tag</h2>
         <div class="form row">
             @include('partials.Alerts')
             <form method="POST" action="{{ route('admin.tags.update', ['tag' => $tag->id]) }}" enctype="multipart/form-data">
@@ -19,7 +12,7 @@
                 @method('PUT')
                 <div class="mb-3">
                     <label for="namatag" class="form-label">
-                        <h4>Nama Tag</h4>
+                        <h4>Nama Tag<span class="required-star">*</span></h4>
                     </label>
                     <input name="name" type="text" class="form-control" id="namatag" value="{{ $tag->name }}"
                         {{ $tag->name == 'S1 Informatika' ? 'readonly' : '' }}>
@@ -36,8 +29,9 @@
                                 </label>
                                 <input type="file" accept="image/*" class="form-control" id="gambar">
                             </div> --}}
-                <div class="mt-3">
+                <div class="mt-4 d-flex gap-2">
                     <button type="submit" class="modern-button modern-button--primary">Submit</button>
+                    <a href="{{ route('admin.tags.index') }}" class="modern-button modern-button--soft">Batal</a>
                 </div>
             </form>
         </div>

@@ -14,9 +14,15 @@ class LinkController extends Controller
      */
     public function index()
     {
-        // Fetch important links data sorted by name
-        $links = ImportantLink::filter(request(['search']))->get()
-            ->sortBy([['important_section.name'],['name', 'desc']]);
+        // Fetch important links data sorted by section name, then link name
+        $links = ImportantLink::filter(request(['search']))
+            ->join('important_sections', 'important_sections.id', '=', 'important_links.important_section_id')
+            ->orderBy('important_sections.name')
+            ->orderBy('important_links.name', 'desc')
+            ->select('important_links.*')
+            ->with('important_section')
+            ->paginate(10)
+            ->withQueryString();
 
         // Return admin important link index page with data
         return view("AdminLinkPenting.AdminPageLink", [

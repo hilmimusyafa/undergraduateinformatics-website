@@ -10,8 +10,11 @@
             </div>
             @if ($reservationTableReady && $reservationDetailsReady)
                 <div class="reservation-heading__actions">
-                    <span class="reservation-count"><i class="fa-regular fa-calendar"></i> {{ $reservations->count() }} reservasi</span>
-                    <a class="modern-button modern-button--soft" href="{{ route('admin.reservation.create') }}"><i class="fa-solid fa-plus"></i> Tambah Reservasi</a>
+                    <form method="GET" action="{{ route('admin.reservation') }}" class="d-flex" role="search">
+                        <input class="form-control" name="search" type="search" placeholder="Cari"
+                            value="{{ request()->get('search') }}" aria-label="Search">
+                    </form>
+                    <a class="modern-button modern-button--primary" href="{{ route('admin.reservation.create') }}"><i class="fa-solid fa-plus"></i> Tambah Reservasi</a>
                 </div>
             @endif
         </div>
@@ -31,28 +34,27 @@
         @elseif ($reservations->isEmpty())
             <section class="empty-state modern-card">
                 <i class="fa-regular fa-calendar-xmark"></i>
-                <p>Belum ada pengajuan reservasi</p>
-                <p>Pengajuan jadwal baru dari formulir reservasi akan muncul di halaman ini.</p>
+                <p>{{ request()->get('search') ? 'Tidak ada hasil untuk pencarian tersebut' : 'Belum ada pengajuan reservasi' }}</p>
+                <p>{{ request()->get('search') ? 'Coba gunakan kata kunci lain.' : 'Pengajuan jadwal baru dari formulir reservasi akan muncul di halaman ini.' }}</p>
             </section>
         @else
             @include('partials.Alerts')
             <div class="table-admin">
-                <table class="table table-striped">
+                <table class="table table-striped table--reservation">
                     <thead>
-                        <tr><th>Tanggal</th><th>Sesi</th><th>Diajukan oleh</th><th>Ruangan</th><th>Berita acara</th><th class="text-end">Aksi</th></tr>
+                        <tr><th>Tanggal</th><th>Sesi</th><th>Diajukan oleh</th><th>Ruangan</th><th class="text-end">Aksi</th></tr>
                     </thead>
                     <tbody>
                         @foreach ($reservations as $reservation)
                             <tr>
                                 <td><strong>{{ \Illuminate\Support\Carbon::parse($reservation->date)->translatedFormat('d M Y') }}</strong><br><small class="text-muted">{{ \Illuminate\Support\Carbon::parse($reservation->date)->translatedFormat('l') }}</small></td>
-                                <td><span class="shift-pill"><i class="fa-regular fa-clock"></i> {{ substr($reservation->shift, 0, 5) }} WIB</span></td>
+                                <td>{{ substr($reservation->shift, 0, 5) }} WIB</td>
                                 <td><strong>{{ $reservation->requested_by }}</strong>@if ($reservation->study_program)<br><small class="text-muted">{{ $reservation->study_program }}</small>@endif</td>
                                 <td>{{ $reservation->meeting_room ?: '—' }}</td>
-                                <td>@if ($reservation->document_link)<a class="reservation-document" href="{{ $reservation->document_link }}" target="_blank" rel="noopener noreferrer"><i class="fa-regular fa-file-pdf"></i> Lihat PDF</a>@else<span class="text-muted">Belum tersedia</span>@endif</td>
                                 <td class="aksi">
-                                    <a class="edit" href="{{ route('admin.reservation.show', ['id' => $reservation->id]) }}">Lihat</a>
-                                    <a class="edit" href="{{ route('admin.reservation.edit', ['id' => $reservation->id]) }}">Edit</a>
-                                    <a class="delete" href="#" data-bs-toggle="modal" data-bs-target="#confirmModal-{{ $reservation->id }}">Hapus</a>
+                                    @if ($reservation->document_link)<a class="edit" href="{{ $reservation->document_link }}" target="_blank" rel="noopener noreferrer" title="Lihat PDF" aria-label="Lihat PDF"><i class="fa-regular fa-file-pdf"></i></a>@endif
+                                    <a class="edit" href="{{ route('admin.reservation.edit', ['id' => $reservation->id]) }}" title="Edit" aria-label="Edit"><i class="fa-solid fa-pen"></i></a>
+                                    <a class="delete" href="#" data-bs-toggle="modal" data-bs-target="#confirmModal-{{ $reservation->id }}" title="Hapus" aria-label="Hapus"><i class="fa-solid fa-trash"></i></a>
                                 </td>
                             </tr>
                         @endforeach
@@ -60,9 +62,13 @@
                 </table>
             </div>
 
+            @if (method_exists($reservations, 'total') && $reservations->total() > 0)
+                <div class="admin-pagination">{{ $reservations->links('pagination::bootstrap-5') }}</div>
+            @endif
+
             @foreach ($reservations as $reservation)
                 <div class="modal fade" id="confirmModal-{{ $reservation->id }}" tabindex="-1" aria-labelledby="confirmModalLabel-{{ $reservation->id }}" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="confirmModalLabel-{{ $reservation->id }}">Konfirmasi</h5>
@@ -76,7 +82,7 @@
                                 <form id="delete-form-{{ $reservation->id }}" action="{{ route('admin.reservation.destroy', ['id' => $reservation->id]) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="modern-button modern-button--danger">Hapus</button>
+                                    <button type="submit" class="modern-button modern-button--primary">Hapus</button>
                                 </form>
                             </div>
                         </div>
