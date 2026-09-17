@@ -3,19 +3,31 @@
 @section('title', 'Admin Login')
 
 @section('content')
-    <div class="auth-card">
-        <div class="auth-card__body" style="padding-top: 32px;">
+    <div class="auth-card auth-card--login">
+        <div class="auth-card__brand">
+            <div class="auth-brand-mark"><i class="fa-solid fa-shield-halved"></i></div>
+            <p>Dashboard Informasi</p>
+            <h1>Admin S1 Informatika</h1>
+        </div>
+
+        <div class="auth-card__body">
             <form method="POST" action="{{ route('admin.loginAttempt') }}">
                 @csrf
                 <div class="auth-field">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email"
-                        required>
+                    <div class="input-icon-wrap">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Masukkan email"
+                            required>
+                    </div>
                 </div>
                 <div class="auth-field">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password"
-                        placeholder="Masukkan password" required autocomplete="off">
+                    <div class="input-icon-wrap">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Masukkan password" required autocomplete="off">
+                    </div>
                 </div>
                 <div class="auth-actions">
                     <div class="lupa-password">

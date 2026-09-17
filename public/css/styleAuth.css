@@ -12,6 +12,11 @@
 .admin-auth .alert { margin-bottom: 18px; border: 0; border-radius: 9px; font-size: .88rem; }
 
 .auth-card { overflow: hidden; border: 1px solid #e7e9ee; border-radius: 14px; background: #fff; box-shadow: 0 16px 40px rgb(31 41 55 / 10%); }
+.auth-card--login { border-radius: 20px; border: 1px solid rgba(159, 21, 33, 0.08); }
+.auth-card__brand { background: linear-gradient(135deg, #9f1521 0%, #7a0f17 100%); color: white; padding: 28px 24px 20px; text-align: center; }
+.auth-brand-mark { display: inline-grid; place-items: center; width: 64px; height: 64px; margin-bottom: 14px; border-radius: 18px; background: rgba(255,255,255,.12); font-size: 1.5rem; }
+.auth-card__brand p { margin: 0 0 6px; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; opacity: .8; }
+.auth-card__brand h1 { margin: 0; font-size: 1.45rem; font-weight: 700; line-height: 1.25; }
 .auth-card__header { border-top: 5px solid #9f1521; padding: 30px 32px 24px; text-align: center; }
 .auth-card__header img { width: min(100%, 260px); height: auto; margin: 0 auto 24px; object-fit: contain; }
 .auth-card__header p { margin: 0 0 6px; color: #9f1521; font-size: .68rem; font-weight: 700; letter-spacing: .14em; }
@@ -22,7 +27,9 @@
 .auth-card__body .back a i { margin-right: 7px; }
 .auth-field { margin-bottom: 18px; }
 .auth-field .form-label { display: block; margin-bottom: 7px; color: #374151; font-size: .84rem; font-weight: 700; }
-.auth-field .form-control { min-height: 44px; border-color: #d9dde5; border-radius: 8px; font-size: .9rem; }
+.input-icon-wrap { position: relative; }
+.input-icon-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: .84rem; }
+.auth-field .form-control { min-height: 44px; border-color: #d9dde5; border-radius: 8px; font-size: .9rem; padding-left: 38px; }
 .auth-field .form-control:focus { border-color: #c77a82; box-shadow: 0 0 0 3px rgb(159 21 33 / 12%); }
 .auth-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 24px; }
 .auth-actions .btn { border: 0; border-radius: 8px; background: #9f1521; font-size: .86rem; font-weight: 700; padding: 10px 17px; }

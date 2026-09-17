@@ -15,35 +15,11 @@ class ReservationController extends Controller
 {
     public function show(Request $request): View
     {
-        $initialData = null;
-
-        try {
-            $initialData = app(ReservationFormService::class)->resolve();
-        } catch (ReservationFormUnavailableException) {
-            $initialData = ['link' => null];
-        } catch (MsFormsException) {
-            $initialData = null;
-        }
-
-        if ($initialData === null) {
-            $initialData = ['link' => null];
-        }
-
-        $initialData['reservation'] = app(ReservationMetadata::class)->build();
-
         $page = PageMeta::page('reservation');
 
-        $jsonLd = [
-            '@context' => 'https://schema.org',
-            '@type' => 'WebPage',
-            'name' => $page['title'],
-            'url' => $request->url(),
+        return view('ReservationPage', [
+            'title' => $page['title'],
             'description' => $page['description'],
-        ];
-
-        return view('app', PageMeta::viewData($request, 'reservation', $jsonLd, [
-            'status' => 'success',
-            'data' => $initialData,
-        ]));
+        ]);
     }
 }

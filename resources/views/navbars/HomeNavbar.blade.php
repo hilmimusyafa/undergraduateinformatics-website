@@ -1,12 +1,17 @@
 <nav class="navbar navbar-expand-lg sticky-top drop-shadow">
     <div class="container-fluid">
-        <a href="{{ route('home') }}"><img class="img-fluid" src="/images/Logo2.png" alt="logoProdi"></a>
+        <a href="{{ route('home') }}" class="navbar-brand" aria-label="Kembali ke halaman utama">
+            <img class="img-fluid" src="/images/Logo2.png" alt="Logo Program Studi Informatika">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="nav ms-auto nav-underline">
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
+                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" aria-current="page" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -25,6 +30,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('feedback.show') }}">Masukan/Saran</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('meeting.agenda.show') }}">Pertemuan Prodi</a>
                 </li>
                 <li class="nav-item">
                     <form method="GET" action="{{ route('posts.search') }}" class="d-flex" role="search">

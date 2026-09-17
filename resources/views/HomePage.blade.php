@@ -1,81 +1,144 @@
 @extends('layouts.homelayout')
 
-@section('title', 'Homepage')
+@section('title', 'Portal Informasi Sarjana Informatika')
+@section('description', 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University')
 
 @section('content')
-    <div class="home">
-        <div class="top">
-            @include('partials.Alerts')
-            <h1>Selamat Datang di Website Informasi Prodi S1 Informatika</h1>
-            <hr>
+    <section class="public-hero">
+        <div class="container-fluid">
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <p class="eyebrow">Portal Informasi</p>
+                    <h1>Portal Informasi<br> Sarjana Informatika</h1>
+                    <p class="lead">Sumber informasi resmi Program Studi Sarjana Informatika Telkom University</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="hero-image-card">
+                        <img src="{{ asset('images/banner.jpg') }}" alt="Telkom University">
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="row">
-            <div class="col-md-9">
-                @forelse($tags as $key => $data)
-                    <div class="content-title d-flex">
-                        <a class="d-flex" href="{{ route('tags.show', ['slug' => $data->slug]) }}">
-                            <i class="fa-sharp fa-solid fa-square fa-xl"></i>
-                            <h3>{{ $data->name }}</h3>
-                            <i class="fa-solid fa-arrow-right fa-lg"></i>
-                        </a>
-                    </div>
-                    <div class="row content-head">
-                        <div class="content d-flex">
-                            @forelse($data->posts->sortByDesc('updated_at')->slice(0, 3) as $key => $post)
-                                <div class="col-md-4 card-holder">
-                                    <div class="card">
-                                        <a class="text-decoration-none" href="{{ route('posts.show', ['slug' => $post->slug]) }}">
-                                            <img src="/{{ $post->image }}" class="card-img-top" alt="{{ $post->title }}">
-                                            <div class="card-body">
-                                                <h5 class="card-title truncate-1">{{ $post->title }}</h5>
-                                                <p class="card-text truncate-1">{{ $post->subtitle }}</p>
-                                                <div class="tag truncate-1">
-                                                    @foreach ($post->tags->slice(0, 3) as $key => $tag)
-                                                        <button type="button-tag" class="btn btn-secondary">
-                                                            <h6>{{ $tag->name }}</h6>
-                                                        </button>
-                                                    @endforeach
-                                                </div>
-                                                <div class='card-date'>
-                                                    <p class="truncate-1">
-                                                        {{ $post->created_at->format('j F Y') }}
-                                                        ({{ $post->created_at->diffForHumans() }})
-                                                    </p>
-                                                    <p class="truncate-1">
-                                                        {{ $post->hasBeenUpdated() ? '' . $post->updated_at->format('j F Y') . ' (Edited)' : '' }}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            @empty
-                                @include('partials.Empty')
-                            @endforelse
-                        </div>
-                    </div>
-                @empty
-                    @include('partials.Empty')
-                @endforelse
+    </section>
 
+    @if ($statistics->isNotEmpty())
+        <section class="statistics-section" aria-labelledby="statistics-title">
+            <div class="container-fluid">
+                <div class="statistics-heading">
+                    <div>
+                        <p class="eyebrow">Data Mahasiswa</p>
+                        <h2 id="statistics-title">Statistik Mahasiswa</h2>
+                        <p>Visualisasi data mahasiswa yang sama dengan dashboard admin.</p>
+                    </div>
+                    <span class="statistics-heading__icon"><i class="fa-solid fa-chart-simple"></i></span>
+                </div>
+
+                <div class="chart-grid public-chart-grid">
+                    @foreach ($statistics as $dataset)
+                        <article class="chart-card public-chart-card">
+                            <div class="chart-card__head">
+                                <h3 class="chart-card__title">{{ $dataset->title }}</h3>
+                            </div>
+                            <div class="chart-canvas">
+                                <canvas id="public-chart-{{ $dataset->id }}"></canvas>
+                            </div>
+                            @if ($dataset->x_label)
+                                <p class="chart-card__axis">{{ $dataset->x_label }}</p>
+                            @endif
+                        </article>
+                    @endforeach
+                </div>
             </div>
-            <div class="col-md-3">
-                <div class="content-title d-flex justify-content-center">
-                    <h3>Info Terbaru</h3>
+        </section>
+    @endif
+
+    <section class="home-content">
+        <div class="container-fluid">
+            <div class="row g-4">
+                <div class="col-xl-9 col-lg-8">
+                    @forelse($tags as $data)
+                        <div class="topic-block">
+                            <div class="topic-header">
+                                <a href="{{ route('tags.show', ['slug' => $data->slug]) }}">
+                                    <span class="topic-mark"></span>
+                                    <h2>{{ $data->name }}</h2>
+                                </a>
+                                <a href="{{ route('tags.show', ['slug' => $data->slug]) }}" class="view-more">Lihat semua</a>
+                            </div>
+
+                            <div class="row g-4">
+                                @forelse($data->posts->sortByDesc('updated_at')->take(3) as $post)
+                                    <div class="col-md-4">
+                                        <article class="news-card">
+                                            <a href="{{ route('posts.show', ['slug' => $post->slug]) }}" class="card-link">
+                                                <img src="{{ $post->image ? '/' . $post->image : asset('images/placeholder.png') }}" alt="{{ $post->title }}">
+                                                <div class="news-card-body">
+                                                    <h3>{{ $post->title }}</h3>
+                                                    <p class="news-subtitle">{{ $post->subtitle }}</p>
+                                                    <div class="tag-list">
+                                                        @foreach ($post->tags->take(3) as $tag)
+                                                            <span class="tag-pill">{{ $tag->name }}</span>
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="meta-line">
+                                                        <span>{{ $post->created_at->format('j F Y') }}</span>
+                                                        <span>{{ $post->hasBeenUpdated() ? 'Diedit' : 'Baru' }}</span>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </article>
+                                    </div>
+                                @empty
+                                    <div class="col-12">
+                                        @include('partials.Empty')
+                                    </div>
+                                @endforelse
+                            </div>
+                        </div>
+                    @empty
+                        <div class="empty-state">
+                            @include('partials.Empty')
+                        </div>
+                    @endforelse
                 </div>
-                <div class="content-info col-md">
-                    <ol class="d-flex">
-                        <h5>
-                            @forelse($posts->slice(0, 10) as $post)
-                                <li><a class="truncate-3"
-                                        href="{{ route('posts.show', ['slug' => $post->slug]) }}">{{ $post->title }}</a></li>
+
+                <aside class="col-xl-3 col-lg-4">
+                    <div class="sidebar-box">
+                        <h3>Info Terbaru</h3>
+                        <ul>
+                            @forelse($posts->take(8) as $post)
+                                <li>
+                                    <a href="{{ route('posts.show', ['slug' => $post->slug]) }}">{{ $post->title }}</a>
+                                </li>
                             @empty
-                                @include('partials.Empty')
+                                <li>@include('partials.Empty')</li>
                             @endforelse
-                        </h5>
-                    </ol>
-                </div>
+                        </ul>
+                    </div>
+                </aside>
             </div>
         </div>
-    </div>
+    </section>
 @endsection
+
+@if ($statistics->isNotEmpty())
+    @include('AdminDashboard._chart-assets')
+
+    @push('scripts')
+        <script>
+            const publicDatasets = @json($statisticsPayload);
+
+            publicDatasets.forEach((dataset) => {
+                const canvas = document.getElementById(`public-chart-${dataset.id}`);
+                if (!canvas) return;
+
+                window.renderChartPreview(
+                    canvas,
+                    dataset.labels,
+                    dataset.values.map((value) => Number(value)),
+                    ['bar', 'line', 'pie'].includes(dataset.chart_type?.toLowerCase()) ? dataset.chart_type.toLowerCase() : 'bar'
+                );
+            });
+        </script>
+    @endpush
+@endif

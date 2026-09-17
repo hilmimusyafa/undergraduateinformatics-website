@@ -1,66 +1,73 @@
 @extends('layouts.homelayout')
 
 @section('title', 'Link Penting')
+@section('description', 'Kumpulan link penting terkait Program Studi Sarjana Informatika Telkom University.')
 
 @section('content')
-    <div class="home">
-        <div class="top">
-            <h1>Kumpulan Link Penting Terkait Informasi yang ada di Prodi S1 Informatika</h1>
-            <hr>
-        </div>
+    <section class="tag-hero">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
+                <a href="{{ route('home') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i><img src="{{ asset('images/Logo2.png') }}" alt=""> <span>Kembali</span></a>
+            </div>
 
-        <div class="row">
-            <div class="col-md-9">
-                <div class="section-title">
-                    <ol>
-                        @foreach ($sections as $section)
-                            <div id="{{ $section->id }}" class="section-content">
-                                <h3>
-                                    <li>
-                                        <p>
-                                            {{ $section->name }}
-                                        </p>
-                                    </li>
-                                </h3>
-                                <ol>
-                                    <h5>
-                                        @forelse($section->important_links->sortByDesc('name') as $link)
-                                            <li>
-                                                <div class="section-link d-flex">
-                                                    <p>{{ $link->name }}: <a href="{{ $link->link }}"
-                                                            target="_blank">{{ $link->link }}</a></p>
-                                                </div>
-                                            </li>
-                                        @empty
-                                            @include('partials.Empty')
-                                        @endforelse
-                                    </h5>
-                                </ol>
-                            </div>
-                        @endforeach
-                    </ol>
-                    @if ($sections->isEmpty())
-                        @include('partials.Empty')
-                    @endif
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="section-title d-flex justify-content-center">
-                    <h3>List Section Terbaru</h3>
-                </div>
-                <div class="section-info col-md">
-                    <ol class="d-flex">
-                        <h5>
-                            @foreach ($sections->sortByDesc('updated_at') as $section)
-                                <li><a href="#{{ $section->id }}">{{ $section->name }}</a></li>
-                            @endforeach
-                        </h5>
-                    </ol>
-                    @if ($sections->isEmpty())
-                        @include('partials.Empty')
-                    @endif
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <p class="eyebrow">Informasi</p>
+                    <h1>Link Penting</h1>
+                    <p class="lead">Kumpulan link penting terkait informasi yang ada di Program Studi S1 Informatika.</p>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <section class="home-content">
+        <div class="container-fluid">
+            <div class="row g-4">
+                <div class="col-xl-9 col-lg-8">
+                    <div class="topic-block">
+                        @forelse($sections as $section)
+                            <div id="section-{{ $section->id }}" class="section-group">
+                                <div class="section-header">
+                                    <span class="section-number">{{ $loop->iteration }}</span>
+                                    <h2>{{ $section->name }}</h2>
+                                </div>
+
+                                <div class="link-list">
+                                    @forelse($section->important_links as $link)
+                                        <a href="{{ $link->link }}" target="_blank" rel="noopener noreferrer" class="resource-link">
+                                            <span class="resource-number">{{ $loop->iteration }}</span>
+                                            <span class="resource-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+                                            <span class="resource-copy">
+                                            <span class="resource-title">{{ $link->name }}</span>
+                                            <span class="resource-url">{{ $link->link }}</span>
+                                            </span>
+                                        </a>
+                                    @empty
+                                        @include('partials.Empty')
+                                    @endforelse
+                                </div>
+                            </div>
+                        @empty
+                            <div class="empty-state">
+                                @include('partials.Empty')
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <aside class="col-xl-3 col-lg-4">
+                    <div class="sidebar-box">
+                        <h3>Daftar Section</h3>
+                        <ul>
+                            @forelse($sections as $section)
+                                <li><a href="#section-{{ $section->id }}"><span>{{ $loop->iteration }}</span>{{ $section->name }}</a></li>
+                            @empty
+                                <li>@include('partials.Empty')</li>
+                            @endforelse
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
 @endsection

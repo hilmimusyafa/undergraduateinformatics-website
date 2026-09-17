@@ -1,60 +1,69 @@
 @extends('layouts.homelayout')
 
 @section('title', $tag->name)
+@section('description', $tag->description ?? 'Informasi terkait ' . $tag->name)
 
 @section('content')
-    <div class="post">
-        <div class="top">
-            <a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left fa-lg"></i>Kembali</a>
-            <h1>Informasi Terkait {{ $tag->name }} untuk Prodi S1 Informatika</h1>
-            <hr>
-        </div>
-        <div class="post-deskripsi">
-            <div class="row deskripsi-gambar d-flex justify-content-center">
-                <img src="/images/placeholder.png" alt="{{ $tag->name }}">
+    <section class="tag-hero">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
+                <a href="{{ route('home') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i><img src="{{ asset('images/Logo2.png') }}" alt=""> <span>Kembali</span></a>
             </div>
-            <div class="row deskripsi-text d-flex">
-                <p>{{ $tag->description }}</p>
+
+            <div class="row align-items-center g-4">
+                <div class="col-lg-7">
+                    <p class="eyebrow">Kategori</p>
+                    <h1>{{ $tag->name }}</h1>
+                    <p class="lead">{{ $tag->description ?: 'Informasi terkini seputar ' . $tag->name . ' untuk Program Studi Sarjana Informatika.' }}</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="hero-image-card">
+                        <img src="{{ asset('images/placeholder.png') }}" alt="{{ $tag->name }}">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="semua-post">
-            <h1>List Informasi</h1>
-            <hr>
-            <div class="row card-post">
-                <div class="d-flex">
+    </section>
+
+    <section class="home-content">
+        <div class="container-fluid">
+            <div class="topic-block">
+                <div class="topic-header">
+                    <a href="#">
+                        <span class="topic-mark"></span>
+                        <h2>List Informasi</h2>
+                    </a>
+                </div>
+
+                <div class="row g-4">
                     @forelse($tag->posts->sortByDesc('updated_at') as $post)
-                        <div class="col-md-3 card-holder">
-                            <div class="card">
-                                <a class="text-decoration-none" href="{{ route('posts.show', ['slug' => $post->slug]) }}">
-                                    <img src="/{{ $post->image }}" class="card-img-top" alt="...">
-                                    <div class="card-body">
-                                        <h5 class="card-title truncate-1">{{ $post->title }}</h5>
-                                        <p class="card-text truncate-1">{{ $post->subtitle }}</p>
-                                        <div class="tag truncate-1">
-                                            @foreach ($post->tags->slice(0, 3) as $tag)
-                                                <button type="button-tag" class="btn btn-secondary">
-                                                    <h6>{{ $tag->name }}</h6>
-                                                </button>
+                        <div class="col-md-4 col-lg-3">
+                            <article class="news-card">
+                                <a href="{{ route('posts.show', ['slug' => $post->slug]) }}" class="card-link">
+                                    <img src="{{ $post->image ? '/' . $post->image : asset('images/placeholder.png') }}" alt="{{ $post->title }}">
+                                    <div class="news-card-body">
+                                        <h3>{{ $post->title }}</h3>
+                                        <p class="news-subtitle">{{ $post->subtitle }}</p>
+                                        <div class="tag-list">
+                                            @foreach ($post->tags->take(3) as $tagItem)
+                                                <span class="tag-pill">{{ $tagItem->name }}</span>
                                             @endforeach
                                         </div>
-                                        <div class='card-date'>
-                                            <p class="truncate-1">
-                                                {{ $post->created_at->format('j F Y') }}
-                                                ({{ $post->created_at->diffForHumans() }})
-                                            </p>
-                                            <p class="truncate-1">
-                                                {{ $post->hasBeenUpdated() ? '' . $post->updated_at->format('j F Y') . ' (Edited)' : '' }}
-                                            </p>
+                                        <div class="meta-line">
+                                            <span>{{ $post->created_at->format('j F Y') }}</span>
+                                            <span>{{ $post->hasBeenUpdated() ? 'Diedit' : 'Baru' }}</span>
                                         </div>
                                     </div>
                                 </a>
-                            </div>
+                            </article>
                         </div>
                     @empty
-                        @include('partials.Empty')
+                        <div class="col-12">
+                            @include('partials.Empty')
+                        </div>
                     @endforelse
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 @endsection

@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\Admin\TagController;
 use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LinkController;
+use App\Http\Controllers\Web\MeetingAgendaController;
 use App\Http\Controllers\Web\PostController as WebPostController;
 use App\Http\Controllers\Web\ReservationController;
 use App\Http\Controllers\Web\SearchController;
@@ -31,6 +32,8 @@ Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('posts.sho
 Route::get('/links', [LinkController::class, 'index'])->name('links.index');
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
 Route::get('/reservation', [ReservationController::class, 'show'])->name('reservation.show');
+Route::get('/meeting-agenda', [MeetingAgendaController::class, 'show'])->name('meeting.agenda.show');
+Route::post('/meeting-agenda', [MeetingAgendaController::class, 'store'])->name('meeting.agenda.store');
 
 /*
  * Admin uses Laravel's regular web stack: session authentication, named routes,

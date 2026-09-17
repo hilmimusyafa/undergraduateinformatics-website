@@ -1,101 +1,102 @@
 @extends('layouts.homelayout')
 
-@section('title', request()->get('search') ? request()->get('search') : 'Pencarian')
+@section('title', $search !== '' ? 'Hasil pencarian: ' . $search : 'Pencarian')
+@section('description', 'Cari informasi terkait program studi Sarjana Informatika Telkom University.')
 
 @section('content')
-    <div class="search">
-        <div class="top">
-            <a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left fa-lg"></i>Kembali</a>
+    <section class="tag-hero">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
+                <a href="{{ route('home') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i><img src="{{ asset('images/Logo2.png') }}" alt=""> <span>Kembali</span></a>
+            </div>
+
+            <div class="row align-items-center g-4">
+                <div class="col-lg-8">
+                    <p class="eyebrow">Pencarian</p>
+                    <h1>{{ $search !== '' ? 'Hasil Pencarian' : 'Cari Informasi' }}</h1>
+                    <p class="lead">Temukan artikel, informasi, dan materi terbaru di Program Studi Sarjana Informatika.</p>
+                </div>
+            </div>
         </div>
-        <div class="search-tag">
-            <div class="row">
-                <label for="tag" class="form-label">
-                    <h4>Pencarian Lain</h4>
-                </label>
-                <form method="GET" action="{{ route('posts.search') }}" class="col-md-3 d-flex" role="search">
-                    <div class="dropdown">
-                        <div class="search-bar">
-                            <input class="form-control me-2" name="search" type="search"
-                                value="{{ request()->get('search') }}" placeholder="Cari" aria-label="Search">
+    </section>
+
+    <section class="home-content">
+        <div class="container-fluid">
+            <div class="topic-block search-panel">
+                <form method="GET" action="{{ route('posts.search') }}" class="search-form">
+                    <div class="search-field">
+                        <label for="search" class="form-label">Kata kunci</label>
+                        <input id="search" class="form-control" name="search" type="search" value="{{ $search }}" placeholder="Cari judul, subtitle, atau isi artikel">
+                    </div>
+
+                    <div class="search-field checkbox-field">
+                        <label class="form-label">Filter tag</label>
+                        <div class="checkbox-group">
+                            @foreach ($tags as $tag)
+                                <label class="check-option">
+                                    <input type="checkbox" name="tags[]" value="{{ $tag->id }}" {{ in_array($tag->id, $tags_search->pluck('id')->toArray(), true) ? 'checked' : '' }}>
+                                    <span>{{ $tag->name }}</span>
+                                </label>
+                            @endforeach
                         </div>
-                        <div class="search-bar-tag">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Tag yang dipilih bisa lebih dari 1
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                @if (request()->query('tags'))
-                                    @foreach ($tags as $tag)
-                                        <label class="dropdown-item">
-                                            <input name="tags[]" type="checkbox" class="checkbox-option"
-                                                value="{{ $tag->id }}"
-                                                {{ in_array($tag->id, request()->query('tags')) ? 'checked' : '' }}>
-                                            {{ $tag->name }}
-                                        </label>
-                                    @endforeach
-                                @else
-                                    @foreach ($tags as $tag)
-                                        <label class="dropdown-item">
-                                            <input name="tags[]" type="checkbox" class="checkbox-option"
-                                                value="{{ $tag->id }}"> {{ $tag->name }}
-                                        </label>
-                                    @endforeach
-                                @endif
-                            </div>
-                            <button class="btn btn-secondary">Cari</button>
-                        </div>
+                    </div>
+
+                    <div class="search-action">
+                        <button type="submit" class="btn btn-primary search-button">Cari</button>
                     </div>
                 </form>
             </div>
-        </div>
-        <div class="search-hasil">
-            <h1>Hasil Pencarian</h1>
-            <hr>
-            <div class="hasil-tag">
-                @if (request()->query('search'))
-                    <h5>Kata Kunci yang Dicari: <strong>{{ request()->get('search') }}</strong></h5>
+
+            <div class="topic-block">
+                <div class="topic-header">
+                    <a href="#">
+                        <span class="topic-mark"></span>
+                        <h2>Hasil Pencarian</h2>
+                    </a>
+                </div>
+
+                @if ($search !== '' || ! $tags_search->isEmpty())
+                    <div class="filter-summary">
+                        @if ($search !== '')
+                            <span>Kata kunci: <strong>{{ $search }}</strong></span>
+                        @endif
+                        @foreach ($tags_search as $tag)
+                            <span class="tag-pill">{{ $tag->name }}</span>
+                        @endforeach
+                    </div>
                 @endif
-                @if (request()->query('tags'))
-                    @foreach ($tags_search as $tag)
-                        <a href="{{ route('tags.show', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a>
-                    @endforeach
-                @endif
-            </div>
-            <div class="row card-search">
-                <div class="d-flex">
+
+                <div class="row g-4">
                     @forelse($posts_search as $post)
-                        <div class="col-md-3 card-holder">
-                            <a class="text-decoration-none" href="{{ route('posts.show', ['slug' => $post->slug]) }}">
-                                <div class="card">
-                                    <img src="/{{ $post->image }}" class="card-img-top" alt="{{ $post->title }}">
-                                    <div class="card-body">
-                                        <h5 class="card-title truncate-1">{{ $post->title }}</h5>
-                                        <p class="card-text truncate-1">{{ $post->subtitle }}</p>
-                                        <div class="tag truncate-1">
-                                            @foreach ($post->tags->slice(0, 3) as $key => $tag)
-                                                <button type="button-tag" class="btn btn-secondary">
-                                                    <h6>{{ $tag->name }}</h6>
-                                                </button>
+                        <div class="col-md-4 col-lg-3">
+                            <article class="news-card">
+                                <a href="{{ route('posts.show', ['slug' => $post->slug]) }}" class="card-link">
+                                    <img src="{{ $post->image ? '/' . $post->image : asset('images/placeholder.png') }}" alt="{{ $post->title }}">
+                                    <div class="news-card-body">
+                                        <h3>{{ $post->title }}</h3>
+                                        <p class="news-subtitle">{{ $post->subtitle }}</p>
+                                        <div class="tag-list">
+                                            @foreach ($post->tags->take(3) as $tag)
+                                                <span class="tag-pill">{{ $tag->name }}</span>
                                             @endforeach
                                         </div>
-                                        <div class='card-date'>
-                                            <p class="truncate-1">
-                                                {{ $post->created_at->format('j F Y') }}
-                                                ({{ $post->created_at->diffForHumans() }})
-                                            </p>
-                                            <p class="truncate-1">
-                                                {{ $post->hasBeenUpdated() ? '' . $post->updated_at->format('j F Y') . ' (Edited)' : '' }}
-                                            </p>
+                                        <div class="meta-line">
+                                            <span>{{ $post->created_at->format('j F Y') }}</span>
+                                            <span>{{ $post->hasBeenUpdated() ? 'Diedit' : 'Baru' }}</span>
                                         </div>
                                     </div>
-                                </div>
-                            </a>
+                                </a>
+                            </article>
                         </div>
                     @empty
-                        @include('partials.Empty')
+                        <div class="col-12">
+                            <div class="empty-state">
+                                @include('partials.Empty')
+                            </div>
+                        </div>
                     @endforelse
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 @endsection

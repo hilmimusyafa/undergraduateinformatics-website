@@ -1,32 +1,45 @@
 @extends('layouts.homelayout')
 
 @section('title', $post->title)
+@section('description', $post->subtitle ?? 'Detail informasi program studi')
 
 @section('content')
-    <div class="post">
-        <div class="top">
-            <a href="{{ route('home') }}"><i class="fa-solid fa-arrow-left fa-lg"></i>Kembali</a>
-        </div>
-        <div class="post-deskripsi">
-            <div class="row deskripsi-gambar d-flex justify-content-center">
-                <img src="/{{ $post->image }}" alt="{{ $post->title }}">
+    <section class="post-article">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-4">
+                <a href="{{ route('home') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i><img src="{{ asset('images/Logo2.png') }}" alt=""> <span>Kembali</span></a>
             </div>
-            <div class="row postingan-text d-flex">
-                <h1>{{ $post->title }}</h1>
-                <h5>{{ $post->subtitle }}</h5>
-                <hr>
-                <p>{!! $post->body !!}</p>
-                <hr>
-            </div>
-            <div class="row postingan-detail">
-                <p>{{ $post->created_at->format('j F Y') }} ({{ $post->created_at->diffForHumans() }})
-                    {{ $post->hasBeenUpdated() ? '| ' . $post->updated_at->format('j F Y') . ' (Edited)' : '' }}</p>
-                <div class="postingan-tag">
-                    @foreach ($post->tags as $tag)
-                        <a href="{{ route('tags.show', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a>
-                    @endforeach
+
+            <article class="article-shell">
+                <header class="article-header">
+                    <div class="article-badge">Informasi</div>
+                    <h1>{{ $post->title }}</h1>
+                    <p class="article-subtitle">{{ $post->subtitle }}</p>
+                    <div class="article-meta">
+                        <span>{{ $post->created_at->format('j F Y') }}</span>
+                        <span>{{ $post->created_at->diffForHumans() }}</span>
+                        @if ($post->hasBeenUpdated())
+                            <span>Diedit {{ $post->updated_at->format('j F Y') }}</span>
+                        @endif
+                    </div>
+                </header>
+
+                <div class="article-cover">
+                    <img src="{{ $post->image ? '/' . $post->image : asset('images/placeholder.png') }}" alt="{{ $post->title }}">
                 </div>
-            </div>
+
+                <div class="article-body">
+                    {!! $post->body !!}
+                </div>
+
+                <footer class="article-footer">
+                    <div class="tag-list article-tags">
+                        @foreach ($post->tags as $tag)
+                            <a href="{{ route('tags.show', ['slug' => $tag->slug]) }}" class="tag-pill tag-link">{{ $tag->name }}</a>
+                        @endforeach
+                    </div>
+                </footer>
+            </article>
         </div>
-    </div>
+    </section>
 @endsection
