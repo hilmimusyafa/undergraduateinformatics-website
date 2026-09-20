@@ -3,10 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Services\MsForms\MsFormsException;
-use App\Services\Reservation\ReservationFormService;
-use App\Services\Reservation\ReservationFormUnavailableException;
-use App\Services\Reservation\ReservationMetadata;
+use App\Models\ReservationLink;
 use App\Support\PageMeta;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -20,6 +17,7 @@ class ReservationController extends Controller
         return view('ReservationPage', [
             'title' => $page['title'],
             'description' => $page['description'],
+            'reservationLink' => ReservationLink::configured()->first(),
         ]);
     }
 }

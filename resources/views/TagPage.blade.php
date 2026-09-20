@@ -11,15 +11,10 @@
             </div>
 
             <div class="row align-items-center g-4">
-                <div class="col-lg-7">
+                <div class="col-lg-8">
                     <p class="eyebrow">Kategori</p>
                     <h1>{{ $tag->name }}</h1>
                     <p class="lead">{{ $tag->description ?: 'Informasi terkini seputar ' . $tag->name . ' untuk Program Studi Sarjana Informatika.' }}</p>
-                </div>
-                <div class="col-lg-5">
-                    <div class="hero-image-card">
-                        <img src="{{ asset('images/placeholder.png') }}" alt="{{ $tag->name }}">
-                    </div>
                 </div>
             </div>
         </div>

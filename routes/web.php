@@ -18,7 +18,6 @@ use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\TagController as WebTagController;
 use App\Models\DashboardDataset;
 use App\Models\ReservationSchedule;
-use App\Support\PageMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
@@ -35,11 +34,7 @@ Route::get('/reservation', [ReservationController::class, 'show'])->name('reserv
 Route::get('/meeting-agenda', [MeetingAgendaController::class, 'show'])->name('meeting.agenda.show');
 Route::post('/meeting-agenda', [MeetingAgendaController::class, 'store'])->name('meeting.agenda.store');
 
-/*
- * Admin uses Laravel's regular web stack: session authentication, named routes,
- * Blade views, and standard form submissions.  The public site remains served
- * by its existing React/Vite entry point.
- */
+/* Admin and public pages use Laravel's regular web stack and Blade views. */
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('login', [AdminController::class, 'loginForm'])->name('login');
@@ -141,13 +136,5 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 Route::fallback(function (Request $request) {
-    if ($request->is('admin/*') || $request->is('api/*')) {
-        abort(404);
-    }
-
-    return response()->view(
-        'app',
-        PageMeta::viewData($request, 'notFound', [], ['notFound' => true], null, null),
-        404
-    );
+    abort(404);
 });

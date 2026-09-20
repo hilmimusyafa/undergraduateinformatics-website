@@ -5,18 +5,10 @@
 
 @section('content')
     <section class="public-hero">
-        <div class="container-fluid">
-            <div class="row align-items-center g-4">
-                <div class="col-lg-7">
-                    <p class="eyebrow">Portal Informasi</p>
-                    <h1>Portal Informasi<br> Sarjana Informatika</h1>
-                    <p class="lead">Sumber informasi resmi Program Studi Sarjana Informatika Telkom University</p>
-                </div>
-                <div class="col-lg-5">
-                    <div class="hero-image-card">
-                        <img src="{{ asset('images/banner.jpg') }}" alt="Telkom University">
-                    </div>
-                </div>
+        <div class="container-fluid public-hero__content">
+            <div class="public-hero__copy">
+                <h1>Portal Informasi<br> Sarjana Informatika</h1>
+                <p class="lead">Sumber informasi resmi Program Studi Sarjana Informatika Telkom University.</p>
             </div>
         </div>
     </section>
@@ -58,8 +50,9 @@
                 <div class="col-xl-9 col-lg-8">
                     @forelse($tags as $data)
                         <div class="topic-block">
-                            <div class="topic-header">
-                                <a href="{{ route('tags.show', ['slug' => $data->slug]) }}">
+                            <div class="topic-header section-header">
+                                <span class="section-number">{{ $loop->iteration }}</span>
+                                <a href="{{ route('tags.show', ['slug' => $data->slug]) }}" class="topic-header__title-wrap">
                                     <span class="topic-mark"></span>
                                     <h2>{{ $data->name }}</h2>
                                 </a>

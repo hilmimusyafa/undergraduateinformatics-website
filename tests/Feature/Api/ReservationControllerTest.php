@@ -192,7 +192,7 @@ class ApiReservationControllerTest extends TestCase
         ReservationLink::create(['link' => 'https://forms.office.com/r/abc123']);
 
         $pdoException = new \PDOException('SQLSTATE[23000]: Integrity constraint violation', 23000);
-        $queryException = new \Illuminate\Database\QueryException('sqlite', 'insert into reservation_schedules', [], $pdoException);
+        $queryException = new \Illuminate\Database\QueryException('mysql', 'insert into reservation_schedules', [], $pdoException);
 
         ReservationSchedule::saving(function () use ($queryException) {
             throw $queryException;

@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg sticky-top drop-shadow">
     <div class="container-fluid">
         <a href="{{ route('home') }}" class="navbar-brand" aria-label="Kembali ke halaman utama">
-            <img class="img-fluid" src="/images/Logo2.png" alt="Logo Program Studi Informatika">
+            <img class="img-fluid" src="/images/logo.png" alt="Fakultas Informatika, School of Computing, Telkom University">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,9 +9,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="nav ms-auto nav-underline">
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Beranda</a>
-                </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" aria-current="page" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,7 +29,7 @@
                     <a class="nav-link" href="{{ route('feedback.show') }}">Masukan/Saran</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('meeting.agenda.show') }}">Pertemuan Prodi</a>
+                    <a class="nav-link" href="{{ route('reservation.show') }}">Reservasi Pertemuan</a>
                 </li>
                 <li class="nav-item">
                     <form method="GET" action="{{ route('posts.search') }}" class="d-flex" role="search">
@@ -42,11 +39,8 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{ Auth::check() ? route('admin.dashboard') : route('admin.login') }}" class="btn-login">
-                        <div class="btn btn-light text-center">Admin</div>
+                        <span class="btn btn-light text-center">Admin</span>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fa-solid fa-language"></i>ID</a>
                 </li>
             </ul>
         </div>

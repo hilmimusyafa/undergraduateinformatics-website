@@ -5,7 +5,7 @@
 @section('description', 'Form masukan dan saran untuk Program Studi Sarjana Informatika.')
 
 @section('content')
-    <section class="tag-hero">
+    <section class="tag-hero public-intro-hero">
         <div class="container-fluid">
             <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
                 <a href="{{ route('home') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i><img src="{{ asset('images/Logo2.png') }}" alt=""> <span>Kembali</span></a>
@@ -16,6 +16,7 @@
                     <p class="eyebrow">Masukan & Saran</p>
                     <h1>Feedback Program Studi</h1>
                     <p class="lead">Sampaikan masukan, kritik, atau saran Anda agar layanan dan pembelajaran di Program Studi S1 Informatika semakin baik.</p>
+                    <p class="hero-detail">Masukan Anda membantu program studi mengevaluasi layanan akademik, komunikasi informasi, kegiatan pembelajaran, dan pengalaman mahasiswa secara berkelanjutan.</p>
                 </div>
             </div>
         </div>

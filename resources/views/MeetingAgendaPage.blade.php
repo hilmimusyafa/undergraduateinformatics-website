@@ -4,7 +4,7 @@
 @section('description', 'Form agenda pertemuan dengan Program Studi Sarjana Informatika Telkom University.')
 
 @section('content')
-    <section class="tag-hero">
+    <section class="tag-hero public-intro-hero">
         <div class="container-fluid">
             <div class="d-flex align-items-center justify-content-between gap-3 flex-wrap mb-3">
                 <a href="{{ route('home') }}" class="back-link"><i class="fa-solid fa-arrow-left"></i><img src="{{ asset('images/Logo2.png') }}" alt=""> <span>Kembali</span></a>
@@ -15,6 +15,7 @@
                     <p class="eyebrow">FORM AGENDA PERTEMUAN</p>
                     <h1>FORM AGENDA PERTEMUAN DENGAN PRODI</h1>
                     <p class="lead">FORM OF MEETING AGENDA WITH PRODI</p>
+                    <p class="hero-detail">Gunakan formulir ini untuk mengajukan agenda diskusi, konsultasi, koordinasi, atau pertemuan resmi dengan Program Studi Sarjana Informatika.</p>
                 </div>
             </div>
         </div>
