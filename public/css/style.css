@@ -107,12 +107,13 @@ body.public-layout {
     background: #98252b;
 }
 
-.public-intro-hero .container-fluid {
+.public-intro-hero .container-fluid,
+.tag-hero .container-fluid {
     position: relative;
     z-index: 1;
     padding-top: 34px;
     padding-bottom: 42px;
-    text-align: center;
+    text-align: left;
 }
 
 .hero-detail {
@@ -128,21 +129,26 @@ body.public-layout {
     align-items: stretch;
 }
 
-.tag-hero .container-fluid {
-    text-align: center;
-}
-
 .tag-hero .d-flex {
-    justify-content: center !important;
+    justify-content: flex-start !important;
 }
 
 .tag-hero .row {
-    justify-content: center;
+    justify-content: flex-start;
 }
 
 .tag-hero .col-lg-8 {
-    margin-right: auto;
-    margin-left: auto;
+    margin-right: 0;
+    margin-left: 0;
+}
+
+.tag-hero .lead,
+.tag-hero .hero-detail,
+.public-intro-hero .lead,
+.public-intro-hero .hero-detail {
+    margin-right: 0;
+    margin-left: 0;
+    text-align: left;
 }
 
 .public-hero__content {
@@ -179,6 +185,7 @@ body.public-layout {
     margin-right: 0;
     margin-left: 0;
 }
+
 
 .public-hero .eyebrow,
 .tag-hero .eyebrow {
