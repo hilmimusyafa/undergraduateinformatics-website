@@ -90,6 +90,14 @@ body.public-layout {
     margin: 0 auto;
 }
 
+.public-page .container-fluid {
+    max-width: 1180px;
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 24px;
+    padding-left: 24px;
+}
+
 .public-hero,
 .tag-hero {
     position: relative;
