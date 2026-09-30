@@ -15,8 +15,7 @@
                 <div class="col-lg-8">
                     <p class="eyebrow">Masukan & Saran</p>
                     <h1>Feedback Program Studi</h1>
-                    <p class="lead">Sampaikan masukan, kritik, atau saran Anda agar layanan dan pembelajaran di Program Studi S1 Informatika semakin baik.</p>
-                    <p class="hero-detail">Masukan Anda membantu program studi mengevaluasi layanan akademik, komunikasi informasi, kegiatan pembelajaran, dan pengalaman mahasiswa secara berkelanjutan.</p>
+                    <p class="lead">Sampaikan masukan, kritik, atau saran Anda agar layanan dan pembelajaran di Program Studi S1 Informatika semakin baik. Masukan Anda membantu program studi mengevaluasi layanan akademik, komunikasi informasi, kegiatan pembelajaran, dan pengalaman mahasiswa secara berkelanjutan.</p>
                 </div>
             </div>
         </div>
@@ -25,7 +24,7 @@
     <section class="home-content">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-xl-10">
+                <div class="col">
                     <div class="topic-block">
                         @if ($feedbackLink && $feedbackLink->link)
                             <div class="responsive-iframe">

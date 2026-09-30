@@ -14,7 +14,7 @@
                 <div class="col-lg-8">
                     <p class="eyebrow">Informasi</p>
                     <h1>Link Penting</h1>
-                    <p class="lead">Kumpulan link penting terkait informasi yang ada di Program Studi S1 Informatika.</p>
+                    <p class="lead">Kumpulan link penting yang berisi berbagai informasi terkait Program Studi S1 Informatika, mulai dari informasi akademik, layanan mahasiswa, kegiatan program studi, hingga berbagai sumber informasi dan layanan pendukung lainnya.</p>
                 </div>
             </div>
         </div>

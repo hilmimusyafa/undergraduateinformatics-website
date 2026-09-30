@@ -53,7 +53,6 @@
                             <div class="topic-header section-header">
                                 <span class="section-number">{{ $loop->iteration }}</span>
                                 <a href="{{ route('tags.show', ['slug' => $data->slug]) }}" class="topic-header__title-wrap">
-                                    <span class="topic-mark"></span>
                                     <h2>{{ $data->name }}</h2>
                                 </a>
                                 <a href="{{ route('tags.show', ['slug' => $data->slug]) }}" class="view-more">Lihat semua</a>

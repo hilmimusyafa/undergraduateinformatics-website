@@ -14,8 +14,7 @@
                 <div class="col-lg-8">
                     <p class="eyebrow">Layanan Mahasiswa</p>
                     <h1>Reservasi Pertemuan dengan Prodi</h1>
-                    <p class="lead">Gunakan formulir ini untuk mengajukan jadwal pertemuan dengan Program Studi S1 Informatika terkait konsultasi, koordinasi, atau agenda akademik.</p>
-                    <p class="hero-detail">Isi data diri, pilihan waktu, dan kebutuhan pertemuan dengan lengkap agar pengajuan dapat ditinjau oleh pengelola Program Studi.</p>
+                    <p class="lead">Gunakan formulir ini untuk mengajukan jadwal pertemuan dengan Program Studi S1 Informatika terkait konsultasi, koordinasi, atau agenda akademik. Isi data diri, pilihan waktu, dan kebutuhan pertemuan dengan lengkap agar pengajuan dapat ditinjau oleh pengelola Program Studi.</p>
                 </div>
             </div>
         </div>
@@ -24,7 +23,7 @@
     <section class="home-content">
         <div class="container-fluid">
             <div class="row justify-content-center">
-                <div class="col-xl-10">
+                <div class="col">
                     <div class="topic-block">
                         @if ($reservationLink && $reservationLink->link)
                             <div class="responsive-iframe">
