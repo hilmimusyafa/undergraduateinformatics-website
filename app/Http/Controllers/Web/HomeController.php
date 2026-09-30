@@ -35,7 +35,6 @@ class HomeController extends Controller
         if (Schema::hasTable('dashboard_datasets') && Schema::hasTable('dashboard_dataset_items')) {
             $statistics = DashboardDataset::query()
                 ->with(['items' => fn ($query) => $query->orderBy('sort_order')])
-                ->where('sheet_name', 'Mahasiswa')
                 ->orderBy('id')
                 ->get();
         }

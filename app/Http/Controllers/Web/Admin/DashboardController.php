@@ -134,7 +134,7 @@ class DashboardController extends Controller
             $created = DashboardDataset::create([
                 'title' => $validatedData['title'],
                 'slug' => $this->uniqueSlug($validatedData['title'], $usedSlugs),
-                'sheet_name' => $validatedData['title'],
+                'sheet_name' => $validatedData['sheet_name'] ?? 'Mahasiswa',
                 'chart_type' => $validatedData['chart_type'],
                 'x_label' => $validatedData['x_label'] ?? '',
                 'y_label' => $validatedData['y_label'] ?? '',
@@ -170,7 +170,7 @@ class DashboardController extends Controller
             $dataset->update([
                 'title' => $validatedData['title'],
                 'slug' => Str::slug($validatedData['title']) . '-' . $dataset->id,
-                'sheet_name' => $validatedData['title'],
+                'sheet_name' => $dataset->sheet_name ?: 'Mahasiswa',
                 'chart_type' => $validatedData['chart_type'],
                 'x_label' => $validatedData['x_label'] ?? $dataset->x_label,
                 'y_label' => $validatedData['y_label'] ?? $dataset->y_label,

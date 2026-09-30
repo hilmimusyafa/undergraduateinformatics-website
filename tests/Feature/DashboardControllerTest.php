@@ -259,4 +259,30 @@ class DashboardControllerTest extends TestCase
         $this->assertSame(0, DashboardDataset::count());
         $this->assertSame(0, DashboardDatasetItem::count());
     }
+
+    public function test_update_accepts_put_method_from_blade_form(): void
+    {
+        $dataset = DashboardDataset::create([
+            'title' => 'Jumlah Mahasiswa',
+            'slug' => 'jumlah-mahasiswa',
+            'sheet_name' => 'Mahasiswa',
+            'chart_type' => 'bar',
+            'x_label' => 'Tahun',
+            'y_label' => 'Mahasiswa',
+            'description' => null,
+        ]);
+        DashboardDatasetItem::create(['dataset_id' => $dataset->id, 'label' => '2023', 'value' => 100, 'sort_order' => 1]);
+
+        $response = $this->actingAs($this->createAdminUser())->put("/admin/dashboard/{$dataset->id}/update", [
+            'title' => 'Mahasiswa per Tahun',
+            'chart_type' => 'pie',
+            'items' => [
+                ['label' => '2023', 'value' => 100],
+            ],
+        ]);
+
+        $response->assertRedirect(route('admin.dashboard'));
+        $this->assertSame('Mahasiswa per Tahun', $dataset->fresh()->title);
+        $this->assertSame('Mahasiswa', $dataset->fresh()->sheet_name);
+    }
 }
