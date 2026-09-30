@@ -3,7 +3,7 @@
 body.public-layout {
     background: #ffffff;
     color: #111827;
-    font-family: Inter, "Segoe UI", sans-serif;
+    font-family: Figtree, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .navbar img {

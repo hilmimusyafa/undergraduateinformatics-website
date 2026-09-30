@@ -10,6 +10,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
+    <link href="/css/fonts/figtree.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="/vendor/fontawesome/css/all-5.15.4.min.css">
