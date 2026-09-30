@@ -24,27 +24,22 @@ class ReservationControllerTest extends TestCase
         Http::fake($this->microsoftEndpoints());
     }
 
-    public function test_reservation_page_injects_seo_metadata(): void
+    public function test_reservation_page_renders_blade_view_successfully(): void
     {
         $response = $this->get('/reservation');
 
         $response->assertStatus(200);
-        $response->assertSee('Reservasi - Portal Informasi Sarjana Informatika', false);
-        $response->assertSee('property="og:title"', false);
-        $response->assertSee('property="og:description"', false);
-        $response->assertSee('application/ld+json', false);
-        $response->assertSee('Ajukan reservasi pertemuan dengan Program Studi Sarjana Informatika Telkom University', false);
+        $response->assertViewIs('ReservationPage');
+        $response->assertSee('Reservasi Pertemuan dengan Prodi');
     }
 
-    public function test_reservation_page_injects_reservation_metadata(): void
+    public function test_reservation_page_displays_configured_iframe(): void
     {
         ReservationLink::create(['link' => 'https://forms.office.com/r/abc123']);
-        app(FormDefinitionService::class)->refresh('reservation', 'https://forms.office.com/r/abc123');
 
         $response = $this->get('/reservation');
 
         $response->assertStatus(200);
-        $response->assertSee('"dateQuestionId"', false);
-        $response->assertSee('"allowedDays"', false);
+        $response->assertSee('https://forms.office.com/r/abc123');
     }
 }

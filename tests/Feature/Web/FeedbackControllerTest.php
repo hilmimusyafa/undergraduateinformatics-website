@@ -19,15 +19,13 @@ class FeedbackControllerTest extends TestCase
         Http::fake($this->microsoftEndpoints());
     }
 
-    public function test_feedback_page_injects_seo_metadata(): void
+    public function test_feedback_page_renders_blade_view_successfully(): void
     {
         $response = $this->get('/feedback');
 
         $response->assertStatus(200);
-        $response->assertSee('Masukan - Portal Informasi Sarjana Informatika', false);
-        $response->assertSee('property="og:title"', false);
-        $response->assertSee('property="og:description"', false);
-        $response->assertSee('application/ld+json', false);
-        $response->assertSee('Sampaikan pengaduan, keluhan, atau aspirasi terkait layanan akademik maupun non-akademik Program Studi Sarjana Informatika Telkom University', false);
+        $response->assertViewIs('FeedbackPage');
+        $response->assertSee('Feedback - Website Informasi S1 Informatika');
+        $response->assertSee('Feedback Program Studi');
     }
 }

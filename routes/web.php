@@ -26,6 +26,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/tags', [WebTagController::class, 'index'])->name('tags.index');
 Route::get('/tags/{slug}', [WebTagController::class, 'show'])->name('tags.show');
+Route::get('/posts', fn () => redirect()->route('posts.search'));
 Route::get('/posts/search', [SearchController::class, 'index'])->name('posts.search');
 Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('posts.show');
 Route::get('/links', [LinkController::class, 'index'])->name('links.index');

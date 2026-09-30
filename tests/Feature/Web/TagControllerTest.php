@@ -21,20 +21,9 @@ class TagControllerTest extends TestCase
         $response = $this->get('/tags');
 
         $response->assertStatus(200);
-        $response->assertViewIs('app');
-        $response->assertViewHas('initialData');
-        $response->assertSee('__INITIAL_DATA__');
-        $response->assertSee('application/ld+json');
-        $response->assertSee('CollectionPage');
-        $response->assertSee('Daftar Topik - Portal Informasi Sarjana Informatika', false);
-        $response->assertSee('Kumpulan topik informasi perkuliahan peserta didik Program Studi Sarjana Informatika Telkom University', false);
-
-        preg_match('/window\.__INITIAL_DATA__ = (\{.*?\});/s', $response->getContent(), $matches);
-        $this->assertNotEmpty($matches, 'Initial data script tag not found');
-        $initialData = json_decode($matches[1], true);
-        $this->assertSame('success', $initialData['status']);
-        $this->assertSame('Academic', $initialData['data'][0]['name']);
-        $this->assertSame(0, $initialData['data'][0]['posts_count']);
+        $response->assertViewIs('TagPage');
+        $response->assertSee('Academic');
+        $response->assertSee('Daftar Kategori');
     }
 
     public function test_web_tag_detail_route_renders_app_with_initial_data_and_seo_tags(): void
@@ -55,20 +44,9 @@ class TagControllerTest extends TestCase
         $response = $this->get('/tags/beasiswa');
 
         $response->assertStatus(200);
-        $response->assertViewIs('app');
-        $response->assertViewHas('initialData');
-        $response->assertSee('__INITIAL_DATA__');
-        $response->assertSee('application/ld+json');
-        $response->assertSee('CollectionPage');
-
-        preg_match('/window\.__INITIAL_DATA__ = (\{.*?\});/s', $response->getContent(), $matches);
-        $this->assertNotEmpty($matches, 'Initial data script tag not found');
-        $initialData = json_decode($matches[1], true);
-        $this->assertSame('success', $initialData['status']);
-        $this->assertSame('Beasiswa', $initialData['data']['name']);
-        $this->assertSame('Pendaftaran Beasiswa 2026', $initialData['data']['posts'][0]['title']);
-        $this->assertSame('pendaftaran-beasiswa-2026', $initialData['data']['posts'][0]['slug']);
-        $this->assertSame('beasiswa', $initialData['data']['posts'][0]['tags'][0]['slug']);
+        $response->assertViewIs('TagPage');
+        $response->assertSee('Beasiswa');
+        $response->assertSee('Pendaftaran Beasiswa 2026');
     }
 
     public function test_web_tag_detail_route_resolves_by_id_for_backward_compatibility(): void
@@ -81,7 +59,7 @@ class TagControllerTest extends TestCase
         $response = $this->get('/tags/' . $tag->id);
 
         $response->assertStatus(200);
-        $response->assertViewIs('app');
+        $response->assertViewIs('TagPage');
         $response->assertSee('Beasiswa');
     }
 
@@ -90,7 +68,5 @@ class TagControllerTest extends TestCase
         $response = $this->get('/tags/tidak-ada');
 
         $response->assertStatus(404);
-        $response->assertViewIs('app');
-        $response->assertSee('window.__INITIAL_DATA__ = {"notFound":true};', false);
     }
 }

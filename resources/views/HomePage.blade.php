@@ -74,7 +74,7 @@
                                                         @endforeach
                                                     </div>
                                                     <div class="meta-line">
-                                                        <span>{{ $post->created_at->format('j F Y') }}</span>
+                                                        <span>{{ $post->created_at?->format('j F Y') }}</span>
                                                         <span>{{ $post->hasBeenUpdated() ? 'Diedit' : 'Baru' }}</span>
                                                     </div>
                                                 </div>

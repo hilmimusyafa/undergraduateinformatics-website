@@ -16,7 +16,7 @@
                     <h1>{{ $post->title }}</h1>
                     <p class="article-subtitle">{{ $post->subtitle }}</p>
                     <div class="article-meta">
-                        <span>{{ $post->created_at->format('j F Y') }}</span>
+                        <span>{{ $post->created_at?->format('j F Y') }}</span>
                         <span>{{ $post->created_at->diffForHumans() }}</span>
                         @if ($post->hasBeenUpdated())
                             <span>Diedit {{ $post->updated_at->format('j F Y') }}</span>

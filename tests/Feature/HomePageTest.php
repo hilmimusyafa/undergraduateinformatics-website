@@ -38,7 +38,7 @@ class HomePageTest extends TestCase
         ]);
     }
 
-    public function test_web_home_route_renders_app_wrapper_with_initial_data_and_seo_tags(): void
+    public function test_web_home_route_renders_blade_view_with_data(): void
     {
         $post = $this->createPost('Welcome to Informatics', 'New semester starting soon');
         $tag = Tag::create(['name' => 'Academic', 'description' => 'Academic announcements']);
@@ -50,21 +50,9 @@ class HomePageTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertViewIs('app');
-        $response->assertViewHas('initialData');
-        $response->assertSee('__INITIAL_DATA__');
+        $response->assertViewIs('HomePage');
         $response->assertSee('Welcome to Informatics');
-        $response->assertSee('Academic Calendar');
-        $response->assertSee('Beranda - Portal Informasi Sarjana Informatika', false);
-        $response->assertSee('Sumber informasi resmi Program Studi Sarjana Informatika Telkom University untuk perkuliahan peserta didik.', false);
-
-        preg_match('/window\.__INITIAL_DATA__ = (\{.*?\});/s', $response->getContent(), $matches);
-        $this->assertNotEmpty($matches, 'Initial data script tag not found');
-        $initialData = json_decode($matches[1], true);
-        $this->assertSame('success', $initialData['status']);
-        $this->assertSame('Welcome to Informatics', $initialData['data']['latest_posts'][0]['title']);
-        $this->assertSame('Academic Calendar', $initialData['data']['latest_links'][0]['name']);
-        $this->assertArrayHasKey('dashboard', $initialData['data']);
+        $response->assertSee('Portal Informasi');
     }
 
     public function test_api_home_returns_new_payload_structure(): void

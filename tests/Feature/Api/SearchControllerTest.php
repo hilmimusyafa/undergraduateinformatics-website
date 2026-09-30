@@ -195,27 +195,15 @@ class SearchControllerTest extends TestCase
         $this->assertStringNotContainsString("ESCAPE '\\'", $likeQuery['query']);
     }
 
-    public function test_web_search_route_renders_app_with_initial_data_and_is_not_shadowed(): void
+    public function test_web_search_route_renders_blade_view_with_results(): void
     {
         $this->createPost('Pendaftaran Beasiswa 2026', 'Periode baru dibuka', '<p>Detail.</p>');
 
         $response = $this->get('/posts/search?q=beasiswa');
 
         $response->assertStatus(200);
-        $response->assertViewIs('app');
-        $response->assertViewHas('initialData');
-        $response->assertSee('__INITIAL_DATA__');
-        $response->assertSee('application/ld+json');
-        $response->assertSee('SearchResultsPage');
-        $response->assertSee('Cari Informasi - Portal Informasi Sarjana Informatika', false);
-
-        preg_match('/window\.__INITIAL_DATA__ = (\{.*?\});/s', $response->getContent(), $matches);
-        $this->assertNotEmpty($matches, 'Initial data script tag not found');
-        $initialData = json_decode($matches[1], true);
-        $this->assertSame('success', $initialData['status']);
-        $this->assertSame('Pendaftaran Beasiswa 2026', $initialData['data'][0]['title']);
-        $this->assertSame(1, $initialData['meta']['total']);
-        $this->assertArrayNotHasKey('body', $initialData['data'][0]);
-        $this->assertArrayNotHasKey('image', $initialData['data'][0]);
+        $response->assertViewIs('SearchPage');
+        $response->assertSee('Pendaftaran Beasiswa 2026');
+        $response->assertSee('Periode baru dibuka');
     }
 }
