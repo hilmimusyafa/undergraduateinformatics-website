@@ -36,10 +36,9 @@
                                     @forelse($section->important_links as $link)
                                         <a href="{{ $link->link }}" target="_blank" rel="noopener noreferrer" class="resource-link">
                                             <span class="resource-number">{{ $loop->iteration }}</span>
-                                            <span class="resource-icon"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
                                             <span class="resource-copy">
-                                            <span class="resource-title">{{ $link->name }}</span>
-                                            <span class="resource-url">{{ $link->link }}</span>
+                                                <span class="resource-title">{{ $link->name }}</span>
+                                                <span class="resource-url">{{ $link->link }}</span>
                                             </span>
                                         </a>
                                     @empty
