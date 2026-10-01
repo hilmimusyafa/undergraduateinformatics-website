@@ -1661,9 +1661,9 @@ html {
 .calendar-cell {
     background: #ffffff;
     border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    min-height: 105px;
-    padding: 8px;
+    border-radius: 8px;
+    min-height: 80px;
+    padding: 6px 8px;
     display: flex;
     flex-direction: column;
     transition: all 0.15s ease-in-out;
@@ -1702,15 +1702,15 @@ html {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .calendar-cell__number {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 700;
     color: #1f2937;
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1723,7 +1723,7 @@ html {
 }
 
 .calendar-cell__status {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
 }
 
@@ -1732,17 +1732,20 @@ html {
     color: #ffffff;
     font-size: 0.72rem;
     font-weight: 600;
-    padding: 4px 6px;
-    border-radius: 6px;
-    margin-top: 3px;
-    line-height: 1.25;
+    padding: 3px 6px;
+    border-radius: 5px;
+    margin-top: 2px;
+    line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 4px;
     cursor: pointer;
     transition: background 0.15s;
     text-decoration: none;
+    max-width: 100%;
 }
 
 .calendar-event-pill:hover {
@@ -1754,8 +1757,15 @@ html {
     background: rgba(255, 255, 255, 0.25);
     padding: 1px 4px;
     border-radius: 3px;
-    margin-right: 3px;
     font-size: 0.68rem;
+    flex-shrink: 0;
+}
+
+.calendar-event-pill__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-grow: 1;
 }
 
 .calendar-selected-panel {

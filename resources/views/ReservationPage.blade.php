@@ -102,7 +102,7 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <h3 id="calMonthTitle" class="calendar-month-title mb-0">Oktober 2026</h3>
                                         <span class="badge bg-danger-subtle text-danger border border-danger-subtle ms-2" id="calEventCountBadge">
-                                            {{ isset($schedules) ? $schedules->count() : 0 }} Agenda Terdata
+                                            {{ isset($schedules) ? $schedules->count() : 0 }} Agenda
                                         </span>
                                     </div>
                                     <div class="d-flex align-items-center gap-1">
@@ -121,15 +121,15 @@
                                 <div class="calendar-legend">
                                     <span class="calendar-legend-item">
                                         <span class="calendar-legend-dot calendar-legend-dot--event"></span>
-                                        <strong>Ada Agenda Terjadwal</strong> (klik kartu/pill untuk lihat detail)
+                                        <strong>Terjadwal</strong>
                                     </span>
                                     <span class="calendar-legend-item">
                                         <span class="calendar-legend-dot calendar-legend-dot--available"></span>
-                                        <strong>Bisa Diisi</strong> (Senin, Selasa, Kamis, Jumat)
+                                        <strong>Tersedia</strong>
                                     </span>
                                     <span class="calendar-legend-item">
                                         <span class="calendar-legend-dot calendar-legend-dot--off"></span>
-                                        <span class="text-muted">Non-Layanan (Rabu & Akhir Pekan)</span>
+                                        <span class="text-muted">Non-Layanan</span>
                                     </span>
                                 </div>
 
@@ -449,6 +449,12 @@ document.addEventListener('DOMContentLoaded', function () {
         return num < 10 ? '0' + num : '' + num;
     }
 
+    function shortenText(str, maxLength = 14) {
+        if (!str) return 'Agenda';
+        str = str.trim();
+        return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+    }
+
     function renderCalendar() {
         if (!gridBodyEl || !monthTitleEl) return;
 
@@ -504,21 +510,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     eventsHtml += `
                         <div class="calendar-event-pill" data-schedule-id="${evt.id}" title="${evt.agenda || 'Pertemuan'}">
                             <span class="calendar-event-pill__time">${evt.shift}</span>
-                            <span>${evt.agenda || 'Pertemuan'}</span>
+                            <span class="calendar-event-pill__text">${shortenText(evt.agenda, 14)}</span>
                         </div>
                     `;
                 });
                 dotHtml = `<span class="calendar-cell__event-dot" title="${dayEvents.length} agenda"></span>`;
             } else if (isOperational) {
-                eventsHtml = `<span class="calendar-cell__status text-success d-none d-md-block mt-auto"><i class="fa-solid fa-check small me-1"></i>Bisa Diisi</span>`;
+                eventsHtml = `<span class="calendar-cell__status text-success d-none d-md-flex align-items-center gap-1 mt-auto" style="font-size:0.65rem; font-weight:600;"><i class="fa-solid fa-circle text-success" style="font-size:4px;"></i>Tersedia</span>`;
             } else {
-                eventsHtml = `<span class="calendar-cell__status text-muted d-none d-md-block mt-auto small">Non-Layanan</span>`;
+                eventsHtml = '';
             }
 
             cell.innerHTML = `
                 <div class="calendar-cell__header">
                     <span class="calendar-cell__number">${day}</span>
-                    ${dayEvents.length > 0 ? '<span class="badge bg-danger text-white rounded-pill d-none d-md-inline" style="font-size:0.62rem;">' + dayEvents.length + ' Agenda</span>' : ''}
                 </div>
                 ${dotHtml}
                 <div class="mt-1 flex-grow-1 d-flex flex-column justify-content-start overflow-hidden">
