@@ -285,4 +285,92 @@ class DashboardControllerTest extends TestCase
         $this->assertSame('Mahasiswa per Tahun', $dataset->fresh()->title);
         $this->assertSame('Mahasiswa', $dataset->fresh()->sheet_name);
     }
+
+    public function test_destroy_requires_authentication(): void
+    {
+        $dataset = DashboardDataset::create([
+            'title' => 'Jumlah Mahasiswa',
+            'slug' => 'jumlah-mahasiswa',
+            'sheet_name' => 'Sheet1',
+            'chart_type' => 'bar',
+            'x_label' => 'Tahun',
+            'y_label' => 'Jumlah',
+        ]);
+
+        $this->delete("/admin/dashboard/{$dataset->id}")
+            ->assertRedirect(route('admin.login'));
+    }
+
+    public function test_destroy_removes_single_dataset_and_its_items(): void
+    {
+        $dataset1 = DashboardDataset::create([
+            'title' => 'Dataset Satu',
+            'slug' => 'dataset-satu',
+            'sheet_name' => 'Sheet1',
+            'chart_type' => 'bar',
+            'x_label' => 'Tahun',
+            'y_label' => 'Jumlah',
+        ]);
+        DashboardDatasetItem::create(['dataset_id' => $dataset1->id, 'label' => 'Item 1', 'value' => 10, 'sort_order' => 1]);
+
+        $dataset2 = DashboardDataset::create([
+            'title' => 'Dataset Dua',
+            'slug' => 'dataset-dua',
+            'sheet_name' => 'Sheet1',
+            'chart_type' => 'line',
+            'x_label' => 'Tahun',
+            'y_label' => 'Jumlah',
+        ]);
+        DashboardDatasetItem::create(['dataset_id' => $dataset2->id, 'label' => 'Item 2', 'value' => 20, 'sort_order' => 1]);
+
+        $response = $this->actingAs($this->createAdminUser())
+            ->delete("/admin/dashboard/{$dataset1->id}");
+
+        $response->assertRedirect(route('admin.dashboard'));
+        $response->assertSessionHas('success', 'Chart berhasil dihapus.');
+
+        $this->assertDatabaseMissing('dashboard_datasets', ['id' => $dataset1->id]);
+        $this->assertDatabaseMissing('dashboard_dataset_items', ['dataset_id' => $dataset1->id]);
+        $this->assertDatabaseHas('dashboard_datasets', ['id' => $dataset2->id]);
+        $this->assertDatabaseHas('dashboard_dataset_items', ['dataset_id' => $dataset2->id]);
+    }
+
+    public function test_destroy_returns_json_when_requested(): void
+    {
+        $dataset = DashboardDataset::create([
+            'title' => 'Dataset Hapus JSON',
+            'slug' => 'dataset-hapus-json',
+            'sheet_name' => 'Sheet1',
+            'chart_type' => 'bar',
+            'x_label' => 'Tahun',
+            'y_label' => 'Jumlah',
+        ]);
+
+        $response = $this->actingAs($this->createAdminUser())
+            ->deleteJson("/admin/dashboard/{$dataset->id}");
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('success', true);
+        $response->assertJsonPath('message', 'Chart berhasil dihapus.');
+        $this->assertDatabaseMissing('dashboard_datasets', ['id' => $dataset->id]);
+    }
+
+    public function test_dashboard_page_renders_delete_button_and_modal(): void
+    {
+        $dataset = DashboardDataset::create([
+            'title' => 'Statistik Kelulusan',
+            'slug' => 'statistik-kelulusan',
+            'sheet_name' => 'Sheet1',
+            'chart_type' => 'bar',
+            'x_label' => 'Tahun',
+            'y_label' => 'Jumlah',
+        ]);
+        DashboardDatasetItem::create(['dataset_id' => $dataset->id, 'label' => '2024', 'value' => 50, 'sort_order' => 1]);
+
+        $response = $this->actingAs($this->createAdminUser())->get('/admin/dashboard');
+
+        $response->assertStatus(200);
+        $response->assertSee('confirmModal-' . $dataset->id);
+        $response->assertSee(route('admin.dashboard.destroy', ['id' => $dataset->id]));
+    }
 }

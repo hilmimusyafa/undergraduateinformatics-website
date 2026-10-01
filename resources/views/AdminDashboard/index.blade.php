@@ -16,6 +16,8 @@
             </div>
         </div>
 
+        @include('partials.Alerts')
+
         @if (! $dashboardTablesReady)
             <div class="empty-state modern-card">
                 <i class="fa-solid fa-database"></i>
@@ -34,7 +36,10 @@
                     <article class="chart-card">
                         <div class="chart-card__head">
                             <h3 class="chart-card__title">{{ $dataset['title'] }}</h3>
-                            <a class="chart-card__edit" href="{{ route('admin.dashboard.edit', ['id' => $dataset['id']]) }}" title="Edit" aria-label="Edit"><i class="fa-solid fa-pen"></i></a>
+                            <div class="chart-card__actions">
+                                <a class="chart-card__edit" href="{{ route('admin.dashboard.edit', ['id' => $dataset['id']]) }}" title="Edit" aria-label="Edit"><i class="fa-solid fa-pen"></i></a>
+                                <button type="button" class="chart-card__delete" data-bs-toggle="modal" data-bs-target="#confirmModal-{{ $dataset['id'] }}" title="Hapus" aria-label="Hapus"><i class="fa-solid fa-trash"></i></button>
+                            </div>
                         </div>
                         <div class="chart-canvas"><canvas id="chart-{{ $dataset['id'] }}"></canvas></div>
                         @if ($dataset['x_label'])
@@ -43,6 +48,30 @@
                     </article>
                 @endforeach
             </div>
+
+            @foreach ($datasets as $dataset)
+                <div class="modal fade" id="confirmModal-{{ $dataset['id'] }}" tabindex="-1" aria-labelledby="confirmModalLabel-{{ $dataset['id'] }}" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmModalLabel-{{ $dataset['id'] }}">Konfirmasi</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Apakah yakin menghapus chart <strong>{{ $dataset['title'] }}</strong>?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="modern-button modern-button--soft" data-bs-dismiss="modal">Batal</button>
+                                <form id="delete-form-{{ $dataset['id'] }}" action="{{ route('admin.dashboard.destroy', ['id' => $dataset['id']]) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="modern-button modern-button--primary">Hapus</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
         @endif
     </div>
 @endsection

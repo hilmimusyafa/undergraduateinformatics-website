@@ -281,8 +281,11 @@
 .chart-card { border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; padding: 24px; box-shadow: none; transition: box-shadow .18s ease, transform .18s ease; }
 .chart-card__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 18px; }
 .chart-card__title { flex: 1; margin: 0; color: #1f2937; font-size: 1rem; font-weight: 750; text-align: center; }
-.chart-card__edit { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; color: var(--admin-muted); cursor: pointer; font-size: .78rem; font-weight: 700; text-decoration: none; transition: border .18s ease, background .18s ease, color .18s ease; }
+.chart-card__actions { display: inline-flex; align-items: center; gap: 6px; }
+.chart-card__edit,
+.chart-card__delete { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; color: var(--admin-muted); cursor: pointer; font-size: .78rem; font-weight: 700; text-decoration: none; transition: border .18s ease, background .18s ease, color .18s ease; }
 .chart-card__edit:hover { border-color: #e5e7eb; background: #f3f4f6; color: #374151; }
+.chart-card__delete:hover { border-color: #fecaca; background: #fef2f2; color: #dc2626; }
 .chart-card__axis { margin: 14px 0 0; color: var(--admin-muted); font-size: .76rem; font-weight: 600; text-align: center; }
 .chart-canvas { aspect-ratio: 4 / 3; }
 .empty-state { display: grid; min-height: 300px; place-content: center; color: var(--admin-muted); text-align: center; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; box-shadow: none; }

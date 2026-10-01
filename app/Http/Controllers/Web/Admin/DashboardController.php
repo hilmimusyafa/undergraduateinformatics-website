@@ -192,6 +192,25 @@ class DashboardController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Chart berhasil diperbarui.');
     }
 
+    public function destroy($id)
+    {
+        $dataset = DashboardDataset::findOrFail($id);
+
+        DB::transaction(function () use ($dataset) {
+            $dataset->items()->delete();
+            $dataset->delete();
+        });
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Chart berhasil dihapus.',
+            ]);
+        }
+
+        return redirect()->route('admin.dashboard')->with('success', 'Chart berhasil dihapus.');
+    }
+
     private function uniqueSlug(string $title, array &$usedSlugs): string
     {
         $base = Str::slug($title) ?: 'chart';

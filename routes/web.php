@@ -83,6 +83,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('dashboard/store', [DashboardController::class, 'store'])->name('dashboard.store');
         Route::match(['POST', 'PUT'], 'dashboard/{id}/update', [DashboardController::class, 'update'])->name('dashboard.update');
         Route::delete('dashboard/cleardata', [DashboardController::class, 'cleardata'])->name('dashboard.cleardata');
+        Route::delete('dashboard/{id}', [DashboardController::class, 'destroy'])->name('dashboard.destroy');
         Route::get('reservation', function (Request $request) {
             $reservationTableReady = Schema::hasTable('reservation_schedules');
             $reservationDetailsReady = $reservationTableReady
