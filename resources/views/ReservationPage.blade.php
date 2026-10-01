@@ -31,19 +31,9 @@
                                 <span class="topic-mark"></span>
                                 <h2>Informasi Jadwal & Agenda Pertemuan</h2>
                             </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Pilihan Tampilan">
-                                    <button type="button" class="btn btn-outline-danger active" id="btnToggleCalendar">
-                                        <i class="fa-solid fa-calendar-days me-1"></i> Kalender
-                                    </button>
-                                    <button type="button" class="btn btn-outline-danger" id="btnToggleList">
-                                        <i class="fa-solid fa-list-check me-1"></i> Daftar
-                                    </button>
-                                </div>
-                                <a href="#reservation-form-block" class="view-more ms-2 d-none d-md-inline">
-                                    Isi Formulir Reservasi <i class="fa-solid fa-arrow-down ms-1"></i>
-                                </a>
-                            </div>
+                            <a href="#reservation-form-block" class="view-more">
+                                Isi Formulir Reservasi <i class="fa-solid fa-arrow-down ms-1"></i>
+                            </a>
                         </div>
 
                         {{-- Panduan Slot Waktu & Ketentuan Layanan --}}
@@ -95,7 +85,7 @@
                             </div>
                         </div>
 
-                        {{-- TAMPILAN 1: KALENDER INTERAKTIF --}}
+                        {{-- KALENDER INTERAKTIF AGENDA PERTEMUAN --}}
                         <div id="reservationCalendarSection" class="mt-4 pt-2 border-top">
                             <div class="reservation-calendar">
                                 <div class="calendar-topbar">
@@ -163,79 +153,6 @@
                             </div>
                         </div>
 
-                        {{-- TAMPILAN 2: DAFTAR AGENDA (TOGGLEABLE) --}}
-                        <div id="reservationListSection" class="mt-4 pt-2 border-top d-none">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3">
-                                <div>
-                                    <h4 class="fw-bold mb-1 text-dark">
-                                        <i class="fa-solid fa-list-check text-danger me-2"></i>Daftar Seluruh Agenda Pertemuan
-                                    </h4>
-                                    <p class="text-muted small mb-0">Klik pada salah satu agenda untuk melihat informasi lengkap pertemuan.</p>
-                                </div>
-                                @if (isset($schedules) && $schedules->isNotEmpty())
-                                    <span class="badge bg-secondary-subtle text-dark border px-3 py-2">
-                                        Total {{ $schedules->count() }} Agenda Terdata
-                                    </span>
-                                @endif
-                            </div>
-
-                            @if (isset($schedules) && $schedules->isNotEmpty())
-                                <div class="row g-3">
-                                    @foreach ($schedules as $schedule)
-                                        <div class="col-md-6 col-lg-4">
-                                            <div class="reservation-agenda-card" role="button" data-bs-toggle="modal" data-bs-target="#agendaDetailModal-{{ $schedule->id }}">
-                                                <div>
-                                                    <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
-                                                        <span class="reservation-agenda-card__date">
-                                                            <i class="fa-solid fa-calendar me-1"></i>{{ \Carbon\Carbon::parse($schedule->date)->translatedFormat('d M Y') }}
-                                                        </span>
-                                                        <span class="badge bg-danger text-white">
-                                                            <i class="fa-solid fa-clock me-1"></i>{{ substr($schedule->shift, 0, 5) }} WIB
-                                                        </span>
-                                                    </div>
-
-                                                    <h5 class="reservation-agenda-card__title" title="{{ $schedule->agenda }}">
-                                                        {{ $schedule->agenda ?: 'Pertemuan dengan Program Studi' }}
-                                                    </h5>
-
-                                                    <div class="reservation-agenda-card__meta">
-                                                        <i class="fa-solid fa-user"></i>
-                                                        <span class="text-dark fw-medium">{{ $schedule->requested_by }}</span>
-                                                    </div>
-
-                                                    @if ($schedule->study_program)
-                                                        <div class="reservation-agenda-card__meta">
-                                                            <i class="fa-solid fa-building-columns"></i>
-                                                            <span>{{ $schedule->study_program }}</span>
-                                                        </div>
-                                                    @endif
-
-                                                    <div class="reservation-agenda-card__meta">
-                                                        <i class="fa-solid fa-location-dot"></i>
-                                                        <span>{{ $schedule->meeting_room ?: 'Ruang Rapat Prodi' }}</span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="mt-3 pt-2 border-top">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#agendaDetailModal-{{ $schedule->id }}">
-                                                        <i class="fa-solid fa-circle-info me-1"></i> Lihat Info Lengkap
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="empty-state text-center p-4">
-                                    <i class="fa-regular fa-calendar-check text-danger mb-2" style="font-size: 2.2rem;"></i>
-                                    <h5 class="fw-bold text-dark">Belum Ada Agenda Pertemuan Terjadwal</h5>
-                                    <p class="text-muted small mb-3">Semua sesi pelayanan (09:00 WIB, 13:00 WIB, dan 15:00 WIB pada hari Senin, Selasa, Kamis, dan Jumat) saat ini berstatus <strong>Bisa Diisi</strong>.</p>
-                                    <a href="#reservation-form-block" class="btn btn-sm btn-danger">
-                                        <i class="fa-solid fa-calendar-plus me-1"></i> Ajukan Pertemuan Sekarang
-                                    </a>
-                                </div>
-                            @endif
-                        </div>
                     </div>
 
                     {{-- 2. FORMULIR RESERVASI PERTEMUAN (DITEMPATKAN DI BAWAH INFO JADWAL) --}}
@@ -423,27 +340,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const prevBtn = document.getElementById('calPrevBtn');
     const nextBtn = document.getElementById('calNextBtn');
     const todayBtn = document.getElementById('calTodayBtn');
-
-    const btnToggleCalendar = document.getElementById('btnToggleCalendar');
-    const btnToggleList = document.getElementById('btnToggleList');
-    const calendarSection = document.getElementById('reservationCalendarSection');
-    const listSection = document.getElementById('reservationListSection');
-
-    if (btnToggleCalendar && btnToggleList) {
-        btnToggleCalendar.addEventListener('click', function () {
-            btnToggleCalendar.classList.add('active');
-            btnToggleList.classList.remove('active');
-            if (calendarSection) calendarSection.classList.remove('d-none');
-            if (listSection) listSection.classList.add('d-none');
-        });
-
-        btnToggleList.addEventListener('click', function () {
-            btnToggleList.classList.add('active');
-            btnToggleCalendar.classList.remove('active');
-            if (listSection) listSection.classList.remove('d-none');
-            if (calendarSection) calendarSection.classList.add('d-none');
-        });
-    }
 
     function formatZero(num) {
         return num < 10 ? '0' + num : '' + num;
