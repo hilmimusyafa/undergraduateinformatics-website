@@ -31,15 +31,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('reservation.show') }}">Reservasi Pertemuan</a>
                 </li>
-                <li class="nav-item">
-                    <form method="GET" action="{{ route('posts.search') }}" class="d-flex" role="search">
-                        <input class="form-control me-2" name="search" type="search" placeholder="Cari"
-                            aria-label="Search">
+                <li class="nav-item d-flex align-items-center my-1 my-lg-0">
+                    <form method="GET" action="{{ route('posts.search') }}" class="d-flex navbar-search-form" role="search">
+                        <input class="form-control navbar-search-input me-lg-2" name="search" type="search" placeholder="Cari..."
+                            aria-label="Search" value="{{ request('search') }}">
                     </form>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ Auth::check() ? route('admin.dashboard') : route('admin.login') }}" class="btn-login">
-                        <span class="btn btn-light text-center">Admin</span>
+                <li class="nav-item d-flex align-items-center my-1 my-lg-0">
+                    <a href="{{ Auth::check() ? route('admin.dashboard') : route('admin.login') }}" class="btn-login navbar-btn-admin">
+                        Admin
                     </a>
                 </li>
             </ul>

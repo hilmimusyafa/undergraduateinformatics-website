@@ -43,22 +43,72 @@ body.public-layout {
     color: #991b1b;
 }
 
+.navbar .navbar-search-input,
+.navbar .navbar-btn-admin,
 .navbar .btn {
-    width: 78px;
-    padding: 9px 12px;
-    border: 0;
-    border-radius: 0;
-    background-color: #991b1b;
-    color: #ffffff;
-    font-size: .72rem;
-    font-weight: 800;
-    letter-spacing: .08em;
+    height: 38px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+    font-size: .82rem;
+    box-sizing: border-box;
+    transition: all .2s ease-in-out;
+}
+
+.navbar .navbar-search-form {
+    margin: 0;
+}
+
+.navbar .navbar-search-input {
+    width: 170px;
+    padding: 7px 14px;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.navbar .navbar-search-input:focus {
+    background-color: #ffffff;
+    border-color: #b91c1c;
+    box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.1);
+    color: #111827;
+    outline: none;
+}
+
+.navbar .navbar-search-input::placeholder {
+    color: #9ca3af;
+}
+
+.navbar .navbar-btn-admin,
+.navbar .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 80px;
+    padding: 7px 18px;
+    color: #374151;
+    font-weight: 700;
+    letter-spacing: .05em;
     text-transform: uppercase;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.navbar .navbar-btn-admin:hover,
+.navbar .navbar-btn-admin:focus,
+.navbar .btn:hover,
+.navbar .btn:focus {
+    background-color: #ffffff;
+    border-color: #b91c1c;
+    color: #991b1b;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    text-decoration: none;
 }
 
 .navbar .btn-login {
-    color: black;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
 }
 
 .navbar .fa-language {
@@ -726,6 +776,17 @@ body.public-layout {
 
     .search-form {
         grid-template-columns: 1fr;
+    }
+
+    .navbar .navbar-search-form,
+    .navbar .navbar-search-input {
+        width: 100%;
+    }
+
+    .navbar .btn-login,
+    .navbar .navbar-btn-admin,
+    .navbar .btn {
+        width: 100%;
     }
 }
 
