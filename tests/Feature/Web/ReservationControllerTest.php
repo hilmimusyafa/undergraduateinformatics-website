@@ -77,4 +77,15 @@ class ReservationControllerTest extends TestCase
         $response->assertSee('agendaDetailModal-' . $schedule->id);
         $response->assertSee('Detail Informasi Agenda Pertemuan');
     }
+
+    public function test_reservation_page_displays_calendar_component(): void
+    {
+        $response = $this->get('/reservation');
+
+        $response->assertStatus(200);
+        $response->assertSee('reservationCalendarSection');
+        $response->assertSee('calendarGridBody');
+        $response->assertSee('calMonthTitle');
+        $response->assertSee('calendarSelectedPanel');
+    }
 }
