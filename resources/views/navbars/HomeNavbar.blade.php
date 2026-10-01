@@ -23,21 +23,21 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('links.index') }}">Link Penting</a>
+                    <a class="nav-link {{ Route::is('links.*') ? 'active' : '' }}" href="{{ route('links.index') }}">Link Penting</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('feedback.show') }}">Masukan/Saran</a>
+                    <a class="nav-link {{ Route::is('feedback.*') ? 'active' : '' }}" href="{{ route('feedback.show') }}">Masukan/Saran</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('reservation.show') }}">Reservasi Pertemuan</a>
+                    <a class="nav-link {{ Route::is('reservation.*') ? 'active' : '' }}" href="{{ route('reservation.show') }}">Reservasi Pertemuan</a>
                 </li>
-                <li class="nav-item d-flex align-items-center my-1 my-lg-0">
+                <li class="nav-item d-flex align-items-center my-1 my-lg-0 navbar-item-search">
                     <form method="GET" action="{{ route('posts.search') }}" class="d-flex navbar-search-form" role="search">
                         <input class="form-control navbar-search-input me-lg-2" name="search" type="search" placeholder="Cari..."
                             aria-label="Search" value="{{ request('search') }}">
                     </form>
                 </li>
-                <li class="nav-item d-flex align-items-center my-1 my-lg-0">
+                <li class="nav-item d-flex align-items-center my-1 my-lg-0 navbar-item-admin">
                     <a href="{{ Auth::check() ? route('admin.dashboard') : route('admin.login') }}" class="btn-login navbar-btn-admin">
                         Admin
                     </a>
