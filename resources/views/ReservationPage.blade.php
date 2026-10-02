@@ -89,52 +89,95 @@
                         <div id="reservationCalendarSection" class="mt-4 pt-2 border-top">
                             <div class="reservation-calendar">
                                 <div class="calendar-topbar">
-                                    <div class="d-flex align-items-center gap-2">
-                                        <h3 id="calMonthTitle" class="calendar-month-title mb-0">Oktober 2026</h3>
-                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle ms-2" id="calEventCountBadge">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap">
+                                        <div class="btn-group btn-group-sm calendar-view-toggle" role="group" aria-label="Pilihan Tampilan Kalender">
+                                            <button type="button" class="btn btn-outline-danger active" id="calModeWeekBtn">
+                                                <i class="fa-solid fa-calendar-week me-1"></i> Kalender Mingguan
+                                            </button>
+                                            <button type="button" class="btn btn-outline-danger" id="calModeMonthBtn">
+                                                <i class="fa-solid fa-calendar-days me-1"></i> Preview Bulanan
+                                            </button>
+                                        </div>
+                                        <h3 id="calMonthTitle" class="calendar-month-title mb-0 ms-md-2">Oktober 2026</h3>
+                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle" id="calEventCountBadge">
                                             {{ isset($schedules) ? $schedules->count() : 0 }} Agenda
                                         </span>
                                     </div>
                                     <div class="d-flex align-items-center gap-1">
-                                        <button type="button" class="calendar-nav-btn" id="calPrevBtn" title="Bulan Sebelumnya">
+                                        <button type="button" class="calendar-nav-btn" id="calPrevBtn" title="Sebelumnya">
                                             <i class="fa-solid fa-chevron-left me-1"></i> Sebelumnya
                                         </button>
                                         <button type="button" class="calendar-nav-btn" id="calTodayBtn">
                                             Hari Ini
                                         </button>
-                                        <button type="button" class="calendar-nav-btn" id="calNextBtn" title="Bulan Berikutnya">
+                                        <button type="button" class="calendar-nav-btn" id="calNextBtn" title="Berikutnya">
                                             Berikutnya <i class="fa-solid fa-chevron-right ms-1"></i>
                                         </button>
                                     </div>
                                 </div>
 
-                                <div class="calendar-legend">
+                                {{-- Legend --}}
+                                <div class="calendar-legend" id="calendarLegend">
                                     <span class="calendar-legend-item">
                                         <span class="calendar-legend-dot calendar-legend-dot--event"></span>
-                                        <strong>Terjadwal</strong>
+                                        <strong id="legendEventText">Terjadwal</strong>
                                     </span>
-                                    <span class="calendar-legend-item">
+                                    <span class="calendar-legend-item" id="legendAvailableItem">
                                         <span class="calendar-legend-dot calendar-legend-dot--available"></span>
                                         <strong>Tersedia</strong>
                                     </span>
-                                    <span class="calendar-legend-item">
+                                    <span class="calendar-legend-item" id="legendOffItem">
                                         <span class="calendar-legend-dot calendar-legend-dot--off"></span>
                                         <span class="text-muted">Non-Layanan</span>
                                     </span>
                                 </div>
 
-                                <div class="calendar-grid mb-1">
-                                    <div class="calendar-grid-header">Senin</div>
-                                    <div class="calendar-grid-header">Selasa</div>
-                                    <div class="calendar-grid-header text-muted">Rabu</div>
-                                    <div class="calendar-grid-header">Kamis</div>
-                                    <div class="calendar-grid-header">Jumat</div>
-                                    <div class="calendar-grid-header text-muted">Sabtu</div>
-                                    <div class="calendar-grid-header text-muted">Minggu</div>
+                                {{-- TAMPILAN 1: KALENDER MINGGUAN (DEFAULT, SIMPLE & MINIMALIS) --}}
+                                <div id="calendarWeekContainer">
+                                    <div class="calendar-grid-wrapper">
+                                        <div class="calendar-grid mb-1">
+                                            <div class="calendar-grid-header">Senin</div>
+                                            <div class="calendar-grid-header">Selasa</div>
+                                            <div class="calendar-grid-header text-muted">Rabu</div>
+                                            <div class="calendar-grid-header">Kamis</div>
+                                            <div class="calendar-grid-header">Jumat</div>
+                                            <div class="calendar-grid-header text-muted">Sabtu</div>
+                                            <div class="calendar-grid-header text-muted">Minggu</div>
+                                        </div>
+
+                                        <div class="calendar-grid" id="calendarGridBody">
+                                            {{-- 7 kotak hari minggu ini di-render oleh script --}}
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="calendar-grid" id="calendarGridBody">
-                                    {{-- Kalender di-render oleh script di bawah --}}
+                                {{-- TAMPILAN 2: PREVIEW BULANAN DENGAN TITIK (MINIMALIS) --}}
+                                <div id="calendarMonthPreviewContainer" class="d-none">
+                                    <div class="alert alert-light border d-flex align-items-center justify-content-between flex-wrap gap-2 py-2 px-3 mb-3">
+                                        <div class="small text-muted">
+                                            <i class="fa-solid fa-circle-info text-danger me-1"></i>
+                                            <strong>Preview Bulanan:</strong> Klik pada tanggal untuk langsung membuka kalender minggu tersebut. Titik merah (<span class="calendar-legend-dot calendar-legend-dot--event d-inline-block" style="width:8px;height:8px;vertical-align:middle;"></span>) menandakan tanggal dengan agenda.
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-danger" id="btnBackToWeek">
+                                            <i class="fa-solid fa-calendar-week me-1"></i> Buka Kalender Mingguan
+                                        </button>
+                                    </div>
+
+                                    <div class="calendar-grid-wrapper">
+                                        <div class="calendar-grid mb-1">
+                                            <div class="calendar-grid-header">Sen</div>
+                                            <div class="calendar-grid-header">Sel</div>
+                                            <div class="calendar-grid-header text-muted">Rab</div>
+                                            <div class="calendar-grid-header">Kam</div>
+                                            <div class="calendar-grid-header">Jum</div>
+                                            <div class="calendar-grid-header text-muted">Sab</div>
+                                            <div class="calendar-grid-header text-muted">Min</div>
+                                        </div>
+
+                                        <div class="calendar-grid month-preview-grid" id="monthPreviewGridBody">
+                                            {{-- Grid bulanan dengan info titik di-render oleh script --}}
+                                        </div>
+                                    </div>
                                 </div>
 
                                 {{-- Panel Rincian Tanggal Terpilih --}}
@@ -318,7 +361,40 @@ document.addEventListener('DOMContentLoaded', function () {
         'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
         'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
     ];
+    const monthNamesShort = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+        'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
+    ];
     const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+
+    function formatZero(num) {
+        return num < 10 ? '0' + num : '' + num;
+    }
+
+    function toDateStr(d) {
+        return d.getFullYear() + '-' + formatZero(d.getMonth() + 1) + '-' + formatZero(d.getDate());
+    }
+
+    function getMonday(d) {
+        const date = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        const day = date.getDay();
+        const diff = (day === 0 ? -6 : 1) - day;
+        date.setDate(date.getDate() + diff);
+        date.setHours(0, 0, 0, 0);
+        return date;
+    }
+
+    function addDays(d, n) {
+        const res = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+        res.setDate(res.getDate() + n);
+        return res;
+    }
+
+    function shortenText(str, maxLength = 14) {
+        if (!str) return 'Agenda';
+        str = str.trim();
+        return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+    }
 
     let currentDate = new Date();
     if (schedules.length > 0) {
@@ -328,69 +404,117 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    let viewYear = currentDate.getFullYear();
-    let viewMonth = currentDate.getMonth();
-    let selectedDateStr = null;
+    let viewMode = 'week';
+    let currentWeekMonday = getMonday(currentDate);
+    let viewYear = currentWeekMonday.getFullYear();
+    let viewMonth = currentWeekMonday.getMonth();
+    let selectedDateStr = schedules.length > 0 ? schedules[0].date : toDateStr(currentDate);
 
     const monthTitleEl = document.getElementById('calMonthTitle');
+    const eventCountBadgeEl = document.getElementById('calEventCountBadge');
     const gridBodyEl = document.getElementById('calendarGridBody');
+    const monthPreviewGridEl = document.getElementById('monthPreviewGridBody');
+    const weekContainerEl = document.getElementById('calendarWeekContainer');
+    const monthContainerEl = document.getElementById('calendarMonthPreviewContainer');
     const selectedTitleEl = document.getElementById('selectedDateTitle');
     const selectedBadgeEl = document.getElementById('selectedDateBadge');
     const selectedContentEl = document.getElementById('selectedDateContent');
     const prevBtn = document.getElementById('calPrevBtn');
     const nextBtn = document.getElementById('calNextBtn');
     const todayBtn = document.getElementById('calTodayBtn');
+    const modeWeekBtn = document.getElementById('calModeWeekBtn');
+    const modeMonthBtn = document.getElementById('calModeMonthBtn');
+    const backToWeekBtn = document.getElementById('btnBackToWeek');
+    const legendAvailableItem = document.getElementById('legendAvailableItem');
+    const legendOffItem = document.getElementById('legendOffItem');
+    const legendEventText = document.getElementById('legendEventText');
 
-    function formatZero(num) {
-        return num < 10 ? '0' + num : '' + num;
+    function updateNavButtons() {
+        if (!prevBtn || !nextBtn || !todayBtn) return;
+        if (viewMode === 'week') {
+            prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left me-1"></i> Minggu Lalu';
+            prevBtn.title = 'Minggu Sebelumnya';
+            todayBtn.textContent = 'Minggu Ini';
+            nextBtn.innerHTML = 'Minggu Depan <i class="fa-solid fa-chevron-right ms-1"></i>';
+            nextBtn.title = 'Minggu Berikutnya';
+            if (legendAvailableItem) legendAvailableItem.classList.remove('d-none');
+            if (legendOffItem) legendOffItem.classList.remove('d-none');
+            if (legendEventText) legendEventText.textContent = 'Terjadwal';
+        } else {
+            prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left me-1"></i> Bulan Lalu';
+            prevBtn.title = 'Bulan Sebelumnya';
+            todayBtn.textContent = 'Bulan Ini';
+            nextBtn.innerHTML = 'Bulan Depan <i class="fa-solid fa-chevron-right ms-1"></i>';
+            nextBtn.title = 'Bulan Berikutnya';
+            if (legendAvailableItem) legendAvailableItem.classList.add('d-none');
+            if (legendOffItem) legendOffItem.classList.remove('d-none');
+            if (legendEventText) legendEventText.textContent = 'Ada Agenda (Titik)';
+        }
     }
 
-    function shortenText(str, maxLength = 14) {
-        if (!str) return 'Agenda';
-        str = str.trim();
-        return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+    function setViewMode(mode) {
+        viewMode = mode;
+        if (mode === 'week') {
+            if (modeWeekBtn) modeWeekBtn.classList.add('active');
+            if (modeMonthBtn) modeMonthBtn.classList.remove('active');
+            if (weekContainerEl) weekContainerEl.classList.remove('d-none');
+            if (monthContainerEl) monthContainerEl.classList.add('d-none');
+            updateNavButtons();
+            renderWeekView();
+        } else {
+            if (modeMonthBtn) modeMonthBtn.classList.add('active');
+            if (modeWeekBtn) modeWeekBtn.classList.remove('active');
+            if (weekContainerEl) weekContainerEl.classList.add('d-none');
+            if (monthContainerEl) monthContainerEl.classList.remove('d-none');
+            viewYear = currentWeekMonday.getFullYear();
+            viewMonth = currentWeekMonday.getMonth();
+            updateNavButtons();
+            renderMonthPreview();
+        }
     }
 
-    function renderCalendar() {
+    function renderWeekView() {
         if (!gridBodyEl || !monthTitleEl) return;
 
-        monthTitleEl.textContent = monthNames[viewMonth] + ' ' + viewYear;
-        gridBodyEl.innerHTML = '';
+        const sunday = addDays(currentWeekMonday, 6);
+        const monYear = currentWeekMonday.getFullYear();
+        const monMonth = currentWeekMonday.getMonth();
+        const sunYear = sunday.getFullYear();
+        const sunMonth = sunday.getMonth();
 
-        const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
-        const mondayStartIndex = (firstDayIndex + 6) % 7;
-
-        const totalDaysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
-        const totalDaysPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
-
-        const today = new Date();
-        const todayStr = today.getFullYear() + '-' + formatZero(today.getMonth() + 1) + '-' + formatZero(today.getDate());
-
-        for (let i = mondayStartIndex - 1; i >= 0; i--) {
-            const dayNum = totalDaysPrevMonth - i;
-            const cell = document.createElement('div');
-            cell.className = 'calendar-cell calendar-cell--muted';
-            cell.innerHTML = `
-                <div class="calendar-cell__header">
-                    <span class="calendar-cell__number">${dayNum}</span>
-                </div>
-            `;
-            gridBodyEl.appendChild(cell);
+        let weekTitle = '';
+        if (monYear === sunYear && monMonth === sunMonth) {
+            weekTitle = currentWeekMonday.getDate() + ' - ' + sunday.getDate() + ' ' + monthNames[monMonth] + ' ' + monYear;
+        } else if (monYear === sunYear) {
+            weekTitle = currentWeekMonday.getDate() + ' ' + monthNamesShort[monMonth] + ' - ' + sunday.getDate() + ' ' + monthNames[sunMonth] + ' ' + monYear;
+        } else {
+            weekTitle = currentWeekMonday.getDate() + ' ' + monthNamesShort[monMonth] + ' ' + monYear + ' - ' + sunday.getDate() + ' ' + monthNamesShort[sunMonth] + ' ' + sunYear;
         }
+        monthTitleEl.textContent = weekTitle;
 
-        for (let day = 1; day <= totalDaysInMonth; day++) {
-            const dateStr = viewYear + '-' + formatZero(viewMonth + 1) + '-' + formatZero(day);
-            const dateObj = new Date(viewYear, viewMonth, day);
-            const dayOfWeek = dateObj.getDay();
+        gridBodyEl.innerHTML = '';
+        const today = new Date();
+        const todayStr = toDateStr(today);
+
+        let weekEventsTotal = 0;
+        let weekDates = [];
+
+        for (let i = 0; i < 7; i++) {
+            const dayDate = addDays(currentWeekMonday, i);
+            const dateStr = toDateStr(dayDate);
+            weekDates.push(dateStr);
+
+            const dayNum = dayDate.getDate();
+            const dayOfWeek = dayDate.getDay();
             const isOperational = [1, 2, 4, 5].includes(dayOfWeek);
             const isToday = (dateStr === todayStr);
             const isSelected = (dateStr === selectedDateStr);
 
             const dayEvents = schedules.filter(s => s.date === dateStr);
+            weekEventsTotal += dayEvents.length;
 
             const cell = document.createElement('div');
-            let cellClasses = ['calendar-cell'];
-
+            let cellClasses = ['calendar-cell', 'calendar-cell--week'];
             if (isToday) cellClasses.push('calendar-cell--today');
             if (isSelected) cellClasses.push('calendar-cell--selected');
             if (!isOperational) cellClasses.push('calendar-cell--non-operational');
@@ -399,8 +523,6 @@ document.addEventListener('DOMContentLoaded', function () {
             cell.setAttribute('data-date', dateStr);
 
             let eventsHtml = '';
-            let dotHtml = '';
-
             if (dayEvents.length > 0) {
                 dayEvents.forEach(evt => {
                     eventsHtml += `
@@ -410,18 +532,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                     `;
                 });
-                dotHtml = `<span class="calendar-cell__event-dot" title="${dayEvents.length} agenda"></span>`;
             } else if (isOperational) {
-                eventsHtml = `<span class="calendar-cell__status text-success d-none d-md-flex align-items-center gap-1 mt-auto" style="font-size:0.65rem; font-weight:600;"><i class="fa-solid fa-circle text-success" style="font-size:4px;"></i>Tersedia</span>`;
+                eventsHtml = `<span class="calendar-cell__status text-success d-flex align-items-center gap-1 mt-auto" style="font-size:0.68rem; font-weight:600;"><i class="fa-solid fa-circle text-success" style="font-size:4px;"></i>Tersedia</span>`;
             } else {
-                eventsHtml = '';
+                eventsHtml = `<span class="calendar-cell__status text-muted mt-auto" style="font-size:0.68rem;">Non-Layanan</span>`;
             }
 
             cell.innerHTML = `
                 <div class="calendar-cell__header">
-                    <span class="calendar-cell__number">${day}</span>
+                    <span class="calendar-cell__number">${dayNum}</span>
+                    <span class="calendar-cell__dayname">${dayNames[dayOfWeek]}</span>
                 </div>
-                ${dotHtml}
                 <div class="mt-1 flex-grow-1 d-flex flex-column justify-content-start overflow-hidden">
                     ${eventsHtml}
                 </div>
@@ -442,18 +563,136 @@ document.addEventListener('DOMContentLoaded', function () {
             gridBodyEl.appendChild(cell);
         }
 
-        if (!selectedDateStr) {
-            const firstEventInMonth = schedules.find(s => s.date.startsWith(viewYear + '-' + formatZero(viewMonth + 1)));
-            if (firstEventInMonth) {
-                const parts = firstEventInMonth.date.split('-');
-                const dObj = new Date(parts[0], parts[1] - 1, parts[2]);
-                const dayEvents = schedules.filter(s => s.date === firstEventInMonth.date);
-                selectDate(firstEventInMonth.date, dObj.getDay(), dayEvents, [1, 2, 4, 5].includes(dObj.getDay()));
-            } else {
-                const dObj = new Date(viewYear, viewMonth, 1);
-                const firstDayStr = viewYear + '-' + formatZero(viewMonth + 1) + '-01';
-                selectDate(firstDayStr, dObj.getDay(), [], [1, 2, 4, 5].includes(dObj.getDay()));
+        if (eventCountBadgeEl) {
+            eventCountBadgeEl.textContent = weekEventsTotal + ' Agenda Minggu Ini';
+        }
+
+        if (!weekDates.includes(selectedDateStr)) {
+            const dayWithEvent = weekDates.find(d => schedules.some(s => s.date === d));
+            const targetDateStr = dayWithEvent || weekDates[0];
+            const p = targetDateStr.split('-');
+            const dObj = new Date(p[0], p[1] - 1, p[2]);
+            const dEvents = schedules.filter(s => s.date === targetDateStr);
+            selectDate(targetDateStr, dObj.getDay(), dEvents, [1, 2, 4, 5].includes(dObj.getDay()));
+        } else {
+            const p = selectedDateStr.split('-');
+            const dObj = new Date(p[0], p[1] - 1, p[2]);
+            const dEvents = schedules.filter(s => s.date === selectedDateStr);
+            selectDate(selectedDateStr, dObj.getDay(), dEvents, [1, 2, 4, 5].includes(dObj.getDay()));
+        }
+    }
+
+    function renderMonthPreview() {
+        if (!monthPreviewGridEl || !monthTitleEl) return;
+
+        monthTitleEl.textContent = monthNames[viewMonth] + ' ' + viewYear;
+        monthPreviewGridEl.innerHTML = '';
+
+        const firstDayIndex = new Date(viewYear, viewMonth, 1).getDay();
+        const mondayStartIndex = (firstDayIndex + 6) % 7;
+
+        const totalDaysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+        const totalDaysPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
+
+        const today = new Date();
+        const todayStr = toDateStr(today);
+
+        const currentWeekEnd = addDays(currentWeekMonday, 6);
+        const currentWeekMondayStr = toDateStr(currentWeekMonday);
+        const currentWeekSundayStr = toDateStr(currentWeekEnd);
+
+        let monthEventsTotal = 0;
+
+        for (let i = mondayStartIndex - 1; i >= 0; i--) {
+            const prevDayNum = totalDaysPrevMonth - i;
+            const prevMonthDate = new Date(viewYear, viewMonth - 1, prevDayNum);
+            const prevDateStr = toDateStr(prevMonthDate);
+
+            const cell = document.createElement('div');
+            cell.className = 'month-preview-cell month-preview-cell--muted';
+            cell.title = 'Buka minggu ' + prevDateStr;
+            cell.innerHTML = `
+                <span class="month-preview-cell__number">${prevDayNum}</span>
+                <div class="month-preview-dots"></div>
+            `;
+            cell.addEventListener('click', function () {
+                currentWeekMonday = getMonday(prevMonthDate);
+                selectedDateStr = prevDateStr;
+                setViewMode('week');
+            });
+            monthPreviewGridEl.appendChild(cell);
+        }
+
+        for (let day = 1; day <= totalDaysInMonth; day++) {
+            const dateObj = new Date(viewYear, viewMonth, day);
+            const dateStr = toDateStr(dateObj);
+            const dayOfWeek = dateObj.getDay();
+            const isOperational = [1, 2, 4, 5].includes(dayOfWeek);
+            const isToday = (dateStr === todayStr);
+            const isSelected = (dateStr === selectedDateStr);
+            const isCurrentWeek = (dateStr >= currentWeekMondayStr && dateStr <= currentWeekSundayStr);
+
+            const dayEvents = schedules.filter(s => s.date === dateStr);
+            monthEventsTotal += dayEvents.length;
+
+            const cell = document.createElement('div');
+            let cellClasses = ['month-preview-cell'];
+            if (isToday) cellClasses.push('calendar-cell--today');
+            if (isSelected) cellClasses.push('month-preview-cell--selected');
+            if (isCurrentWeek) cellClasses.push('month-preview-cell--active-week');
+            if (!isOperational) cellClasses.push('month-preview-cell--non-operational');
+
+            cell.className = cellClasses.join(' ');
+            cell.setAttribute('data-date', dateStr);
+            cell.title = dayNames[dayOfWeek] + ', ' + day + ' ' + monthNames[viewMonth] + ' (Klik untuk buka jadwal mingguan)';
+
+            let dotsHtml = '';
+            if (dayEvents.length > 0) {
+                const dotCount = Math.min(dayEvents.length, 3);
+                for (let k = 0; k < dotCount; k++) {
+                    dotsHtml += `<span class="month-preview-dot month-preview-dot--event"></span>`;
+                }
             }
+
+            cell.innerHTML = `
+                <span class="month-preview-cell__number">${day}</span>
+                <div class="month-preview-dots">
+                    ${dotsHtml}
+                </div>
+            `;
+
+            cell.addEventListener('click', function () {
+                currentWeekMonday = getMonday(dateObj);
+                selectedDateStr = dateStr;
+                setViewMode('week');
+            });
+
+            monthPreviewGridEl.appendChild(cell);
+        }
+
+        const totalRendered = mondayStartIndex + totalDaysInMonth;
+        const remainingCells = (7 - (totalRendered % 7)) % 7;
+        for (let nextDay = 1; nextDay <= remainingCells; nextDay++) {
+            const nextMonthDate = new Date(viewYear, viewMonth + 1, nextDay);
+            const nextDateStr = toDateStr(nextMonthDate);
+
+            const cell = document.createElement('div');
+            cell.className = 'month-preview-cell month-preview-cell--muted';
+            cell.title = 'Buka minggu ' + nextDateStr;
+            cell.innerHTML = `
+                <span class="month-preview-cell__number">${nextDay}</span>
+                <div class="month-preview-dots"></div>
+            `;
+            cell.addEventListener('click', function () {
+                currentWeekMonday = getMonday(nextMonthDate);
+                selectedDateStr = nextDateStr;
+                setViewMode('week');
+            });
+            monthPreviewGridEl.appendChild(cell);
+        }
+
+        if (eventCountBadgeEl) {
+            eventCountBadgeEl.textContent = monthEventsTotal + ' Agenda Bulan Ini';
         }
     }
 
@@ -560,41 +799,72 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.openAgendaModal = openAgendaModal;
 
+    if (modeWeekBtn) {
+        modeWeekBtn.addEventListener('click', function () {
+            setViewMode('week');
+        });
+    }
+
+    if (modeMonthBtn) {
+        modeMonthBtn.addEventListener('click', function () {
+            setViewMode('month');
+        });
+    }
+
+    if (backToWeekBtn) {
+        backToWeekBtn.addEventListener('click', function () {
+            setViewMode('week');
+        });
+    }
+
     if (prevBtn) {
         prevBtn.addEventListener('click', function () {
-            viewMonth--;
-            if (viewMonth < 0) {
-                viewMonth = 11;
-                viewYear--;
+            if (viewMode === 'week') {
+                currentWeekMonday = addDays(currentWeekMonday, -7);
+                renderWeekView();
+            } else {
+                viewMonth--;
+                if (viewMonth < 0) {
+                    viewMonth = 11;
+                    viewYear--;
+                }
+                renderMonthPreview();
             }
-            selectedDateStr = null;
-            renderCalendar();
         });
     }
 
     if (nextBtn) {
         nextBtn.addEventListener('click', function () {
-            viewMonth++;
-            if (viewMonth > 11) {
-                viewMonth = 0;
-                viewYear++;
+            if (viewMode === 'week') {
+                currentWeekMonday = addDays(currentWeekMonday, 7);
+                renderWeekView();
+            } else {
+                viewMonth++;
+                if (viewMonth > 11) {
+                    viewMonth = 0;
+                    viewYear++;
+                }
+                renderMonthPreview();
             }
-            selectedDateStr = null;
-            renderCalendar();
         });
     }
 
     if (todayBtn) {
         todayBtn.addEventListener('click', function () {
             const now = new Date();
-            viewYear = now.getFullYear();
-            viewMonth = now.getMonth();
-            selectedDateStr = null;
-            renderCalendar();
+            if (viewMode === 'week') {
+                currentWeekMonday = getMonday(now);
+                selectedDateStr = toDateStr(now);
+                renderWeekView();
+            } else {
+                viewYear = now.getFullYear();
+                viewMonth = now.getMonth();
+                renderMonthPreview();
+            }
         });
     }
 
-    renderCalendar();
+    setViewMode('week');
 });
 </script>
 @endpush

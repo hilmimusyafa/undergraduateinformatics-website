@@ -88,4 +88,18 @@ class ReservationControllerTest extends TestCase
         $response->assertSee('calMonthTitle');
         $response->assertSee('calendarSelectedPanel');
     }
+
+    public function test_reservation_page_displays_weekly_calendar_and_monthly_preview_toggle(): void
+    {
+        $response = $this->get('/reservation');
+
+        $response->assertStatus(200);
+        $response->assertSee('calModeWeekBtn');
+        $response->assertSee('calModeMonthBtn');
+        $response->assertSee('calendarWeekContainer');
+        $response->assertSee('calendarMonthPreviewContainer');
+        $response->assertSee('monthPreviewGridBody');
+        $response->assertSee('Kalender Mingguan');
+        $response->assertSee('Preview Bulanan');
+    }
 }

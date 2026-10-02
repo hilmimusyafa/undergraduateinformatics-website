@@ -1776,10 +1776,122 @@ html {
     margin-top: 20px;
 }
 
+/* Responsive Grid Wrapper */
+.calendar-grid-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Week View Cell Styling */
+.calendar-cell--week {
+    min-height: 95px;
+    padding: 8px 10px;
+}
+
+.calendar-cell__dayname {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: capitalize;
+}
+
+/* Month Preview Grid & Cells (Dot-based minimal preview) */
+.month-preview-grid {
+    gap: 6px;
+}
+
+.month-preview-cell {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    min-height: 52px;
+    padding: 6px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+    position: relative;
+}
+
+.month-preview-cell:hover {
+    border-color: #991b1b;
+    background: #fef2f2;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(153, 27, 27, 0.08);
+}
+
+.month-preview-cell--muted {
+    background: #f9fafb;
+    color: #9ca3af;
+    opacity: 0.45;
+}
+
+.month-preview-cell--active-week {
+    background: #fff5f5;
+    border-color: #fca5a5;
+}
+
+.month-preview-cell--selected {
+    border-color: #991b1b !important;
+    background: #fee2e2 !important;
+    box-shadow: 0 0 0 2px rgba(153, 27, 27, 0.2);
+}
+
+.month-preview-cell--non-operational {
+    background: #f8fafc;
+}
+
+.month-preview-cell__number {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1f2937;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.month-preview-cell--today .month-preview-cell__number {
+    background: #f59e0b;
+    color: #ffffff;
+}
+
+.month-preview-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 8px;
+}
+
+.month-preview-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #991b1b;
+    display: inline-block;
+}
+
+.calendar-view-toggle .btn {
+    font-weight: 700;
+    font-size: 0.8rem;
+    padding: 5px 12px;
+}
+
 @media (max-width: 767px) {
     .calendar-cell {
         min-height: 60px;
         padding: 4px;
+    }
+
+    .calendar-cell--week {
+        min-height: 70px;
     }
 
     .calendar-event-pill {
