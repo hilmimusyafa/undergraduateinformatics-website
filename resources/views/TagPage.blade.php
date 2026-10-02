@@ -25,7 +25,6 @@
             <div class="topic-block">
                 <div class="topic-header">
                     <a href="#">
-                        <span class="topic-mark"></span>
                         <h2>{{ $tag ? 'List Informasi' : 'Kategori Tersedia' }}</h2>
                     </a>
                 </div>

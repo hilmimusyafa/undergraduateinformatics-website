@@ -1153,14 +1153,7 @@ body.public-layout {
 }
 
 .topic-mark {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #e11d48;
-    margin-right: 12px;
-    vertical-align: middle;
-    flex-shrink: 0;
+    display: none !important;
 }
 
 .topic-header .section-number {

@@ -28,7 +28,6 @@
                     <div class="topic-block mb-4" id="reservation-schedule-block">
                         <div class="topic-header">
                             <div class="topic-header__title-wrap">
-                                <span class="topic-mark"></span>
                                 <h2>Informasi Jadwal & Agenda Pertemuan</h2>
                             </div>
                             <a href="#reservation-form-block" class="view-more">
@@ -119,7 +118,6 @@
                     <div class="topic-block" id="reservation-form-block">
                         <div class="topic-header">
                             <div class="topic-header__title-wrap">
-                                <span class="topic-mark"></span>
                                 <h2>Formulir Pengajuan Reservasi</h2>
                             </div>
                             <a href="#reservation-schedule-block" class="view-more">

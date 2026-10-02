@@ -88,7 +88,6 @@
             <div class="topic-block">
                 <div class="topic-header">
                     <a href="#">
-                        <span class="topic-mark"></span>
                         <h2>Hasil Pencarian</h2>
                     </a>
                 </div>
