@@ -69,9 +69,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle" id="calEventCountBadge">
-                                            {{ isset($schedules) ? $schedules->count() : 0 }} Agenda
-                                        </span>
                                     </div>
                                     <div class="d-flex align-items-center gap-1">
                                         <button type="button" class="calendar-nav-btn" id="calPrevBtn" title="Minggu Sebelumnya">
@@ -330,7 +327,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let selectedDateStr = schedules.length > 0 ? schedules[0].date : toDateStr(currentDate);
 
     const monthTitleEl = document.getElementById('calMonthTitle');
-    const eventCountBadgeEl = document.getElementById('calEventCountBadge');
     const gridBodyEl = document.getElementById('calendarGridBody');
     const monthPickerBtn = document.getElementById('calMonthPickerBtn');
     const popoverMonthYearTitle = document.getElementById('popoverMonthYearTitle');
@@ -456,10 +452,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             gridBodyEl.appendChild(dayCol);
-        }
-
-        if (eventCountBadgeEl) {
-            eventCountBadgeEl.textContent = weekEventsTotal + ' Agenda Minggu Ini';
         }
 
         if (!weekDates.includes(selectedDateStr)) {

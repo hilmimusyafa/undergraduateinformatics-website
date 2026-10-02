@@ -88,6 +88,8 @@ class ReservationControllerTest extends TestCase
         $response->assertSee('calMonthTitle');
         $response->assertDontSee('calendarSelectedPanel');
         $response->assertDontSee('Tanggal Terpilih');
+        $response->assertDontSee('calEventCountBadge');
+        $response->assertDontSee('Agenda Minggu Ini');
     }
 
     public function test_reservation_page_displays_weekly_calendar_with_fixed_slots_and_month_preview_dropdown(): void
