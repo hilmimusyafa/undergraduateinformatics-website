@@ -30,16 +30,27 @@
 }
 
 .admin-auth .alert {
+    position: fixed !important;
+    top: 24px !important;
+    right: 24px !important;
+    z-index: 9999 !important;
     width: auto;
     width: fit-content;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 18px;
+    max-width: min(480px, calc(100vw - 48px));
+    margin: 0;
     border-radius: 12px;
     font-size: .88rem;
-    padding: 10px 16px;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    padding: 12px 18px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08);
+    animation: admin-toast-in .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@media (max-width: 768px) {
+    .admin-auth .alert {
+        top: 16px !important;
+        right: 16px !important;
+        max-width: calc(100vw - 32px);
+    }
 }
 
 .admin-auth .alert-success {
@@ -130,8 +141,30 @@
 
 .admin-auth .admin-toast--hidden {
     opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-12px) scale(0.96);
     transition: opacity .25s ease-in, transform .25s ease-in;
+}
+
+@keyframes admin-toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes admin-toast-out {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+    }
 }
 
 .auth-shell {

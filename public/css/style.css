@@ -2279,3 +2279,28 @@ html {
         padding: 6px 7px;
     }
 }
+
+.admin-toast {
+    animation: admin-toast-in .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+@keyframes admin-toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+@keyframes admin-toast-out {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+    }
+}
