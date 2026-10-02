@@ -251,12 +251,7 @@
                             <a href="{{ $schedule->document_link ?: route('reservation.berita-acara', $schedule->id) }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger btn-sm">
                                 <i class="fa-solid fa-file-pdf me-1"></i> Surat Berita Acara
                             </a>
-                            <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
-                                <a href="#reservation-form-block" class="btn btn-danger btn-sm" data-bs-dismiss="modal">
-                                    <i class="fa-solid fa-calendar-plus me-1"></i> Ajukan Jadwal di Sesi Lain
-                                </a>
-                            </div>
+                            <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
                         </div>
                     </div>
                 </div>
