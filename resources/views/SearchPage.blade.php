@@ -25,25 +25,62 @@
         <div class="container-fluid">
             <div class="topic-block search-panel">
                 <form method="GET" action="{{ route('posts.search') }}" class="search-form">
-                    <div class="search-field">
-                        <label for="search" class="form-label">Kata kunci</label>
-                        <input id="search" class="form-control" name="search" type="search" value="{{ $search }}" placeholder="Cari judul, subtitle, atau isi artikel">
-                    </div>
-
-                    <div class="search-field checkbox-field">
-                        <label class="form-label">Filter tag</label>
-                        <div class="checkbox-group">
-                            @foreach ($tags as $tag)
-                                <label class="check-option">
-                                    <input type="checkbox" name="tags[]" value="{{ $tag->id }}" {{ in_array($tag->id, $tags_search->pluck('id')->toArray(), true) ? 'checked' : '' }}>
-                                    <span>{{ $tag->name }}</span>
-                                </label>
-                            @endforeach
+                    <div class="search-input-wrapper">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label for="search" class="search-field-label">
+                                <i class="fa-solid fa-magnifying-glass text-danger"></i>
+                                <span>Kata Kunci</span>
+                            </label>
+                            @if ($search !== '' || ! $tags_search->isEmpty())
+                                <a href="{{ route('posts.search') }}" class="search-reset-link">
+                                    <i class="fa-solid fa-rotate-left"></i>
+                                    <span>Reset Filter</span>
+                                </a>
+                            @endif
+                        </div>
+                        <div class="search-input-group">
+                            <div class="search-input-inner">
+                                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                <input id="search" class="form-control" name="search" type="search" value="{{ $search }}" placeholder="Cari judul, subtitle, atau isi artikel..." autocomplete="off">
+                            </div>
+                            <button type="submit" class="btn search-btn search-button">
+                                <i class="fa-solid fa-magnifying-glass me-1"></i> Cari
+                            </button>
                         </div>
                     </div>
 
-                    <div class="search-action">
-                        <button type="submit" class="btn btn-primary search-button">Cari</button>
+                    <div class="filter-tag-wrapper">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <label class="search-field-label">
+                                    <i class="fa-solid fa-tags text-danger"></i>
+                                    <span>Filter Tag</span>
+                                </label>
+                                @if (! $tags_search->isEmpty())
+                                    <span class="badge bg-danger text-white rounded-pill px-2 py-1 font-monospace" style="font-size: 0.72rem;">
+                                        {{ $tags_search->count() }} dipilih
+                                    </span>
+                                @endif
+                            </div>
+                            <small class="text-muted d-none d-sm-inline" style="font-size: 0.78rem;">Pilih tag untuk menyaring hasil</small>
+                        </div>
+
+                        <div class="tag-filter-container checkbox-group">
+                            <div class="tag-filter-group">
+                                @foreach ($tags as $tag)
+                                    @php
+                                        $isChecked = in_array($tag->id, $tags_search->pluck('id')->toArray(), true);
+                                    @endphp
+                                    <label class="tag-filter-chip check-option {{ $isChecked ? 'is-active' : '' }}" for="tag-{{ $tag->id }}">
+                                        <input type="checkbox" id="tag-{{ $tag->id }}" name="tags[]" value="{{ $tag->id }}" {{ $isChecked ? 'checked' : '' }} class="tag-filter-chip__input">
+                                        <span class="tag-filter-chip__check">
+                                            <i class="fa-solid fa-check"></i>
+                                        </span>
+                                        <span class="tag-filter-chip__text">{{ $tag->name }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -101,3 +138,19 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const chipInputs = document.querySelectorAll('.tag-filter-chip__input');
+    chipInputs.forEach(function (input) {
+        input.addEventListener('change', function () {
+            const chip = this.closest('.tag-filter-chip');
+            if (chip) {
+                chip.classList.toggle('is-active', this.checked);
+            }
+        });
+    });
+});
+</script>
+@endpush

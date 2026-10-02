@@ -206,4 +206,18 @@ class SearchControllerTest extends TestCase
         $response->assertSee('Pendaftaran Beasiswa 2026');
         $response->assertSee('Periode baru dibuka');
     }
+
+    public function test_web_search_renders_tag_filter_chips_and_active_states(): void
+    {
+        $tag = \App\Models\Tag::create(['name' => 'Akademik', 'slug' => 'akademik']);
+
+        $response = $this->get('/posts/search?tags[]=' . $tag->id);
+
+        $response->assertStatus(200);
+        $response->assertSee('Filter Tag');
+        $response->assertSee('tag-filter-chip');
+        $response->assertSee('is-active');
+        $response->assertSee('1 dipilih');
+        $response->assertSee('Reset Filter');
+    }
 }
