@@ -11,11 +11,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest">
     <link href="/css/fonts/figtree.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/admin.css">
-    <script src="/vendor/ckeditor/ckeditor.js"></script>
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/css/admin.css?v={{ file_exists(public_path('css/admin.css')) ? filemtime(public_path('css/admin.css')) : '1.0' }}">
+    <script src="/vendor/ckeditor/ckeditor.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body class="admin-app">
