@@ -49,9 +49,9 @@ class ReservationControllerTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Informasi Jadwal & Agenda Pertemuan', false);
-        $response->assertSee('Hari Pelayanan');
-        $response->assertSee('Pilihan Sesi Pertemuan');
-        $response->assertSee('Status Ketersediaan Slot');
+        $response->assertDontSee('Hari Pelayanan');
+        $response->assertDontSee('Pilihan Sesi Pertemuan');
+        $response->assertDontSee('Status Ketersediaan Slot');
         $response->assertSee('Formulir Pengajuan Reservasi');
     }
 
@@ -86,7 +86,8 @@ class ReservationControllerTest extends TestCase
         $response->assertSee('reservationCalendarSection');
         $response->assertSee('calendarGridBody');
         $response->assertSee('calMonthTitle');
-        $response->assertSee('calendarSelectedPanel');
+        $response->assertDontSee('calendarSelectedPanel');
+        $response->assertDontSee('Tanggal Terpilih');
     }
 
     public function test_reservation_page_displays_weekly_calendar_with_fixed_slots_and_month_preview_dropdown(): void

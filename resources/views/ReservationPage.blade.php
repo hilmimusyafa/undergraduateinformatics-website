@@ -36,57 +36,8 @@
                             </a>
                         </div>
 
-                        {{-- Panduan Slot Waktu & Ketentuan Layanan --}}
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-4">
-                                <div class="reservation-info-tile">
-                                    <div>
-                                        <div class="reservation-info-tile__icon">
-                                            <i class="fa-solid fa-calendar-day"></i>
-                                        </div>
-                                        <h5 class="fw-bold mb-1">Hari Pelayanan</h5>
-                                        <p class="text-muted small mb-2">Jadwal reservasi terbuka untuk hari kerja akademik:</p>
-                                        <div class="fw-semibold text-danger">Senin, Selasa, Kamis, Jumat</div>
-                                    </div>
-                                    <small class="text-secondary mt-2"><i class="fa-solid fa-circle-info me-1"></i>Rabu & akhir pekan tidak tersedia</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="reservation-info-tile">
-                                    <div>
-                                        <div class="reservation-info-tile__icon">
-                                            <i class="fa-solid fa-clock"></i>
-                                        </div>
-                                        <h5 class="fw-bold mb-1">Pilihan Sesi Pertemuan</h5>
-                                        <p class="text-muted small mb-2">Slot waktu yang dapat diajukan (durasi ~2 jam):</p>
-                                        <div class="d-flex flex-wrap gap-1">
-                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Sesi 1: 09:00 WIB</span>
-                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Sesi 2: 13:00 WIB</span>
-                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Sesi 3: 15:00 WIB</span>
-                                        </div>
-                                    </div>
-                                    <small class="text-secondary mt-2"><i class="fa-solid fa-users-viewfinder me-1"></i>1 agenda pertemuan per sesi</small>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="reservation-info-tile">
-                                    <div>
-                                        <div class="reservation-info-tile__icon">
-                                            <i class="fa-solid fa-clipboard-check"></i>
-                                        </div>
-                                        <h5 class="fw-bold mb-1">Status Ketersediaan Slot</h5>
-                                        <p class="text-muted small mb-2">Sesi yang belum terisi pada agenda di bawah berstatus <strong>Bisa Diisi</strong>.</p>
-                                        <a href="#reservation-form-block" class="btn btn-sm btn-outline-danger w-100">
-                                            <i class="fa-solid fa-pen-to-square me-1"></i> Ajukan Jadwal di Bawah
-                                        </a>
-                                    </div>
-                                    <small class="text-success mt-2"><i class="fa-solid fa-circle-check me-1"></i>Pilih sesi kosong untuk mempercepat persetujuan</small>
-                                </div>
-                            </div>
-                        </div>
-
                         {{-- KALENDER INTERAKTIF AGENDA PERTEMUAN (SLOT FIX & PREVIEW BULANAN MINIMALIS) --}}
-                        <div id="reservationCalendarSection" class="mt-4 pt-2 border-top">
+                        <div id="reservationCalendarSection" class="mt-3">
                             <div class="reservation-calendar">
                                 <div class="calendar-topbar">
                                     <div class="d-flex align-items-center gap-2 flex-wrap">
@@ -150,7 +101,7 @@
                                         <span class="text-muted">Non-Layanan (Rabu & Akhir Pekan)</span>
                                     </span>
                                     <span class="calendar-legend-item d-none d-md-inline-flex ms-auto text-muted small">
-                                        <i class="fa-solid fa-clock me-1 text-danger"></i> Slot Sesi: 09:00 | 13:00 | 15:00 WIB
+                                        <i class="fa-solid fa-clock me-1 text-danger"></i> Sesi Tetap: 09:00 WIB | 13:00 WIB | 15:00 WIB
                                     </span>
                                 </div>
 
@@ -160,20 +111,6 @@
                                         <div class="calendar-week-grid" id="calendarGridBody">
                                             {{-- 7 kolom hari dengan slot tetap 09:00, 13:00, 15:00 dirender oleh script --}}
                                         </div>
-                                    </div>
-                                </div>
-
-                                {{-- Panel Rincian Tanggal Terpilih --}}
-                                <div class="calendar-selected-panel mt-3" id="calendarSelectedPanel">
-                                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2 pb-2 border-bottom">
-                                        <div>
-                                            <span class="text-danger small fw-bold text-uppercase"><i class="fa-solid fa-calendar-day me-1"></i> Tanggal Terpilih</span>
-                                            <h5 class="fw-bold text-dark mb-0" id="selectedDateTitle">Pilih tanggal pada kalender</h5>
-                                        </div>
-                                        <div id="selectedDateBadge"></div>
-                                    </div>
-                                    <div id="selectedDateContent">
-                                        <p class="text-muted small mb-0">Klik pada salah satu tanggal atau slot sesi di kalender di atas untuk melihat rincian agenda atau ketersediaan sesi pada hari tersebut.</p>
                                     </div>
                                 </div>
                             </div>
@@ -401,9 +338,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const popoverNextMonthBtn = document.getElementById('popoverNextMonthBtn');
     const popoverTodayBtn = document.getElementById('popoverTodayBtn');
     const monthPreviewGridEl = document.getElementById('monthPreviewGridBody');
-    const selectedTitleEl = document.getElementById('selectedDateTitle');
-    const selectedBadgeEl = document.getElementById('selectedDateBadge');
-    const selectedContentEl = document.getElementById('selectedDateContent');
     const prevBtn = document.getElementById('calPrevBtn');
     const nextBtn = document.getElementById('calNextBtn');
     const todayBtn = document.getElementById('calTodayBtn');
@@ -509,8 +443,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (bookedSlot) {
                     const schedId = bookedSlot.getAttribute('data-schedule-id');
                     openAgendaModal(schedId);
+                } else {
+                    const availSlot = e.target.closest('.calendar-slot--available');
+                    if (availSlot) {
+                        const formEl = document.getElementById('reservation-form-block');
+                        if (formEl) {
+                            formEl.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    }
                 }
-                selectDate(dateStr, dayOfWeek, dayEvents, isOperational);
+                selectDate(dateStr);
             });
 
             gridBodyEl.appendChild(dayCol);
@@ -523,15 +465,9 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!weekDates.includes(selectedDateStr)) {
             const dayWithEvent = weekDates.find(d => schedules.some(s => s.date === d));
             const targetDateStr = dayWithEvent || weekDates[0];
-            const p = targetDateStr.split('-');
-            const dObj = new Date(p[0], p[1] - 1, p[2]);
-            const dEvents = schedules.filter(s => s.date === targetDateStr);
-            selectDate(targetDateStr, dObj.getDay(), dEvents, [1, 2, 4, 5].includes(dObj.getDay()));
+            selectDate(targetDateStr);
         } else {
-            const p = selectedDateStr.split('-');
-            const dObj = new Date(p[0], p[1] - 1, p[2]);
-            const dEvents = schedules.filter(s => s.date === selectedDateStr);
-            selectDate(selectedDateStr, dObj.getDay(), dEvents, [1, 2, 4, 5].includes(dObj.getDay()));
+            selectDate(selectedDateStr);
         }
 
         renderMonthPreviewDropdown();
@@ -649,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    function selectDate(dateStr, dayOfWeek, dayEvents, isOperational) {
+    function selectDate(dateStr) {
         selectedDateStr = dateStr;
 
         document.querySelectorAll('.calendar-day-col').forEach(c => {
@@ -659,87 +595,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 c.classList.remove('calendar-day-col--selected');
             }
         });
-
-        const parts = dateStr.split('-');
-        const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
-        const dayName = dayNames[dateObj.getDay()];
-        const monthName = monthNames[dateObj.getMonth()];
-        const formattedDate = dayName + ', ' + parseInt(parts[2], 10) + ' ' + monthName + ' ' + parts[0];
-
-        if (selectedTitleEl) selectedTitleEl.textContent = formattedDate;
-
-        if (selectedBadgeEl) {
-            if (!isOperational) {
-                selectedBadgeEl.innerHTML = '<span class="badge bg-secondary">Hari Non-Pelayanan</span>';
-            } else if (dayEvents.length > 0) {
-                selectedBadgeEl.innerHTML = '<span class="badge bg-danger">' + dayEvents.length + ' Agenda Terjadwal</span>';
-            } else {
-                selectedBadgeEl.innerHTML = '<span class="badge bg-success">Slot Tersedia (Bisa Diisi)</span>';
-            }
-        }
-
-        if (selectedContentEl) {
-            let html = '';
-
-            if (dayEvents.length > 0) {
-                html += '<div class="row g-2 mb-3">';
-                dayEvents.forEach(evt => {
-                    html += `
-                        <div class="col-md-6">
-                            <div class="card h-100 border p-3 rounded-3 shadow-sm bg-white">
-                                <div class="d-flex align-items-center justify-content-between mb-2">
-                                    <span class="badge bg-danger text-white"><i class="fa-solid fa-clock me-1"></i>${evt.shift} WIB</span>
-                                    <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i>${evt.meeting_room || 'Ruang Prodi'}</small>
-                                </div>
-                                <h6 class="fw-bold text-dark mb-1">${evt.agenda || 'Pertemuan'}</h6>
-                                <p class="text-muted small mb-2"><i class="fa-solid fa-user me-1"></i>${evt.requested_by} ${evt.study_program ? '(' + evt.study_program + ')' : ''}</p>
-                                <button type="button" class="btn btn-sm btn-outline-danger mt-auto" onclick="window.openAgendaModal(${evt.id})">
-                                    <i class="fa-solid fa-circle-info me-1"></i> Lihat Info Lengkap
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-
-                const occupiedShifts = dayEvents.map(e => e.shift);
-                const freeShifts = allowedShifts.filter(s => !occupiedShifts.includes(s));
-                if (freeShifts.length > 0 && isOperational) {
-                    html += `
-                        <div class="alert alert-success d-flex align-items-center justify-content-between flex-wrap gap-2 mb-0 py-2 px-3">
-                            <div>
-                                <i class="fa-solid fa-circle-check text-success me-1"></i>
-                                <strong>Sesi lain yang masih bisa diisi:</strong> ${freeShifts.map(s => s + ' WIB').join(', ')}
-                            </div>
-                            <a href="#reservation-form-block" class="btn btn-sm btn-success">
-                                <i class="fa-solid fa-pen-to-square me-1"></i> Isi Form untuk Sesi Ini
-                            </a>
-                        </div>
-                    `;
-                }
-            } else if (isOperational) {
-                html += `
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-3 p-3 bg-white border rounded-3">
-                        <div>
-                            <h6 class="fw-bold text-success mb-1"><i class="fa-solid fa-calendar-check me-2"></i>Semua Sesi Tersedia (Bisa Diisi)</h6>
-                            <p class="text-muted small mb-0">Pada tanggal ini tersedia Sesi 1 (09:00 WIB), Sesi 2 (13:00 WIB), dan Sesi 3 (15:00 WIB).</p>
-                        </div>
-                        <a href="#reservation-form-block" class="btn btn-sm btn-danger">
-                            <i class="fa-solid fa-calendar-plus me-1"></i> Ajukan Jadwal di Tanggal Ini
-                        </a>
-                    </div>
-                `;
-            } else {
-                html += `
-                    <div class="p-3 bg-white border rounded-3 text-muted small">
-                        <i class="fa-solid fa-circle-exclamation text-secondary me-1"></i>
-                        Tanggal ini merupakan hari <strong>Rabu / Akhir Pekan</strong>. Layanan reservasi pertemuan Program Studi hanya dibuka pada hari <strong>Senin, Selasa, Kamis, dan Jumat</strong>. Silakan pilih hari layanan lainnya.
-                    </div>
-                `;
-            }
-
-            selectedContentEl.innerHTML = html;
-        }
     }
 
     function openAgendaModal(id) {
