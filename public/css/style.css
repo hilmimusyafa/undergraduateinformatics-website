@@ -1427,13 +1427,18 @@ div.tag {
     margin-top: 16px;
 }
 
-/* Feedback Page */
+/* Feedback & Reservation Form Iframe */
 
 .responsive-iframe {
     position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
+    width: 100%;
+    height: 920px;
+    min-height: 750px;
+    border-radius: 14px;
     overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid #e5e7eb;
+    background: #ffffff;
 }
 
 .responsive-iframe iframe {
@@ -1442,17 +1447,21 @@ div.tag {
     left: 0;
     width: 100%;
     height: 100%;
+    border: 0;
+}
+
+@media screen and (max-width: 991px) {
+    .responsive-iframe {
+        height: 860px;
+        min-height: 700px;
+    }
 }
 
 @media screen and (max-width: 767px) {
-
     .responsive-iframe {
-        position: relative;
-        padding-bottom: 200%;
-        height: 0;
-        overflow: hidden;
+        height: 820px;
+        min-height: 650px;
     }
-
 }
 
 /* Reservation Schedule & Agenda Styling */
