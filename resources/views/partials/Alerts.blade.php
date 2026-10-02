@@ -1,5 +1,5 @@
 @if ($errors->any())
-    <div class="alert alert-danger admin-toast" role="alert">
+    <div class="alert alert-danger admin-toast" role="alert" style="display: inline-flex; width: fit-content; max-width: min(540px, 100%); justify-self: start;">
         <div class="admin-toast__content">
             <i class="fa-solid fa-circle-exclamation admin-toast__icon"></i>
             <div class="admin-toast__body">
@@ -18,7 +18,7 @@
 @endif
 
 @if (session()->has('success'))
-    <div class="alert alert-success admin-toast" role="alert">
+    <div class="alert alert-success admin-toast" role="alert" style="display: inline-flex; width: fit-content; max-width: min(540px, 100%); justify-self: start;">
         <div class="admin-toast__content">
             <i class="fa-solid fa-circle-check admin-toast__icon"></i>
             <div class="admin-toast__body">
@@ -29,7 +29,7 @@
 @endif
 
 @if (session()->has('error'))
-    <div class="alert alert-danger admin-toast" role="alert">
+    <div class="alert alert-danger admin-toast" role="alert" style="display: inline-flex; width: fit-content; max-width: min(540px, 100%); justify-self: start;">
         <div class="admin-toast__content">
             <i class="fa-solid fa-circle-xmark admin-toast__icon"></i>
             <div class="admin-toast__body">
@@ -40,7 +40,7 @@
 @endif
 
 @if (session()->has('warning'))
-    <div class="alert alert-warning admin-toast" role="alert">
+    <div class="alert alert-warning admin-toast" role="alert" style="display: inline-flex; width: fit-content; max-width: min(540px, 100%); justify-self: start;">
         <div class="admin-toast__content">
             <i class="fa-solid fa-triangle-exclamation admin-toast__icon"></i>
             <div class="admin-toast__body">
