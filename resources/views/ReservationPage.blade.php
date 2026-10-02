@@ -95,7 +95,7 @@
                                     </span>
                                     <span class="calendar-legend-item" id="legendOffItem">
                                         <span class="calendar-legend-dot calendar-legend-dot--off"></span>
-                                        <span class="text-muted">Non-Layanan (Rabu & Akhir Pekan)</span>
+                                        <span class="text-muted">Non-Layanan</span>
                                     </span>
                                     <span class="calendar-legend-item d-none d-md-inline-flex ms-auto text-muted small">
                                         <i class="fa-solid fa-clock me-1 text-danger"></i> Sesi Tetap: 09:00 WIB | 13:00 WIB | 15:00 WIB
@@ -228,26 +228,37 @@
                                         <p class="text-dark mb-0" style="white-space: pre-line;">{{ $schedule->agenda }}</p>
                                     </div>
                                 </div>
-                                @if ($schedule->document_link)
-                                    <div class="col-12">
-                                        <div class="alert alert-info d-flex align-items-center justify-content-between mb-0">
-                                            <div>
-                                                <i class="fa-regular fa-file-pdf text-danger me-2 fs-5"></i>
-                                                <strong>Dokumen Berita Acara / Lampiran Tersedia</strong>
+                                <div class="col-12">
+                                    <div class="agenda-detail-box bg-light border p-3 rounded-3">
+                                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; min-width: 44px;">
+                                                    <i class="fa-solid fa-file-contract fs-5"></i>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted small d-block mb-1"><i class="fa-solid fa-file-signature me-1 text-danger"></i> Surat Berita Acara</span>
+                                                    <strong class="text-dark d-block">Dokumen Surat Berita Acara Pertemuan</strong>
+                                                    <small class="text-muted">Dokumentasi resmi hasil pelaksanaan pertemuan dengan Program Studi.</small>
+                                                </div>
                                             </div>
-                                            <a href="{{ $schedule->document_link }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-danger">
-                                                <i class="fa-solid fa-download me-1"></i> Buka Dokumen PDF
+                                            <a href="{{ $schedule->document_link ?: route('reservation.berita-acara', $schedule->id) }}" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-danger px-3 py-2 fw-semibold">
+                                                <i class="fa-solid fa-file-pdf me-1"></i> Akses Surat Berita Acara
                                             </a>
                                         </div>
                                     </div>
-                                @endif
+                                </div>
                             </div>
                         </div>
-                        <div class="modal-footer bg-light">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                            <a href="#reservation-form-block" class="btn btn-danger" data-bs-dismiss="modal">
-                                <i class="fa-solid fa-calendar-plus me-1"></i> Ajukan Jadwal di Sesi Lain
+                        <div class="modal-footer bg-light d-flex justify-content-between">
+                            <a href="{{ $schedule->document_link ?: route('reservation.berita-acara', $schedule->id) }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-danger btn-sm">
+                                <i class="fa-solid fa-file-pdf me-1"></i> Surat Berita Acara
                             </a>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Tutup</button>
+                                <a href="#reservation-form-block" class="btn btn-danger btn-sm" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-calendar-plus me-1"></i> Ajukan Jadwal di Sesi Lain
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -419,7 +430,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="calendar-slot calendar-slot--off">
                         <i class="fa-solid fa-ban text-muted mb-1" style="font-size: 1.1rem;"></i>
                         <span class="fw-bold" style="font-size: 0.74rem;">Non-Layanan</span>
-                        <span style="font-size: 0.65rem; color: #94a3b8;">${dayOfWeek === 3 ? 'Rabu: Rapat Internal' : 'Libur Akhir Pekan'}</span>
                     </div>
                 `;
             }

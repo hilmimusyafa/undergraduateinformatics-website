@@ -76,6 +76,8 @@ class ReservationControllerTest extends TestCase
         $response->assertSee('Ruang Rapat Prodi 101');
         $response->assertSee('agendaDetailModal-' . $schedule->id);
         $response->assertSee('Detail Informasi Agenda Pertemuan');
+        $response->assertSee('Surat Berita Acara');
+        $response->assertSee('Akses Surat Berita Acara');
     }
 
     public function test_reservation_page_displays_calendar_component(): void
@@ -90,6 +92,8 @@ class ReservationControllerTest extends TestCase
         $response->assertDontSee('Tanggal Terpilih');
         $response->assertDontSee('calEventCountBadge');
         $response->assertDontSee('Agenda Minggu Ini');
+        $response->assertDontSee('Rabu: Rapat Internal');
+        $response->assertDontSee('Libur Akhir Pekan');
     }
 
     public function test_reservation_page_displays_weekly_calendar_with_fixed_slots_and_month_preview_dropdown(): void
@@ -105,5 +109,23 @@ class ReservationControllerTest extends TestCase
         $response->assertSee('09:00 WIB');
         $response->assertSee('13:00 WIB');
         $response->assertSee('15:00 WIB');
+    }
+
+    public function test_reservation_berita_acara_route_renders_successfully(): void
+    {
+        $schedule = \App\Models\ReservationSchedule::create([
+            'date' => '2026-10-12',
+            'shift' => '09:00:00',
+            'requested_by' => 'Ketua HIMA IF',
+            'study_program' => 'S1 Informatika',
+            'meeting_room' => 'Ruang Rapat Prodi 101',
+            'participants' => '6 orang',
+            'agenda' => 'Diskusi Koordinasi Program Magang Industri',
+            'city' => 'Bandung',
+        ]);
+
+        $response = $this->get('/reservation/' . $schedule->id . '/berita-acara');
+
+        $this->assertTrue(in_array($response->getStatusCode(), [200, 302]));
     }
 }

@@ -32,6 +32,7 @@ Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('posts.sho
 Route::get('/links', [LinkController::class, 'index'])->name('links.index');
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
 Route::get('/reservation', [ReservationController::class, 'show'])->name('reservation.show');
+Route::get('/reservation/{id}/berita-acara', [ReservationController::class, 'beritaAcara'])->name('reservation.berita-acara');
 Route::get('/meeting-agenda', [MeetingAgendaController::class, 'show'])->name('meeting.agenda.show');
 Route::post('/meeting-agenda', [MeetingAgendaController::class, 'store'])->name('meeting.agenda.store');
 
