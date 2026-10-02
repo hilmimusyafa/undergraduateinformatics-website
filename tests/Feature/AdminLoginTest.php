@@ -44,4 +44,24 @@ class AdminLoginTest extends TestCase
 
         $response->assertRedirect(route('admin.dashboard'));
     }
+
+    public function test_login_page_displays_back_to_home_link(): void
+    {
+        $response = $this->get('/admin/login');
+
+        $response->assertStatus(200);
+        $response->assertSee('Kembali ke Halaman Utama');
+        $response->assertSee(route('home'));
+    }
+
+    public function test_login_page_displays_error_alert_with_structured_content(): void
+    {
+        $response = $this->withSession(['error' => 'Email atau password salah, silahkan coba lagi'])
+            ->get('/admin/login');
+
+        $response->assertStatus(200);
+        $response->assertSee('Email atau password salah, silahkan coba lagi');
+        $response->assertSee('admin-toast');
+        $response->assertSee('admin-toast__text');
+    }
 }

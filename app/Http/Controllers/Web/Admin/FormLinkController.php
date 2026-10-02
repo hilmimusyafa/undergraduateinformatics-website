@@ -62,7 +62,7 @@ class FormLinkController extends Controller
 
         return redirect()->route('admin.form-link')->with(
             'success',
-            $successMessage . ($fetchedAt ? ' Definisi di-refresh pada ' . $fetchedAt->format('d M Y H:i') . '.' : '')
+            $successMessage . ($fetchedAt ? "\nDefinisi di-refresh pada " . $fetchedAt->format('d M Y H:i') . '.' : '')
         );
     }
 }

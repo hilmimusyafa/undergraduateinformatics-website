@@ -44,6 +44,12 @@
                         <button type="submit" class="btn btn-danger">Masuk</button>
                     </div>
                 </form>
+                <div class="auth-back-action">
+                    <a href="{{ route('home') }}" class="auth-back-link">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Kembali ke Halaman Utama</span>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
