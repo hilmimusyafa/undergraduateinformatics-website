@@ -89,17 +89,18 @@ class ReservationControllerTest extends TestCase
         $response->assertSee('calendarSelectedPanel');
     }
 
-    public function test_reservation_page_displays_weekly_calendar_and_monthly_preview_toggle(): void
+    public function test_reservation_page_displays_weekly_calendar_with_fixed_slots_and_month_preview_dropdown(): void
     {
         $response = $this->get('/reservation');
 
         $response->assertStatus(200);
-        $response->assertSee('calModeWeekBtn');
-        $response->assertSee('calModeMonthBtn');
         $response->assertSee('calendarWeekContainer');
-        $response->assertSee('calendarMonthPreviewContainer');
+        $response->assertSee('calendarGridBody');
+        $response->assertSee('calMonthPickerBtn');
+        $response->assertSee('monthPreviewDropdown');
         $response->assertSee('monthPreviewGridBody');
-        $response->assertSee('Kalender Mingguan');
-        $response->assertSee('Preview Bulanan');
+        $response->assertSee('09:00 WIB');
+        $response->assertSee('13:00 WIB');
+        $response->assertSee('15:00 WIB');
     }
 }

@@ -5,17 +5,11 @@
 @section('content')
     <div class="auth-shell">
         <div class="auth-logo-wrap">
-            <a href="{{ route('home') }}" class="auth-logo-link" aria-label="Kembali ke halaman utama">
-                <img class="auth-logo" src="/images/logo.png"
-                    alt="Fakultas Informatika, School of Computing, Telkom University">
-            </a>
         </div>
 
         <div class="auth-card auth-card--login">
             <div class="auth-card__header">
-                <p>FAKULTAS INFORMATIKA</p>
-                <h2>Apps-SoC</h2>
-                <div class="auth-card__subtitle">Masuk untuk melanjutkan</div>
+                <img class="auth-logo" src="/images/logo.png" alt="Fakultas Informatika, School of Computing, Telkom University">
             </div>
 
             <div class="auth-card__body">
@@ -50,10 +44,6 @@
                         <button type="submit" class="btn btn-danger">Masuk</button>
                     </div>
                 </form>
-            </div>
-
-            <div class="auth-footer">
-                <span>© Developed by IKN</span>
             </div>
         </div>
     </div>
