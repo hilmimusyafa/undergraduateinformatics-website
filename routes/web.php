@@ -77,6 +77,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ]);
         })->name('dashboard');
         Route::get('dashboard/upload', [DashboardController::class, 'upload'])->name('dashboard.upload');
+        Route::get('dashboard/template', function () {
+            $path = public_path('example.xlsx');
+            if (! file_exists($path)) {
+                $path = public_path('template-statistik-mahasiswa.xlsx');
+            }
+            if (! file_exists($path)) {
+                abort(404, 'File template tidak ditemukan.');
+            }
+            return response()->download($path, 'template-statistik-mahasiswa.xlsx');
+        })->name('dashboard.template');
         Route::get('dashboard/create', [DashboardController::class, 'create'])->name('dashboard.create');
         Route::get('dashboard/{id}/edit', [DashboardController::class, 'edit'])->name('dashboard.edit');
         Route::post('dashboard/extract', [DashboardController::class, 'extract'])->name('dashboard.extract');

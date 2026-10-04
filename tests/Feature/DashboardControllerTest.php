@@ -373,4 +373,67 @@ class DashboardControllerTest extends TestCase
         $response->assertSee('confirmModal-' . $dataset->id);
         $response->assertSee(route('admin.dashboard.destroy', ['id' => $dataset->id]));
     }
+
+    public function test_dashboard_template_download_succeeds(): void
+    {
+        $response = $this->actingAs($this->createAdminUser())->get('/admin/dashboard/template');
+
+        $response->assertStatus(200);
+        $response->assertHeader('content-disposition');
+    }
+
+    public function test_upload_page_renders_template_download_link(): void
+    {
+        $response = $this->actingAs($this->createAdminUser())->get('/admin/dashboard/upload');
+
+        $response->assertStatus(200);
+        $response->assertSee('Unduh File Template (.xlsx)');
+        $response->assertSee('/admin/dashboard/template');
+    }
+
+    public function test_extract_rejects_empty_file_with_informative_message(): void
+    {
+        $response = $this->actingAs($this->createAdminUser())->postJson('/admin/dashboard/extract', []);
+
+        $response->assertStatus(422);
+        $response->assertJsonPath('success', false);
+        $response->assertJsonPath('message', 'Pilih file Excel terlebih dahulu sebelum memproses.');
+    }
+
+    public function test_extract_rejects_invalid_file_type(): void
+    {
+        $file = \Illuminate\Http\UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
+
+        $response = $this->actingAs($this->createAdminUser())->postJson('/admin/dashboard/extract', [
+            'excel_file' => $file,
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonPath('success', false);
+        $response->assertSee('Format file tidak didukung');
+    }
+
+    public function test_extract_parses_valid_excel_template(): void
+    {
+        $filePath = base_path('test.xlsx');
+        if (! file_exists($filePath)) {
+            $this->markTestSkipped('test.xlsx not found');
+        }
+
+        $file = new \Illuminate\Http\UploadedFile(
+            $filePath,
+            'example.xlsx',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            null,
+            true
+        );
+
+        $response = $this->actingAs($this->createAdminUser())->post('/admin/dashboard/extract', [
+            'excel_file' => $file,
+        ], ['Accept' => 'application/json']);
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('success', true);
+        $this->assertNotEmpty($response->json('datasets'));
+    }
 }

@@ -4,13 +4,43 @@
 
 @section('content')
     <div class="admin modern-page">
-        <h2 class="modern-page__heading">Upload Data Statistik Mahasiswa</h2>
+        <div class="dashboard-heading">
+            <h2 class="modern-page__heading">Upload Data Statistik Mahasiswa</h2>
+            <div class="dashboard-heading__actions">
+                <a href="{{ route('admin.dashboard.template') }}" download="template-statistik-mahasiswa.xlsx" class="modern-button modern-button--soft" style="text-decoration: none;">
+                    <i class="fa-solid fa-file-excel text-success"></i> Unduh File Template (.xlsx)
+                </a>
+            </div>
+        </div>
 
         <div id="upload-alert" class="d-none" role="alert"></div>
 
+        <div class="modern-card p-3" style="background: #fafaf9; border-left: 4px solid #16a34a;">
+            <div class="d-flex align-items-start gap-3">
+                <div style="font-size: 1.5rem; color: #16a34a; line-height: 1; margin-top: 2px;">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="flex-grow-1" style="font-size: 0.88rem; color: #374151;">
+                    <strong class="d-block mb-1 text-dark" style="font-size: 0.92rem;">Panduan Format File Excel (Template):</strong>
+                    <ul class="mb-2 ps-3" style="line-height: 1.5;">
+                        <li>Setiap <strong>Sheet</strong> pada file Excel akan otomatis menjadi <strong>1 grafik/chart</strong>.</li>
+                        <li><strong>Baris 1 (Header):</strong> Kolom A untuk Label/Kategori, Kolom B untuk Jumlah/Nilai.</li>
+                        <li><strong>Baris 2 dst (Data):</strong> Kolom A berisi nama teks, Kolom B harus berupa <strong>angka/nilai numerik</strong>.</li>
+                    </ul>
+                    <div>
+                        Format belum sesuai? 
+                        <a href="{{ route('admin.dashboard.template') }}" download="template-statistik-mahasiswa.xlsx" class="fw-bold text-decoration-underline" style="color: #16a34a;">
+                            <i class="fa-solid fa-download me-1"></i>Unduh contoh file template (example.xlsx) di sini
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <section class="modern-card">
             <div class="upload-dropzone">
-                <p>Pilih file Excel (.xlsx, .xls) untuk diunggah</p>
+                <p class="mb-1 fw-semibold" style="font-size: 0.95rem; color: #1f2937;">Pilih file Excel (.xlsx, .xls) untuk diunggah</p>
+                <p class="text-muted mb-3" style="font-size: 0.82rem;">Pastikan struktur tabel mengikuti template contoh agar berhasil diproses.</p>
                 <input id="excel_file" class="form-control" type="file" accept=".xlsx,.xls">
             </div>
         </section>
@@ -80,9 +110,18 @@
         let parsedDatasets = [];
 
         function notify(message, type = 'success') {
-            alertBox.textContent = message;
             const noticeType = type === 'danger' ? 'danger' : type === 'warning' ? 'info' : 'success';
+            let icon = 'fa-circle-check';
+            if (noticeType === 'danger') icon = 'fa-circle-exclamation';
+            else if (noticeType === 'info') icon = 'fa-circle-info';
+
+            alertBox.innerHTML = `
+                <div class="d-flex align-items-start gap-2">
+                    <i class="fa-solid ${icon} mt-1"></i>
+                    <div style="flex: 1; line-height: 1.45;">${escapeHtml(message)}</div>
+                </div>`;
             alertBox.className = `modern-notice modern-notice--${noticeType}`;
+            alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function setBusy(button, isBusy, label) {
@@ -201,13 +240,39 @@
             }
 
             fileInput.disabled = true;
-            notify('Memproses file...', 'info');
+            notify('Memproses file Excel...', 'info');
             try {
                 const data = new FormData();
                 data.append('excel_file', fileInput.files[0]);
-                const response = await fetch('{{ route('admin.dashboard.extract') }}', requestOptions('POST', data));
-                const result = await response.json();
-                if (!response.ok || !result.success) throw new Error(result.message || 'Proses file gagal.');
+
+                let response;
+                try {
+                    response = await fetch('{{ route('admin.dashboard.extract') }}', requestOptions('POST', data));
+                } catch (fetchErr) {
+                    throw new Error('Gagal mengunggah file. Pastikan format tabel sesuai dengan contoh template (.xlsx) dan file tidak rusak.');
+                }
+
+                let result = null;
+                try {
+                    result = await response.json();
+                } catch (_) {
+                    result = null;
+                }
+
+                if (!response.ok || !result || !result.success) {
+                    if (response.status === 419) {
+                        throw new Error('Sesi telah kedaluwarsa. Silakan refresh halaman dan coba unggah kembali.');
+                    }
+                    if (response.status === 413) {
+                        throw new Error('Ukuran file terlalu besar. Maksimal ukuran file adalah 10 MB.');
+                    }
+                    const serverMessage = result?.message || (result?.errors ? Object.values(result.errors).flat().join(' ') : null);
+                    throw new Error(serverMessage || 'Format isi file Excel tidak sesuai dengan template. Pastikan setiap sheet memiliki kolom label dan nilai angka seperti pada contoh template.');
+                }
+
+                if (!result.datasets || !result.datasets.length) {
+                    throw new Error('Format isi file Excel tidak sesuai dengan template atau data kosong. Pastikan kolom pertama berisi kategori dan kolom kedua berisi angka nilai numerik.');
+                }
 
                 parsedDatasets = result.datasets;
                 renderEditorList(previewItems, parsedDatasets);
@@ -215,12 +280,17 @@
                 if (countEl) countEl.textContent = `${result.datasets.length} dataset siap disimpan`;
                 preview.classList.remove('d-none');
                 saveButton.disabled = false;
-                notify('Data berhasil diparse. Sesuaikan jika perlu, lalu konfirmasi untuk menyimpan.');
+                notify('Data berhasil diparse dari file Excel. Sesuaikan jika perlu, lalu klik Konfirmasi & Simpan.');
             } catch (error) {
                 parsedDatasets = [];
                 saveButton.disabled = true;
                 preview.classList.add('d-none');
-                notify(error.message, 'danger');
+
+                let errMsg = error?.message || '';
+                if (!errMsg || errMsg === 'Failed to fetch' || errMsg.includes('NetworkError') || errMsg.includes('Load failed')) {
+                    errMsg = 'Gagal memproses file Excel. Format tabel mungkin tidak sesuai template atau terjadi kendala koneksi. Silakan unduh dan gunakan contoh template file Excel yang disediakan.';
+                }
+                notify(errMsg, 'danger');
             } finally {
                 fileInput.disabled = false;
             }

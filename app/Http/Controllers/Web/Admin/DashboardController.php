@@ -8,6 +8,7 @@ use App\Models\DashboardDatasetItem;
 use App\Services\Excel\ExcelExtractor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class DashboardController extends Controller
@@ -25,22 +26,46 @@ class DashboardController extends Controller
 
     public function extract(Request $request)
     {
-        $validatedData = $request->validate([
-            'excel_file' => 'required|file|mimes:xlsx,xls',
+        $validator = Validator::make($request->all(), [
+            'excel_file' => 'required|file|mimes:xlsx,xls|max:10240',
+        ], [
+            'excel_file.required' => 'Pilih file Excel terlebih dahulu sebelum memproses.',
+            'excel_file.file' => 'File yang diunggah tidak valid.',
+            'excel_file.mimes' => 'Format file tidak didukung. Mohon unggah file Excel berekstensi .xlsx atau .xls.',
+            'excel_file.max' => 'Ukuran file Excel maksimal 10 MB.',
         ]);
 
-        if (! $validatedData) {
-            return response()->json(['message' => 'Invalid file format. Please upload an Excel file.'], 400);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first('excel_file'),
+            ], 422);
         }
 
-        $excelExtractor = new ExcelExtractor;
-        $datasets = $excelExtractor->extract($request->file('excel_file'));
+        try {
+            $excelExtractor = new ExcelExtractor;
+            $datasets = $excelExtractor->extract($request->file('excel_file'));
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Data extracted successfully',
-            'datasets' => $datasets,
-        ]);
+            if (empty($datasets)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Format isi file Excel tidak sesuai dengan template. Pastikan setiap sheet memiliki kolom label/kategori (Kolom A) dan angka nilai (Kolom B). Silakan gunakan contoh file template yang disediakan.',
+                ], 422);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil diekstrak dari file Excel.',
+                'datasets' => $datasets,
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membaca isi file Excel. Pastikan format tabel sesuai dengan template (.xlsx) dan file tidak dalam keadaan rusak. Silakan unduh contoh file template.',
+            ], 422);
+        }
     }
 
     public function save(Request $request)
