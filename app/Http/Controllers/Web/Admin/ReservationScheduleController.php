@@ -127,19 +127,25 @@ class ReservationScheduleController extends Controller
 
     private function rules(?ReservationSchedule $schedule = null): array
     {
+        $dateRules = [
+            'required',
+            'date',
+            function ($attribute, $value, $fail) {
+                $day = Carbon::parse($value)->dayOfWeekIso;
+                if (! in_array($day, [1, 2, 4, 5])) {
+                    $fail('Tanggal harus hari Senin, Selasa, Kamis, atau Jumat.');
+                }
+            },
+        ];
+
+        if ($schedule) {
+            array_unshift($dateRules, 'sometimes');
+        }
+
         $sometimes = $schedule ? 'sometimes|' : '';
 
         return [
-            'date' => [
-                $sometimes.'required',
-                'date',
-                function ($attribute, $value, $fail) {
-                    $day = Carbon::parse($value)->dayOfWeekIso;
-                    if (! in_array($day, [1, 2, 4, 5])) {
-                        $fail('Tanggal harus hari Senin, Selasa, Kamis, atau Jumat.');
-                    }
-                },
-            ],
+            'date' => $dateRules,
             'shift' => $sometimes.'required|in:09:00,13:00,15:00,09:00:00,13:00:00,15:00:00',
             'requested_by' => $sometimes.'required|string|max:255',
             'document_link' => 'nullable|string|url|max:255',
