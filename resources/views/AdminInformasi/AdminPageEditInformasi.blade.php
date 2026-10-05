@@ -30,13 +30,6 @@
                     </label>
                     <textarea name="body" type="text" class="form-control" id="deskripsi" required>{{ $post->body }}</textarea>
                 </div>
-                <script>
-                    ClassicEditor
-                        .create(document.querySelector('#deskripsi'))
-                        .catch(error => {
-                            console.error(error);
-                        });
-                </script>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="mb-3">
@@ -93,12 +86,21 @@
     @include('AdminInformasi.TagLiveSearchScript')
 @endsection
 
-<script>
-    function deleteImage() {
-        var deleteGambar = document.getElementById('deleteGambar');
-        var imageContainer = document.getElementById('image-container');
-        if (deleteGambar && imageContainer) {
-            imageContainer.style.display = deleteGambar.checked ? 'none' : 'block';
+@push('scripts')
+    <script src="/vendor/ckeditor/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#deskripsi'))
+            .catch(error => {
+                console.error(error);
+            });
+
+        function deleteImage() {
+            var deleteGambar = document.getElementById('deleteGambar');
+            var imageContainer = document.getElementById('image-container');
+            if (deleteGambar && imageContainer) {
+                imageContainer.style.display = deleteGambar.checked ? 'none' : 'block';
+            }
         }
-    }
-</script>
+    </script>
+@endpush

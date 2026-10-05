@@ -28,13 +28,6 @@
                     </label>
                     <textarea name="body" type="text" class="form-control" id="deskripsi"></textarea>
                 </div>
-                <script>
-                    ClassicEditor
-                        .create(document.querySelector('#deskripsi'))
-                        .catch(error => {
-                            console.error(error);
-                        });
-                </script>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <div class="mb-3">
@@ -80,3 +73,14 @@
     </div>
     @include('AdminInformasi.TagLiveSearchScript')
 @endsection
+
+@push('scripts')
+    <script src="/vendor/ckeditor/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#deskripsi'))
+            .catch(error => {
+                console.error(error);
+            });
+    </script>
+@endpush

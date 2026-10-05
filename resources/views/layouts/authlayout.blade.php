@@ -11,7 +11,6 @@
     <link rel="manifest" href="/site.webmanifest">
     <link href="/css/fonts/figtree.css" rel="stylesheet">
     <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/vendor/fontawesome/css/all-5.15.4.min.css">
     <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/styleAuth.css?v={{ file_exists(public_path('css/styleAuth.css')) ? filemtime(public_path('css/styleAuth.css')) : '1.0' }}">
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
