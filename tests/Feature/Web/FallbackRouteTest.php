@@ -14,8 +14,6 @@ class FallbackRouteTest extends TestCase
         $response = $this->get('/halaman-tidak-ada');
 
         $response->assertStatus(404);
-        $response->assertViewIs('app');
-        $response->assertSee('window.__INITIAL_DATA__ = {"notFound":true};', false);
     }
 
     public function test_unknown_api_url_keeps_json_404(): void

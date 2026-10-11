@@ -10,9 +10,7 @@ class FeedbackLink extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'link',
-    ];
+    protected $guarded = ['id'];
 
     public function scopeConfigured(Builder $query): Builder
     {

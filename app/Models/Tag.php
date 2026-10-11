@@ -6,18 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Support\Slug;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Tag extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'description',
-    ];
+    protected $guarded = ['id'];
 
     protected static function booted(): void
     {
@@ -43,11 +38,16 @@ class Tag extends Model
         return $query->where('slug', $value)->orWhere('id', $value);
     }
 
-    public function post_tags(): HasMany
+    public function post_tags()
     {
         return $this->hasMany(PostTag::class);
     }
 
+    /**
+     * The posts that belong to the Tag
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'post_tags', 'tag_id', 'post_id');

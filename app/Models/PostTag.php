@@ -6,24 +6,20 @@ use App\Models\Tag;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PostTag extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'post_id',
-        'tag_id',
-    ];
+    protected $guarded = ['id'];
     protected $with = ['tag'];
 
-    public function post(): BelongsTo
+    public function post()
     {
         return $this->belongsTo(Post::class);
     }
 
-    public function tag(): BelongsTo
+    public function tag()
     {
         return $this->belongsTo(Tag::class);
     }

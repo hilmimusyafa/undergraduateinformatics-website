@@ -3,28 +3,26 @@
 namespace App\Models;
 
 use App\Models\PostTag;
+use App\Services\Security\HtmlSanitizer;
 use App\Support\Slug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Post extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'subtitle',
-        'body',
-        'image',
-        'slug',
-    ];
+    protected $guarded = ['id'];
 
     protected static function booted(): void
     {
         static::saving(function (Post $post) {
+            if ($post->body) {
+                $post->body = HtmlSanitizer::clean($post->body);
+            }
+
             if ($post->slug) {
                 return;
             }
@@ -54,11 +52,15 @@ class Post extends Model
         });
     }
 
-    public function post_tags(): HasMany
+    public function post_tags()
     {
         return $this->hasMany(PostTag::class);
     }
-
+    /**
+     * The roles that belong to the Post
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function tags(): BelongsToMany
     {
         return $this->belongsToMany(Tag::class, 'post_tags', 'post_id', 'tag_id');

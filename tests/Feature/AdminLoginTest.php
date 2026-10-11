@@ -13,14 +13,15 @@ class AdminLoginTest extends TestCase
     public function test_login_redirects_to_admin_dashboard(): void
     {
         User::create([
+            'name' => 'Admin',
             'email' => 'admin@example.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'password_recovery_id' => 1,
         ]);
 
         $response = $this->post('/admin/login', ['email' => 'admin@example.com', 'password' => 'password']);
 
-        $response->assertRedirect(route('admin.datasets.index'));
+        $response->assertRedirect(route('admin.dashboard'));
     }
 
     public function test_login_rejects_invalid_credentials(): void
@@ -33,38 +34,34 @@ class AdminLoginTest extends TestCase
     public function test_authenticated_user_visiting_login_is_redirected_to_admin_dashboard(): void
     {
         User::create([
+            'name' => 'Admin',
             'email' => 'admin@example.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
             'password_recovery_id' => 1,
         ]);
 
         $response = $this->actingAs(User::first())->get('/admin/login');
 
-        $response->assertRedirect(route('admin.datasets.index'));
+        $response->assertRedirect(route('admin.dashboard'));
     }
 
-    public function test_logout_uses_post_and_redirects_home(): void
+    public function test_login_page_displays_back_to_home_link(): void
     {
-        User::create([
-            'email' => 'admin@example.com',
-            'password' => 'password',
-            'password_recovery_id' => 1,
-        ]);
+        $response = $this->get('/admin/login');
 
-        $response = $this->actingAs(User::first())->post('/admin/logout');
-
-        $response->assertRedirect(route('home'));
-        $this->assertGuest();
+        $response->assertStatus(200);
+        $response->assertSee('Kembali ke Halaman Utama');
+        $response->assertSee(route('home'));
     }
 
-    public function test_logout_via_get_is_not_routed(): void
+    public function test_login_page_displays_error_alert_with_structured_content(): void
     {
-        User::create([
-            'email' => 'admin@example.com',
-            'password' => 'password',
-            'password_recovery_id' => 1,
-        ]);
+        $response = $this->withSession(['error' => 'Email atau password salah, silahkan coba lagi'])
+            ->get('/admin/login');
 
-        $this->actingAs(User::first())->get('/admin/logout')->assertNotFound();
+        $response->assertStatus(200);
+        $response->assertSee('Email atau password salah, silahkan coba lagi');
+        $response->assertSee('admin-toast');
+        $response->assertSee('admin-toast__text');
     }
 }

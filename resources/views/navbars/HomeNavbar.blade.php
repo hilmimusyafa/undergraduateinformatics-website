@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg sticky-top drop-shadow">
+    <div class="container-fluid">
+        <a href="{{ route('home') }}" class="navbar-brand" aria-label="Kembali ke halaman utama">
+            <img class="img-fluid" src="/images/logo.png" alt="Fakultas Informatika, School of Computing, Telkom University">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav ms-auto nav-underline">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" aria-current="page" href="#" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Informasi
+                    </a>
+                    <ul class="dropdown-menu">
+                        @foreach ($tags_navbar->slice(0, 8) as $tag)
+                            <li><a class="dropdown-item"
+                                    href="{{ route('tags.show', ['slug' => $tag->slug]) }}">{{ $tag->name }}</a></li>
+                        @endforeach
+                        <li><a class="dropdown-item" href="{{ route('posts.search') }}">Informasi Lainnya</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::is('links.*') ? 'active' : '' }}" href="{{ route('links.index') }}">Link Penting</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::is('feedback.*') ? 'active' : '' }}" href="{{ route('feedback.show') }}">Masukan/Saran</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ Route::is('reservation.*') ? 'active' : '' }}" href="{{ route('reservation.show') }}">Reservasi Pertemuan</a>
+                </li>
+                <li class="nav-item d-flex align-items-center my-1 my-lg-0 navbar-item-search">
+                    <form method="GET" action="{{ route('posts.search') }}" class="d-flex navbar-search-form" role="search">
+                        <input class="form-control navbar-search-input me-lg-2" name="search" type="search" placeholder="Cari..."
+                            aria-label="Search" value="{{ request('search') }}">
+                    </form>
+                </li>
+                <li class="nav-item d-flex align-items-center my-1 my-lg-0 navbar-item-admin">
+                    <a href="{{ Auth::check() ? route('admin.dashboard') : route('admin.login') }}" class="btn-login navbar-btn-admin">
+                        Admin
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

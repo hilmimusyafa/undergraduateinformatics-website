@@ -3,36 +3,58 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DashboardDatasetResource;
-use App\Http\Resources\ImportantLinkResource;
 use App\Models\DashboardDataset;
-use App\Services\ImportantLinks\ImportantLinkQuery;
-use App\Services\Search\SearchDataService;
+use App\Models\Post;
+use App\Models\Tag;
 use App\Support\PageMeta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
     public function index(Request $request): View
     {
-        $posts = app(SearchDataService::class)->resolve(null, 1, 5);
-        $links = app(ImportantLinkQuery::class)->latest(1, 5);
-        $datasets = DashboardDataset::query()->with('items')->orderBy('id')->get();
-        $initialData = [
-            'posts' => $posts['data'] ?? [],
-            'links' => ImportantLinkResource::collection($links)->resolve(),
-            'datasets' => DashboardDatasetResource::collection($datasets)->resolve(),
-        ];
         $seo = PageMeta::page('home');
-        $jsonLd = [
-            '@context' => 'https://schema.org',
-            '@type' => 'EducationalOrganization',
-            'name' => PageMeta::load()['siteName'],
-            'url' => $request->url(),
-            'description' => $seo['description'],
-        ];
 
-        return view('app', PageMeta::viewData($request, 'home', $jsonLd, $initialData));
+        $tags = Tag::query()
+            ->with(['posts' => function ($query) {
+                $query->orderByDesc('updated_at')->limit(3);
+            }, 'posts.tags'])
+            ->withCount('posts')
+            ->orderBy('name')
+            ->get();
+
+        $posts = Post::query()
+            ->with('tags')
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        $statistics = collect();
+        if (Schema::hasTable('dashboard_datasets') && Schema::hasTable('dashboard_dataset_items')) {
+            $statistics = DashboardDataset::query()
+                ->with(['items' => fn ($query) => $query->orderBy('sort_order')])
+                ->orderBy('id')
+                ->get();
+        }
+
+        $statisticsPayload = $statistics->map(function ($dataset) {
+            return [
+                'id' => $dataset->id,
+                'chart_type' => $dataset->chart_type,
+                'labels' => $dataset->items->pluck('label')->values(),
+                'values' => $dataset->items->pluck('value')->values(),
+            ];
+        })->values();
+
+        return view('HomePage', [
+            'title' => $seo['title'],
+            'description' => $seo['description'],
+            'tags' => $tags,
+            'posts' => $posts,
+            'statistics' => $statistics,
+            'statisticsPayload' => $statisticsPayload,
+        ]);
     }
 }

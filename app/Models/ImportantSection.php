@@ -5,18 +5,14 @@ namespace App\Models;
 use App\Models\ImportantLink;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ImportantSection extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'order_number',
-    ];
+    protected $guarded = ['id'];
 
-    public function important_links(): HasMany
+    public function important_links()
     {
         return $this->hasMany(ImportantLink::class);
     }

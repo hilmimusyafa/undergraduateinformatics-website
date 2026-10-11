@@ -797,18 +797,10 @@ class PostSeeder extends Seeder
         ];
 
         foreach ($posts as $title => $data) {
-            $timestamps = [
-                'created_at' => $data['created_at'],
-                'updated_at' => $data['updated_at'],
-            ];
-            unset($data['created_at'], $data['updated_at']);
-
-            $post = Post::updateOrCreate(
+            Post::updateOrCreate(
                 ['title' => $title],
                 $data
             );
-
-            Post::whereKey($post->id)->update($timestamps);
         }
     }
 }

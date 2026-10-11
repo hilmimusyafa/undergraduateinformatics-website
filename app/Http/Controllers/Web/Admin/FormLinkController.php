@@ -8,60 +8,61 @@ use App\Models\MsFormDefinition;
 use App\Models\ReservationLink;
 use App\Services\MsForms\FormDefinitionService;
 use App\Services\MsForms\MsFormsException;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\View\View;
 
 class FormLinkController extends Controller
 {
-    public function show(): View
+    public function show()
     {
         return view('AdminDashboard.feedback', [
             'feedbackLink' => FeedbackLink::query()->first(),
-            'reservationLink' => Schema::hasTable('reservation_links') ? ReservationLink::query()->first() : null,
+            'reservationLink' => Schema::hasTable('reservation_links')
+                ? ReservationLink::query()->first()
+                : null,
             'feedbackDefinition' => MsFormDefinition::query()->where('kind', 'feedback')->first(),
             'reservationDefinition' => MsFormDefinition::query()->where('kind', 'reservation')->first(),
         ]);
     }
 
-    public function update(Request $request): RedirectResponse
+    public function updateFeedback(Request $request)
     {
-        $validated = $request->validate([
-            'feedback_link' => ['nullable', 'url'],
-            'reservation_link' => ['nullable', 'url'],
-        ]);
+        $validated = $request->validate(['feedback_link' => ['required', 'url']]);
+        $feedbackLink = FeedbackLink::query()->firstOrCreate([], ['link' => '']);
+        $feedbackLink->update(['link' => $validated['feedback_link']]);
 
-        $message = 'Link berhasil diperbarui.';
+        return $this->refreshDefinition('feedback', $validated['feedback_link'], 'Link feedback berhasil diperbarui.');
+    }
 
-        if (isset($validated['feedback_link'])) {
-            $feedbackLink = FeedbackLink::query()->firstOrCreate([], ['link' => '']);
-            $feedbackLink->update(['link' => $validated['feedback_link']]);
-            try {
-                app(FormDefinitionService::class)->refresh('feedback', $validated['feedback_link']);
-            } catch (MsFormsException) {
-                return redirect()->route('admin.form-links.show')->with('warning', 'Link tersimpan, tetapi refresh definisi gagal. Coba lagi.');
-            }
-            $feedbackDefinition = MsFormDefinition::query()->where('kind', 'feedback')->first();
-            if ($feedbackDefinition && $feedbackDefinition->fetched_at) {
-                $message .= ' Definisi di-refresh pada ' . $feedbackDefinition->fetched_at->format('d M Y H:i') . '.';
-            }
+    public function updateReservation(Request $request)
+    {
+        $validated = $request->validate(['reservation_link' => ['required', 'url']]);
+        $reservationLink = ReservationLink::query()->firstOrCreate([], ['link' => '']);
+        $reservationLink->update(['link' => $validated['reservation_link']]);
+
+        return $this->refreshDefinition('reservation', $validated['reservation_link'], 'Link reservasi berhasil diperbarui.');
+    }
+
+    public function refresh(string $kind)
+    {
+        abort_unless(in_array($kind, ['feedback', 'reservation'], true), 404);
+
+        return $this->refreshDefinition($kind, null, 'Definisi berhasil di-refresh.');
+    }
+
+    private function refreshDefinition(string $kind, ?string $link, string $successMessage)
+    {
+        try {
+            app(FormDefinitionService::class)->refresh($kind, $link);
+        } catch (MsFormsException) {
+            return redirect()->route('admin.form-link')->with('warning', 'Link tersimpan, tetapi refresh definisi gagal. Coba lagi.');
         }
 
-        if (isset($validated['reservation_link'])) {
-            $reservationLink = ReservationLink::query()->firstOrCreate([], ['link' => '']);
-            $reservationLink->update(['link' => $validated['reservation_link']]);
-            try {
-                app(FormDefinitionService::class)->refresh('reservation', $validated['reservation_link']);
-            } catch (MsFormsException) {
-                return redirect()->route('admin.form-links.show')->with('warning', 'Link tersimpan, tetapi refresh definisi gagal. Coba lagi.');
-            }
-            $reservationDefinition = MsFormDefinition::query()->where('kind', 'reservation')->first();
-            if ($reservationDefinition && $reservationDefinition->fetched_at) {
-                $message .= ' Definisi di-refresh pada ' . $reservationDefinition->fetched_at->format('d M Y H:i') . '.';
-            }
-        }
+        $fetchedAt = MsFormDefinition::query()->where('kind', $kind)->first()?->fetched_at;
 
-        return redirect()->route('admin.form-links.show')->with('success', $message);
+        return redirect()->route('admin.form-link')->with(
+            'success',
+            $successMessage . ($fetchedAt ? "\nDefinisi di-refresh pada " . $fetchedAt->format('d M Y H:i') . '.' : '')
+        );
     }
 }

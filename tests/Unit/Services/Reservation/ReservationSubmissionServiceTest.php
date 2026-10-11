@@ -223,7 +223,7 @@ class ReservationSubmissionServiceTest extends TestCase
         ReservationLink::create(['link' => 'https://forms.office.com/r/abc123']);
 
         $pdoException = new \PDOException('SQLSTATE[23000]: Integrity constraint violation', 23000);
-        $queryException = new QueryException('sqlite', 'insert into reservation_schedules', [], $pdoException);
+        $queryException = new QueryException('mysql', 'insert into reservation_schedules', [], $pdoException);
 
         ReservationSchedule::saving(function () use ($queryException) {
             throw $queryException;
@@ -245,7 +245,7 @@ class ReservationSubmissionServiceTest extends TestCase
         ReservationLink::create(['link' => 'https://forms.office.com/r/abc123']);
 
         $queryException = new QueryException(
-            'sqlite',
+            'mysql',
             'insert into reservation_schedules',
             [],
             new \PDOException('database is down')

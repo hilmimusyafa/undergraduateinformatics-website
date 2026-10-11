@@ -26,7 +26,7 @@ class FeedbackControllerTest extends TestCase
     {
         app(FormDefinitionService::class)->refresh('feedback', 'https://forms.office.com/r/abc123');
 
-        $response = $this->getJson('/api/feedback-form');
+        $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(200);
         $response->assertJsonPath('status', 'success');
@@ -62,7 +62,7 @@ class FeedbackControllerTest extends TestCase
         $this->runtimeFixture = 'form-definition-branching.raw.json';
         app(FormDefinitionService::class)->refresh('feedback', 'https://forms.office.com/r/abc123');
 
-        $response = $this->getJson('/api/feedback-form');
+        $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(200);
         $response->assertJsonPath('status', 'success');
@@ -78,7 +78,7 @@ class FeedbackControllerTest extends TestCase
         FeedbackLink::create(['link' => 'https://forms.office.com/r/abc123']);
         app(FormDefinitionService::class)->refresh('feedback', 'https://forms.office.com/r/abc123');
 
-        $response = $this->getJson('/api/feedback-form');
+        $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(200);
         $response->assertJsonPath('status', 'success');
@@ -87,29 +87,17 @@ class FeedbackControllerTest extends TestCase
         $response->assertJsonPath('data.title.html', null);
     }
 
-    public function test_feedback_submission_returns_201_with_submitted_at(): void
-    {
-        FeedbackLink::create(['link' => 'https://forms.office.com/r/abc123']);
-        $response = $this->postJson('/api/feedback-submissions', [
-            'answers' => [['questionId' => 'q1', 'answer' => 'Bagus']],
-        ]);
-        $response->assertCreated();
-        $response->assertJsonPath('status', 'success');
-        $this->assertArrayHasKey('submitted_at', $response->json('data'));
-    }
-
     public function test_submit_forwards_answers_to_microsoft(): void
     {
-        $response = $this->postJson('/api/feedback-submissions', [
+        $response = $this->postJson('/api/feedback', [
             'answers' => [
                 ['questionId' => 'r1', 'answer' => 'Budi'],
                 ['questionId' => 'r2', 'answer' => ['Saran', 'Keluhan']],
             ],
         ]);
 
-        $response->assertCreated();
+        $response->assertStatus(200);
         $response->assertJsonPath('status', 'success');
-        $this->assertArrayHasKey('submitted_at', $response->json('data'));
 
         Http::assertSent(function ($request) {
             return str_contains($request->url(), '/responses')
@@ -122,27 +110,27 @@ class FeedbackControllerTest extends TestCase
 
     public function test_submit_requires_answers(): void
     {
-        $response = $this->postJson('/api/feedback-submissions', []);
+        $response = $this->postJson('/api/feedback', []);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors('answers');
+        $response->assertJsonPath('status', 'error');
     }
 
     public function test_submit_rejects_answer_without_value(): void
     {
-        $response = $this->postJson('/api/feedback-submissions', [
+        $response = $this->postJson('/api/feedback', [
             'answers' => [
                 ['questionId' => 'r1'],
             ],
         ]);
 
         $response->assertStatus(422);
-        $response->assertJsonValidationErrors('answers.0.answer');
+        $response->assertJsonPath('status', 'error');
     }
 
     public function test_get_feedback_auto_refreshes_when_no_definition_is_stored(): void
     {
-        $response = $this->getJson('/api/feedback-form');
+        $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(200);
         $response->assertJsonPath('status', 'success');
@@ -154,7 +142,7 @@ class FeedbackControllerTest extends TestCase
     {
         FeedbackLink::query()->delete();
 
-        $response = $this->getJson('/api/feedback-form');
+        $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(404);
         $response->assertJsonPath('status', 'error');
@@ -165,7 +153,7 @@ class FeedbackControllerTest extends TestCase
         FeedbackLink::query()->delete();
         FeedbackLink::create(['link' => 'not-a-url']);
 
-        $response = $this->getJson('/api/feedback-form');
+        $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(404);
         $response->assertJsonPath('status', 'error');
@@ -176,7 +164,7 @@ class FeedbackControllerTest extends TestCase
         FeedbackLink::query()->delete();
         FeedbackLink::create(['link' => 'https://example.com/forms/fake']);
 
-        $response = $this->getJson('/api/feedback-form');
+        $response = $this->getJson('/api/feedback');
 
         $response->assertStatus(404);
         $response->assertJsonPath('status', 'error');

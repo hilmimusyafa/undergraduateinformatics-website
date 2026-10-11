@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Services\Tags\TagsDataService;
+use App\Models\Tag;
 use App\Support\PageMeta;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -14,47 +14,36 @@ class TagController extends Controller
 {
     public function index(Request $request): View
     {
-        $tagsData = app(TagsDataService::class)->resolve();
+        $tags = Tag::withCount('posts')
+            ->withMax('posts', 'updated_at')
+            ->orderByDesc('posts_max_updated_at')
+            ->orderBy('name')
+            ->get();
 
-        $page = PageMeta::page('tagList');
-
-        $jsonLd = [
-            '@context' => 'https://schema.org',
-            '@type' => 'CollectionPage',
-            'name' => $page['title'],
-            'url' => $request->url(),
-            'description' => $page['description'],
-        ];
-
-        return view('app', PageMeta::viewData($request, 'tagList', $jsonLd, $tagsData));
+        return view('TagPage', [
+            'title' => PageMeta::page('tagList')['title'],
+            'description' => PageMeta::page('tagList')['description'],
+            'tags' => $tags,
+            'tag' => null,
+        ]);
     }
 
     public function show(Request $request, string $slugOrId): View|Response
     {
         try {
-            $tagData = app(TagsDataService::class)->resolveDetail($slugOrId);
+            $tag = Tag::with([
+                'posts' => fn ($query) => $query->orderByDesc('updated_at'),
+                'posts.tags',
+            ])->whereSlugOrId($slugOrId)->firstOrFail();
         } catch (ModelNotFoundException) {
-            return response()->view(
-                'app',
-                PageMeta::viewData($request, 'notFound', [], ['notFound' => true], null, null),
-                404
-            );
+            abort(404);
         }
 
-        $tag = $tagData['data'];
-
-        $title = $tag['name'] . ' - ' . PageMeta::load()['defaultTitle'];
-        $description = $tag['description'] ?? '';
-        $metaDescription = $description !== '' ? $description : PageMeta::page('tagDetail')['description'];
-
-        $jsonLd = [
-            '@context' => 'https://schema.org',
-            '@type' => 'CollectionPage',
-            'name' => $title,
-            'url' => $request->url(),
-            'description' => $metaDescription,
-        ];
-
-        return view('app', PageMeta::viewData($request, 'tagDetail', $jsonLd, $tagData, $title, $metaDescription));
+        return view('TagPage', [
+            'title' => $tag->name . ' - ' . PageMeta::load()['defaultTitle'],
+            'description' => $tag->description ?: PageMeta::page('tagDetail')['description'],
+            'tag' => $tag,
+            'tags' => collect(),
+        ]);
     }
 }

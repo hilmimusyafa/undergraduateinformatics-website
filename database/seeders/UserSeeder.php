@@ -9,11 +9,11 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        User::updateOrCreate(
+        User::firstOrCreate(
             ['email' => 'bif@telkomuniversity.ac.id'],
             [
                 'password_recovery_id' => 1,
-                'password' => 'akunadmin',
+                'password' => bcrypt('akunadmin'),
             ]
         );
     }

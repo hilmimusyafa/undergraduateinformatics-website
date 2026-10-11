@@ -2,12 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Resources\DashboardDatasetResource;
-use App\Http\Resources\ImportantLinkResource;
-use App\Models\DashboardDataset;
 use App\Models\Post;
 use App\Models\Tag;
-use App\Services\ImportantLinks\ImportantLinkQuery;
+use App\Services\Home\HomeDataService;
 use App\Services\Links\LinksDataService;
 use App\Services\Posts\PostsDataService;
 use App\Services\Search\SearchDataService;
@@ -22,11 +19,11 @@ final class ContractSnapshot extends Command
     protected $description = 'Snapshot public API response shapes for the static frontend contract';
 
     public function handle(
+        HomeDataService $home,
         PostsDataService $posts,
         TagsDataService $tags,
         LinksDataService $links,
-        SearchDataService $search,
-        ImportantLinkQuery $importantLinks
+        SearchDataService $search
     ): int {
         try {
             $postSlug = (string) ($this->option('post') ?: Post::query()->orderBy('id')->firstOrFail()->slug);
@@ -40,19 +37,16 @@ final class ContractSnapshot extends Command
         $payload = [
             'generated_at' => now()->toIso8601String(),
             'endpoints' => [
-                'GET /api/posts' => $search->resolve(null, 1, 2),
+                'GET /api/home' => $home->resolve(),
                 'GET /api/posts/{slug}' => $posts->resolveDetail($postSlug),
                 'GET /api/tags' => $tags->resolve(),
                 'GET /api/tags/{slug}' => $tags->resolveDetail($tagSlug),
-                'GET /api/link-sections' => $links->getSectionsWithLinks(),
-                'GET /api/important-links' => [
-                    'status' => 'success',
-                    'data' => ImportantLinkResource::collection($importantLinks->latest(1, 2))->resolve(),
-                ],
-                'GET /api/datasets' => [
-                    'status' => 'success',
-                    'data' => DashboardDatasetResource::collection(DashboardDataset::query()->with('items')->orderBy('id')->get())->resolve(),
-                ],
+                'GET /api/links' => $links->getSectionsWithLinks(),
+                'GET /api/posts/search' => $search->resolve(
+                    is_string($this->option('search')) ? $this->option('search') : null,
+                    1,
+                    2
+                ),
             ],
         ];
 

@@ -249,13 +249,148 @@
 .admin .form form .mt-3 { margin-top: 16px !important; }
 .admin .form form .mt-4 { margin-top: 24px !important; }
 .admin .form .row .mb-3 { margin-bottom: 0 !important; }
-.admin .alert { border-radius: 9px; font-size: .88rem; }
-.admin-content .admin-toast { position: fixed; top: 24px; right: 24px; z-index: 1055; width: min(360px, calc(100vw - 48px)); margin: 0; border: 0; box-shadow: none; overflow-wrap: anywhere; animation: admin-toast-in .25s ease-out; }
-.admin-content .admin-toast ul { margin: 0; padding-left: 18px; }
-.admin-content .admin-toast--hidden { animation: admin-toast-out .25s ease-in forwards; }
+.admin .alert { border-radius: 12px; font-size: .88rem; }
+.admin-toast,
+.admin-content .admin-toast,
+.admin .alert.admin-toast,
+div.admin-toast {
+    position: fixed !important;
+    top: 24px !important;
+    right: 24px !important;
+    z-index: 9999 !important;
+    display: inline-flex !important;
+    align-items: flex-start !important;
+    width: fit-content !important;
+    max-width: min(480px, calc(100vw - 48px)) !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+    padding: 12px 18px !important;
+    font-size: .88rem !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.12), 0 8px 10px -6px rgba(0, 0, 0, 0.08) !important;
+    animation: admin-toast-in .3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
 
-@keyframes admin-toast-in { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes admin-toast-out { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-10px); } }
+@media (max-width: 768px) {
+    .admin-toast,
+    .admin-content .admin-toast,
+    .admin .alert.admin-toast,
+    div.admin-toast {
+        top: 16px !important;
+        right: 16px !important;
+        max-width: calc(100vw - 32px) !important;
+    }
+}
+
+.admin-toast__content {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.45;
+    width: 100%;
+}
+.admin-toast__icon {
+    font-size: 1.05rem;
+    line-height: 1.45;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+.admin-toast__body {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.88rem;
+    font-weight: 500;
+}
+.admin-toast__text {
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+}
+.admin-toast__list {
+    margin: 0;
+    padding-left: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.admin-toast__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    margin-left: 14px;
+    color: currentColor;
+    opacity: 0.55;
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1;
+    align-self: flex-start;
+    margin-top: 3px;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+.admin-toast__close:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+.admin-toast--hidden,
+.admin-content .admin-toast--hidden {
+    opacity: 0 !important;
+    transform: translateY(-12px) scale(0.96) !important;
+    transition: opacity .25s ease-in, transform .25s ease-in !important;
+}
+
+.admin-toast.alert-success,
+.admin .alert-success.admin-toast {
+    background-color: #ecfdf5 !important;
+    border: 1px solid #a7f3d0 !important;
+    color: #065f46 !important;
+}
+.admin-toast.alert-success .admin-toast__icon {
+    color: #059669 !important;
+}
+
+.admin-toast.alert-danger,
+.admin .alert-danger.admin-toast {
+    background-color: #fef2f2 !important;
+    border: 1px solid #fecaca !important;
+    color: #991b1b !important;
+}
+.admin-toast.alert-danger .admin-toast__icon {
+    color: #dc2626 !important;
+}
+
+.admin-toast.alert-warning,
+.admin .alert-warning.admin-toast {
+    background-color: #fffbeb !important;
+    border: 1px solid #fde68a !important;
+    color: #92400e !important;
+}
+.admin-toast.alert-warning .admin-toast__icon {
+    color: #d97706 !important;
+}
+
+@keyframes admin-toast-in {
+    from {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+@keyframes admin-toast-out {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-16px) scale(0.96);
+    }
+}
 .admin .modal-content { border: 0; border-radius: 14px; box-shadow: 0 20px 48px rgb(0 0 0 / 22%); }
 
 /* Blade equivalents of the current React dashboard screens */
@@ -281,8 +416,11 @@
 .chart-card { border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; padding: 24px; box-shadow: none; transition: box-shadow .18s ease, transform .18s ease; }
 .chart-card__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 18px; }
 .chart-card__title { flex: 1; margin: 0; color: #1f2937; font-size: 1rem; font-weight: 750; text-align: center; }
-.chart-card__edit { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; color: var(--admin-muted); cursor: pointer; font-size: .78rem; font-weight: 700; text-decoration: none; transition: border .18s ease, background .18s ease, color .18s ease; }
+.chart-card__actions { display: inline-flex; align-items: center; gap: 6px; }
+.chart-card__edit,
+.chart-card__delete { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; color: var(--admin-muted); cursor: pointer; font-size: .78rem; font-weight: 700; text-decoration: none; transition: border .18s ease, background .18s ease, color .18s ease; }
 .chart-card__edit:hover { border-color: #e5e7eb; background: #f3f4f6; color: #374151; }
+.chart-card__delete:hover { border-color: #fecaca; background: #fef2f2; color: #dc2626; }
 .chart-card__axis { margin: 14px 0 0; color: var(--admin-muted); font-size: .76rem; font-weight: 600; text-align: center; }
 .chart-canvas { aspect-ratio: 4 / 3; }
 .empty-state { display: grid; min-height: 300px; place-content: center; color: var(--admin-muted); text-align: center; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; box-shadow: none; }

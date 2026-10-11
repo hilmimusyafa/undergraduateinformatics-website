@@ -11,29 +11,33 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->string('slug')->after('title')->nullable();
-        });
-
-        $titles = DB::table('posts')->pluck('title', 'id');
-
-        foreach ($titles as $id => $title) {
-            $slug = Slug::makeUnique(Str::slug($title) ?: 'post', function (string $slug) use ($id) {
-                return DB::table('posts')->where('slug', $slug)->where('id', '!=', $id)->exists();
+        if (! Schema::hasColumn('posts', 'slug')) {
+            Schema::table('posts', function (Blueprint $table) {
+                $table->string('slug')->after('title')->nullable();
             });
 
-            DB::table('posts')->where('id', $id)->update(['slug' => $slug]);
-        }
+            $titles = DB::table('posts')->pluck('title', 'id');
 
-        Schema::table('posts', function (Blueprint $table) {
-            $table->string('slug')->nullable(false)->unique()->change();
-        });
+            foreach ($titles as $id => $title) {
+                $slug = Slug::makeUnique(Str::slug($title) ?: 'post', function (string $slug) use ($id) {
+                    return DB::table('posts')->where('slug', $slug)->where('id', '!=', $id)->exists();
+                });
+
+                DB::table('posts')->where('id', $id)->update(['slug' => $slug]);
+            }
+
+            Schema::table('posts', function (Blueprint $table) {
+                $table->string('slug')->nullable(false)->unique()->change();
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->dropColumn('slug');
-        });
+        if (Schema::hasColumn('posts', 'slug')) {
+            Schema::table('posts', function (Blueprint $table) {
+                $table->dropColumn('slug');
+            });
+        }
     }
 };

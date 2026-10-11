@@ -86,8 +86,11 @@ class TagController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Tag $tag)
+    public function edit(string $id)
     {
+        // Fetch targeted tag data
+        $tag = Tag::findOrFail($id);
+
         // Return admin edit tag form page with data
         return view("AdminTag.AdminPageEditTag", [
            'tag' => $tag 
@@ -97,13 +100,16 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request, string $id)
     {
         // Check if updated inputs are valid
         $request->validate([
             'name' => 'required',
             'description' => 'nullable'
         ]);
+
+        // Fetch targeted tag data
+        $tag = Tag::findOrFail($id);
 
         if ($tag->name == "S1 Informatika" && $request->name != "S1 Informatika") {
             return back()->withError('Nama tag default tidak dapat diubah');
@@ -151,14 +157,17 @@ class TagController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Tag $tag)
+    public function destroy(string $id)
     {
+        // Fetch targeted tag data
+        $tag = Tag::findOrFail($id);
+
         if ($tag->name == "S1 Informatika") {
             return back()->withError('Tag default tidak dapat dihapus');
         }
         
         // Delete PostTags with target tag id
-        PostTag::where('tag_id', $tag->id)->delete();
+        PostTag::where('tag_id', $id)->delete();
 
         // Delete targeted tag from database
         $tag->delete();

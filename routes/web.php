@@ -2,90 +2,166 @@
 
 use App\Http\Controllers\Web\Admin\AdminController;
 use App\Http\Controllers\Web\Admin\DashboardController;
-use App\Http\Controllers\Web\Admin\DatasetImportController;
 use App\Http\Controllers\Web\Admin\FormLinkController;
-use App\Http\Controllers\Web\Admin\ImportantLinkController;
-use App\Http\Controllers\Web\Admin\PasswordRecoveryController;
-use App\Http\Controllers\Web\Admin\PasswordResetController;
+use App\Http\Controllers\Web\Admin\LinkController as AdminLinkController;
 use App\Http\Controllers\Web\Admin\PostController;
 use App\Http\Controllers\Web\Admin\ReservationScheduleController;
-use App\Http\Controllers\Web\Admin\ImportantSectionController;
+use App\Http\Controllers\Web\Admin\SectionController;
 use App\Http\Controllers\Web\Admin\TagController;
 use App\Http\Controllers\Web\FeedbackController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LinkController;
+use App\Http\Controllers\Web\MeetingAgendaController;
 use App\Http\Controllers\Web\PostController as WebPostController;
 use App\Http\Controllers\Web\ReservationController;
+use App\Http\Controllers\Web\SearchController;
 use App\Http\Controllers\Web\TagController as WebTagController;
-use App\Support\PageMeta;
+use App\Models\DashboardDataset;
+use App\Models\ReservationSchedule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Schema;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/tags', [WebTagController::class, 'index'])->name('tags.index');
 Route::get('/tags/{slug}', [WebTagController::class, 'show'])->name('tags.show');
-Route::get('/posts', [WebPostController::class, 'index'])->name('posts.index');
-Route::get('/posts/search', function (Request $request) {
-    $query = array_filter([
-        'q' => is_string($request->query('q')) ? $request->query('q') : null,
-        'per_page' => $request->query('per_page'),
-        'page' => $request->query('page'),
-    ]);
-
-    return redirect('/posts?'.http_build_query($query), 301);
+Route::get('/tag/{id}', function (string $id) {
+    $tag = \App\Models\Tag::whereSlugOrId($id)->first();
+    if (! $tag) {
+        abort(404);
+    }
+    return redirect()->route('tags.show', ['slug' => $tag->slug ?: $tag->id], 301);
 });
+Route::get('/posts', fn () => redirect()->route('posts.search'));
+Route::get('/posts/search', [SearchController::class, 'index'])->name('posts.search');
 Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('posts.show');
+Route::get('/post/{id}', function (string $id) {
+    $post = \App\Models\Post::whereSlugOrId($id)->first();
+    if (! $post) {
+        abort(404);
+    }
+    return redirect()->route('posts.show', ['slug' => $post->slug ?: $post->id], 301);
+});
 Route::get('/links', [LinkController::class, 'index'])->name('links.index');
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
 Route::get('/reservation', [ReservationController::class, 'show'])->name('reservation.show');
+Route::get('/reservation/{id}/berita-acara', [ReservationController::class, 'beritaAcara'])->name('reservation.berita-acara');
+Route::get('/meeting-agenda', [MeetingAgendaController::class, 'show'])->name('meeting.agenda.show');
+Route::post('/meeting-agenda', [MeetingAgendaController::class, 'store'])->name('meeting.agenda.store');
 
+/* Admin and public pages use Laravel's regular web stack and Blade views. */
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('login', [AdminController::class, 'loginForm'])->name('login');
-        Route::post('login', [AdminController::class, 'login'])->name('loginAttempt');
-        Route::resource('password-resets', PasswordResetController::class)->only(['create', 'store', 'edit', 'update'])->parameters(['password-resets' => 'passwordReset']);
+        Route::post('login', [AdminController::class, 'login'])->middleware('throttle:5,1')->name('loginAttempt');
     });
 
+    Route::get('forgot-password', [AdminController::class, 'forgotForm'])->name('forgotPassword');
+    Route::post('submit-email-recovery', [AdminController::class, 'submitEmailRecovery'])->middleware('throttle:10,1')->name('submitEmailRecovery');
+    Route::get('question-form', [AdminController::class, 'questionForm'])->name('questionForm');
+    Route::post('submit-answer-recovery', [AdminController::class, 'submitAnswerRecovery'])->middleware('throttle:10,1')->name('submitAnswerRecovery');
+    Route::get('password-recovery-form', [AdminController::class, 'passwordRecoveryForm'])->name('passwordRecoveryForm');
+    Route::post('submit-password-recovery', [AdminController::class, 'submitPasswordRecovery'])->middleware('throttle:10,1')->name('submitPasswordRecovery');
+
     Route::middleware('auth')->group(function () {
-        Route::get('/', fn () => redirect()->route('admin.datasets.index'));
+        Route::get('/', fn () => redirect()->route('admin.dashboard'));
+        Route::get('dashboard', function () {
+            $dashboardTablesReady = Schema::hasTable('dashboard_datasets')
+                && Schema::hasTable('dashboard_dataset_items');
 
-        Route::get('datasets', [DashboardController::class, 'index'])->name('datasets.index');
-        Route::get('datasets/create', [DashboardController::class, 'create'])->name('datasets.create');
-        Route::post('datasets', [DashboardController::class, 'store'])->name('datasets.store');
-        Route::get('datasets/{dashboardDataset}/edit', [DashboardController::class, 'edit'])->name('datasets.edit');
-        Route::match(['put', 'patch'], 'datasets/{dashboardDataset}', [DashboardController::class, 'update'])->name('datasets.update');
-        Route::delete('datasets', [DashboardController::class, 'destroyAll'])->name('datasets.destroyAll');
+            $datasets = $dashboardTablesReady
+                ? DashboardDataset::with(['items' => fn ($query) => $query->orderBy('sort_order')])
+                    ->orderBy('id')
+                    ->get()
+                    ->map(fn (DashboardDataset $dataset) => [
+                        'id' => $dataset->id,
+                        'title' => $dataset->title,
+                        'chart_type' => $dataset->chart_type,
+                        'x_label' => $dataset->x_label,
+                        'y_label' => $dataset->y_label,
+                        'labels' => $dataset->items->pluck('label')->values(),
+                        'values' => $dataset->items->pluck('value')->values(),
+                    ])
+                : collect();
 
-        Route::get('dataset-imports/create', [DatasetImportController::class, 'create'])->name('dataset-imports.create');
-        Route::post('dataset-imports', [DatasetImportController::class, 'store'])->name('dataset-imports.store');
-        Route::get('dataset-imports/{datasetImport}', [DatasetImportController::class, 'show'])->name('dataset-imports.show');
-        Route::match(['put', 'patch'], 'dataset-imports/{datasetImport}', [DatasetImportController::class, 'update'])->name('dataset-imports.update');
-        Route::delete('dataset-imports/{datasetImport}', [DatasetImportController::class, 'destroy'])->name('dataset-imports.destroy');
-        Route::resource('reservations', ReservationScheduleController::class)->except(['show'])->parameters(['reservations' => 'reservationSchedule']);
+            return view('AdminDashboard.index', [
+                'datasets' => $datasets,
+                'dashboardTablesReady' => $dashboardTablesReady,
+            ]);
+        })->name('dashboard');
+        Route::get('dashboard/upload', [DashboardController::class, 'upload'])->name('dashboard.upload');
+        Route::get('dashboard/template', function () {
+            $path = public_path('example.xlsx');
+            if (! file_exists($path)) {
+                $path = public_path('template-statistik-mahasiswa.xlsx');
+            }
+            if (! file_exists($path)) {
+                abort(404, 'File template tidak ditemukan.');
+            }
+            return response()->download($path, 'template-statistik-mahasiswa.xlsx');
+        })->name('dashboard.template');
+        Route::get('dashboard/create', [DashboardController::class, 'create'])->name('dashboard.create');
+        Route::get('dashboard/{id}/edit', [DashboardController::class, 'edit'])->name('dashboard.edit');
+        Route::post('dashboard/extract', [DashboardController::class, 'extract'])->name('dashboard.extract');
+        Route::post('dashboard/save', [DashboardController::class, 'save'])->name('dashboard.save');
+        Route::post('dashboard/store', [DashboardController::class, 'store'])->name('dashboard.store');
+        Route::match(['POST', 'PUT'], 'dashboard/{id}/update', [DashboardController::class, 'update'])->name('dashboard.update');
+        Route::delete('dashboard/cleardata', [DashboardController::class, 'cleardata'])->name('dashboard.cleardata');
+        Route::delete('dashboard/{id}', [DashboardController::class, 'destroy'])->name('dashboard.destroy');
+        Route::get('reservation', function (Request $request) {
+            $reservationTableReady = Schema::hasTable('reservation_schedules');
+            $reservationDetailsReady = $reservationTableReady
+                && Schema::hasColumn('reservation_schedules', 'meeting_room');
+            $search = trim((string) $request->get('search', ''));
 
-        Route::get('sections/reorder', [ImportantSectionController::class, 'editOrder'])->name('sections.reorder');
-        Route::match(['put', 'patch'], 'sections', [ImportantSectionController::class, 'updateAll'])->name('sections.updateAll');
-        Route::singleton('form-links', FormLinkController::class)->only(['show', 'update']);
+            $reservations = collect();
+            if ($reservationTableReady) {
+                $query = ReservationSchedule::latest();
+                if ($search !== '') {
+                    $query->where(function ($inner) use ($search) {
+                        $inner->where('requested_by', 'like', '%' . $search . '%')
+                            ->orWhere('meeting_room', 'like', '%' . $search . '%')
+                            ->orWhere('study_program', 'like', '%' . $search . '%')
+                            ->orWhere('date', 'like', '%' . $search . '%')
+                            ->orWhere('shift', 'like', '%' . $search . '%')
+                            ->orWhere('agenda', 'like', '%' . $search . '%');
+                    });
+                }
+                $reservations = $query->paginate(10)->withQueryString();
+            }
 
-        Route::post('logout', [AdminController::class, 'logout'])->name('logout');
+            return view('AdminDashboard.reservation', [
+                'reservationTableReady' => $reservationTableReady,
+                'reservationDetailsReady' => $reservationDetailsReady,
+                'reservations' => $reservations,
+            ]);
+        })->name('reservation');
+        Route::get('reservation/create', [ReservationScheduleController::class, 'create'])->name('reservation.create');
+        Route::get('reservation/{id}/edit', [ReservationScheduleController::class, 'edit'])->name('reservation.edit');
+        Route::post('reservation/store', [ReservationScheduleController::class, 'store'])->name('reservation.store');
+        Route::match(['POST', 'PUT'], 'reservation/{id}/update', [ReservationScheduleController::class, 'update'])->name('reservation.update');
+        Route::delete('reservation/{id}', [ReservationScheduleController::class, 'destroy'])->name('reservation.destroy');
+
+        Route::get('form-link', [FormLinkController::class, 'show'])->name('form-link');
+        Route::match(['POST', 'PUT'], 'form-link/feedback', [FormLinkController::class, 'updateFeedback'])->name('form-link.feedback.update');
+        Route::match(['POST', 'PUT'], 'form-link/reservation', [FormLinkController::class, 'updateReservation'])->name('form-link.reservation.update');
+        Route::match(['POST', 'PUT'], 'form-link/{kind}/refresh', [FormLinkController::class, 'refresh'])->name('form-link.refresh');
+
+        Route::get('logout', [AdminController::class, 'logout'])->name('logout');
         Route::resource('posts', PostController::class)->except(['show']);
-        Route::resource('links', ImportantLinkController::class)->except(['show'])->parameters(['links' => 'importantLink']);
+        Route::resource('links', AdminLinkController::class)->except(['show']);
         Route::resource('tags', TagController::class)->except(['show']);
-        Route::resource('sections', ImportantSectionController::class)->except(['show'])->parameters(['sections' => 'importantSection']);
+        Route::resource('sections', SectionController::class)->except(['show']);
 
-        Route::singleton('password-recovery', PasswordRecoveryController::class)->only(['edit', 'update']);
+        Route::get('sections/change-order', [SectionController::class, 'changeOrder'])->name('sections.changeOrder');
+        Route::post('sections/update-order', [SectionController::class, 'updateOrder'])->name('sections.updateOrder');
+
+        Route::get('edit-password-recovery-questions', [AdminController::class, 'editPasswordRecoveryQuestion'])->name('editPasswordRecoveryQuestion');
+        Route::post('update-password-recovery-questions', [AdminController::class, 'updatePasswordRecoveryQuestion'])->name('updatePasswordRecoveryQuestion');
     });
 });
 
 Route::fallback(function (Request $request) {
-    if ($request->is('admin/*') || $request->is('api/*')) {
-        abort(404);
-    }
-
-    return response()->view(
-        'app',
-        PageMeta::viewData($request, 'notFound', [], ['notFound' => true], null, null),
-        404
-    );
+    abort(404);
 });

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="@yield('description', 'Sumber informasi resmi Program Studi Sarjana Informatika Telkom University')">
+    <title>@yield('title', 'Home') - Website Informasi S1 Informatika</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link href="/css/fonts/figtree.css" rel="stylesheet">
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css?v={{ file_exists(public_path('css/style.css')) ? filemtime(public_path('css/style.css')) : '1.0' }}">
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body class="public-layout">
+    @include('navbars.HomeNavbar')
+    <main class="public-shell">
+        <div class="public-page">
+            @yield('content')
+        </div>
+    </main>
+    @stack('scripts')
+</body>
+
+</html>

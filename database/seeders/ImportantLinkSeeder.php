@@ -171,15 +171,14 @@ class ImportantLinkSeeder extends Seeder
         $total = count($orderedLinks);
 
         foreach ($orderedLinks as $position => $linkData) {
-            $link = ImportantLink::firstOrCreate(
+            ImportantLink::firstOrCreate(
                 ['important_section_id' => $linkData['important_section_id'], 'name' => $linkData['name']],
-                ['link' => $linkData['link']]
+                [
+                    'link' => $linkData['link'],
+                    'created_at' => $this->staggeredTimestamp($position, $total),
+                    'updated_at' => $this->staggeredTimestamp($position, $total),
+                ]
             );
-
-            if ($link->wasRecentlyCreated) {
-                $timestamp = $this->staggeredTimestamp($position, $total);
-                ImportantLink::whereKey($link->id)->update(['created_at' => $timestamp, 'updated_at' => $timestamp]);
-            }
         }
     }
 

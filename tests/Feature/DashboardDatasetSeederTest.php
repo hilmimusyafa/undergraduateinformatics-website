@@ -35,7 +35,7 @@ class DashboardDatasetSeederTest extends TestCase
 
         $this->assertSame(
             ['bar', 'line', 'pie'],
-            DashboardDataset::query()->orderBy('id')->distinct()->pluck('chart_type')->sort()->values()->all()
+            DashboardDataset::query()->distinct()->pluck('chart_type')->sort()->values()->all()
         );
     }
 }

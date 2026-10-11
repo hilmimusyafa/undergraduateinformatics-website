@@ -55,12 +55,13 @@ class ImportantLinkSeederTest extends TestCase
         $timestamp = now()->startOfDay();
 
         foreach (['Video Profil Prodi S-1 Informatika', 'Link Tree LAAK FIF'] as $name) {
-            $created = ImportantLink::create([
+            ImportantLink::create([
                 'important_section_id' => $section->id,
                 'name' => $name,
                 'link' => 'https://example.com',
+                'created_at' => $timestamp,
+                'updated_at' => $timestamp,
             ]);
-            ImportantLink::whereKey($created->id)->update(['created_at' => $timestamp, 'updated_at' => $timestamp]);
         }
 
         $this->seed(ImportantLinkSeeder::class);
@@ -82,9 +83,9 @@ class ImportantLinkSeederTest extends TestCase
             'important_section_id' => $section->id,
             'name' => 'Video Profil Prodi S-1 Informatika',
             'link' => 'https://example.com',
+            'created_at' => now()->subDays(10),
+            'updated_at' => now()->subDays(2),
         ]);
-        ImportantLink::whereKey($link->id)->update(['created_at' => now()->subDays(10), 'updated_at' => now()->subDays(2)]);
-        $link = $link->fresh();
 
         $this->seed(ImportantLinkSeeder::class);
 

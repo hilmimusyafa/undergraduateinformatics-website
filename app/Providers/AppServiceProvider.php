@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
+use App\Models\Tag;
+use Illuminate\Support\Facades\View;
+use Illuminate\Database\QueryException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::shouldBeStrict(! app()->isProduction());
+        View::composer('navbars.HomeNavbar', function ($view) {
+            $tags = Tag::all()->slice(0,8);
+            View::share('tags_navbar', $tags);
+        });
     }
 }

@@ -3,60 +3,155 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\DashboardDatasetStoreRequest;
-use App\Http\Requests\Admin\DashboardDatasetUpdateRequest;
 use App\Models\DashboardDataset;
 use App\Models\DashboardDatasetItem;
-use App\Models\DatasetImport;
-use Illuminate\Http\RedirectResponse;
+use App\Services\Excel\ExcelExtractor;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
-    public function index(): View
+    public function cleardata()
     {
-        $dashboardTablesReady = Schema::hasTable('dashboard_datasets')
-            && Schema::hasTable('dashboard_dataset_items');
+        DashboardDataset::query()->delete();
+        DashboardDatasetItem::query()->delete();
 
-        $datasets = $dashboardTablesReady
-            ? DashboardDataset::with(['items' => fn ($query) => $query->orderBy('sort_order')])
-                ->orderBy('id')
-                ->get()
-                ->map(fn (DashboardDataset $dataset) => [
-                    'id' => $dataset->id,
-                    'title' => $dataset->title,
-                    'chart_type' => $dataset->chart_type,
-                    'x_label' => $dataset->x_label,
-                    'y_label' => $dataset->y_label,
-                    'labels' => $dataset->items->pluck('label')->values(),
-                    'values' => $dataset->items->pluck('value')->values(),
-                ])
-            : collect();
-
-        return view('AdminDashboard.index', [
-            'datasets' => $datasets,
-            'dashboardTablesReady' => $dashboardTablesReady,
+        return response()->json([
+            'success' => true,
+            'message' => 'Semua data dashboard berhasil dihapus.',
         ]);
     }
 
-    public function create(): View
+    public function extract(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'excel_file' => 'required|file|mimes:xlsx,xls|max:10240',
+        ], [
+            'excel_file.required' => 'Pilih file Excel terlebih dahulu sebelum memproses.',
+            'excel_file.file' => 'File yang diunggah tidak valid.',
+            'excel_file.mimes' => 'Format file tidak didukung. Mohon unggah file Excel berekstensi .xlsx atau .xls.',
+            'excel_file.max' => 'Ukuran file Excel maksimal 10 MB.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first('excel_file'),
+            ], 422);
+        }
+
+        try {
+            $excelExtractor = new ExcelExtractor;
+            $datasets = $excelExtractor->extract($request->file('excel_file'));
+
+            if (empty($datasets)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Format isi file Excel tidak sesuai dengan template. Pastikan setiap sheet memiliki kolom label/kategori (Kolom A) dan angka nilai (Kolom B). Silakan gunakan contoh file template yang disediakan.',
+                ], 422);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil diekstrak dari file Excel.',
+                'datasets' => $datasets,
+            ]);
+        } catch (\Throwable $e) {
+            report($e);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal membaca isi file Excel. Pastikan format tabel sesuai dengan template (.xlsx) dan file tidak dalam keadaan rusak. Silakan unduh contoh file template.',
+            ], 422);
+        }
+    }
+
+    public function save(Request $request)
+    {
+        $validatedData = $request->validate([
+            'datasets' => 'required|array|min:1',
+            'datasets.*.title' => 'required|string|max:255',
+            'datasets.*.chart_type' => 'required|in:bar,line,pie',
+            'datasets.*.sheet_name' => 'nullable|string|max:255',
+            'datasets.*.x_label' => 'nullable|string|max:255',
+            'datasets.*.y_label' => 'nullable|string|max:255',
+            'datasets.*.items' => 'required|array|min:1',
+            'datasets.*.items.*.label' => 'required|string|max:255',
+            'datasets.*.items.*.value' => 'required|numeric',
+        ]);
+
+        $results = DB::transaction(function () use ($validatedData) {
+            DashboardDatasetItem::query()->delete();
+            DashboardDataset::query()->delete();
+
+            $usedSlugs = [];
+            $datasetCount = 0;
+            $itemCount = 0;
+
+            foreach ($validatedData['datasets'] as $dataset) {
+                $created = DashboardDataset::create([
+                    'title' => $dataset['title'],
+                    'slug' => $this->uniqueSlug($dataset['title'], $usedSlugs),
+                    'sheet_name' => $dataset['sheet_name'] ?? $dataset['title'],
+                    'chart_type' => $dataset['chart_type'],
+                    'x_label' => $dataset['x_label'] ?? '',
+                    'y_label' => $dataset['y_label'] ?? '',
+                    'description' => null,
+                ]);
+                $datasetCount++;
+
+                foreach (array_values($dataset['items']) as $index => $item) {
+                    DashboardDatasetItem::create([
+                        'dataset_id' => $created->id,
+                        'label' => $item['label'],
+                        'value' => $item['value'],
+                        'sort_order' => $index + 1,
+                    ]);
+                    $itemCount++;
+                }
+            }
+
+            return [
+                'datasets_created' => $datasetCount,
+                'items_created' => $itemCount,
+            ];
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data dashboard berhasil disimpan.',
+            'results' => $results,
+        ]);
+    }
+
+    public function create()
     {
         return view('AdminDashboard.create');
     }
 
-    public function edit(DashboardDataset $dashboardDataset): View
+    public function edit($id)
     {
-        $dataset = $dashboardDataset->load('items');
+        $dataset = DashboardDataset::with('items')->findOrFail($id);
 
         return view('AdminDashboard.edit', ['dataset' => $dataset]);
     }
 
-    public function store(DashboardDatasetStoreRequest $request): RedirectResponse
+    public function upload()
     {
-        $validatedData = $request->validated();
+        return view('AdminDashboard.upload');
+    }
+
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'chart_type' => 'required|in:bar,line,pie',
+            'items' => 'required|array|min:1',
+            'items.*.label' => 'required|string|max:255',
+            'items.*.value' => 'required|numeric',
+        ]);
 
         DB::transaction(function () use ($validatedData) {
             $usedSlugs = [];
@@ -64,7 +159,7 @@ class DashboardController extends Controller
             $created = DashboardDataset::create([
                 'title' => $validatedData['title'],
                 'slug' => $this->uniqueSlug($validatedData['title'], $usedSlugs),
-                'sheet_name' => $validatedData['title'],
+                'sheet_name' => $validatedData['sheet_name'] ?? 'Mahasiswa',
                 'chart_type' => $validatedData['chart_type'],
                 'x_label' => $validatedData['x_label'] ?? '',
                 'y_label' => $validatedData['y_label'] ?? '',
@@ -81,20 +176,26 @@ class DashboardController extends Controller
             }
         });
 
-        return redirect()->route('admin.datasets.index')->with('success', 'Chart berhasil ditambahkan.');
+        return redirect()->route('admin.dashboard')->with('success', 'Chart berhasil ditambahkan.');
     }
 
-    public function update(DashboardDatasetUpdateRequest $request, DashboardDataset $dashboardDataset): RedirectResponse
+    public function update(Request $request, $id)
     {
-        $dataset = $dashboardDataset;
+        $dataset = DashboardDataset::findOrFail($id);
 
-        $validatedData = $request->validated();
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'chart_type' => 'required|in:bar,line,pie',
+            'items' => 'required|array|min:1',
+            'items.*.label' => 'required|string|max:255',
+            'items.*.value' => 'required|numeric',
+        ]);
 
         DB::transaction(function () use ($dataset, $validatedData) {
             $dataset->update([
                 'title' => $validatedData['title'],
                 'slug' => Str::slug($validatedData['title']) . '-' . $dataset->id,
-                'sheet_name' => $validatedData['title'],
+                'sheet_name' => $dataset->sheet_name ?: 'Mahasiswa',
                 'chart_type' => $validatedData['chart_type'],
                 'x_label' => $validatedData['x_label'] ?? $dataset->x_label,
                 'y_label' => $validatedData['y_label'] ?? $dataset->y_label,
@@ -113,18 +214,26 @@ class DashboardController extends Controller
             }
         });
 
-        return redirect()->route('admin.datasets.index')->with('success', 'Chart berhasil diperbarui.');
+        return redirect()->route('admin.dashboard')->with('success', 'Chart berhasil diperbarui.');
     }
 
-    public function destroyAll(): RedirectResponse
+    public function destroy($id)
     {
-        DB::transaction(function () {
-            DashboardDatasetItem::query()->delete();
-            DashboardDataset::query()->delete();
-            DatasetImport::query()->delete();
+        $dataset = DashboardDataset::findOrFail($id);
+
+        DB::transaction(function () use ($dataset) {
+            $dataset->items()->delete();
+            $dataset->delete();
         });
 
-        return redirect()->route('admin.datasets.index')->with('success', 'Semua data dashboard berhasil dihapus.');
+        if (request()->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Chart berhasil dihapus.',
+            ]);
+        }
+
+        return redirect()->route('admin.dashboard')->with('success', 'Chart berhasil dihapus.');
     }
 
     private function uniqueSlug(string $title, array &$usedSlugs): string

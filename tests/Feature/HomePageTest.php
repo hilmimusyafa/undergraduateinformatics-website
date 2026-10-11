@@ -17,38 +17,28 @@ class HomePageTest extends TestCase
 
     private function createPost(string $title, string $subtitle, ?\DateTimeInterface $createdAt = null): Post
     {
-        $post = Post::create([
+        return Post::create([
             'title' => $title,
             'subtitle' => $subtitle,
             'body' => '<p>Detail.</p>',
             'image' => 'images/DummyImage.png',
+            'created_at' => $createdAt,
+            'updated_at' => $createdAt,
         ]);
-
-        if ($createdAt !== null) {
-            Post::whereKey($post->id)->update(['created_at' => $createdAt, 'updated_at' => $createdAt]);
-            $post = $post->fresh();
-        }
-
-        return $post;
     }
 
     private function createLink(string $name, string $link, ImportantSection $section, ?\DateTimeInterface $updatedAt = null): ImportantLink
     {
-        $created = ImportantLink::create([
+        return ImportantLink::create([
             'name' => $name,
             'link' => $link,
             'important_section_id' => $section->id,
+            'created_at' => $updatedAt,
+            'updated_at' => $updatedAt,
         ]);
-
-        if ($updatedAt !== null) {
-            ImportantLink::whereKey($created->id)->update(['created_at' => $updatedAt, 'updated_at' => $updatedAt]);
-            $created = $created->fresh();
-        }
-
-        return $created;
     }
 
-    public function test_web_home_route_renders_app_wrapper_with_initial_data_and_seo_tags(): void
+    public function test_web_home_route_renders_blade_view_with_data(): void
     {
         $post = $this->createPost('Welcome to Informatics', 'New semester starting soon');
         $tag = Tag::create(['name' => 'Academic', 'description' => 'Academic announcements']);
@@ -57,6 +47,92 @@ class HomePageTest extends TestCase
         $section = ImportantSection::create(['name' => 'Student Affairs', 'order_number' => 1]);
         $this->createLink('Academic Calendar', 'https://example.com/calendar', $section);
 
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+        $response->assertViewIs('HomePage');
+        $response->assertSee('Welcome to Informatics');
+        $response->assertSee('Portal Informasi');
+    }
+
+    public function test_api_home_returns_new_payload_structure(): void
+    {
+        $post = $this->createPost('AI Lab Opening', 'New computing resources available');
+        $tag = Tag::create(['name' => 'Research', 'description' => 'Research updates']);
+        $post->tags()->attach($tag);
+
+        $section = ImportantSection::create(['name' => 'Curriculum', 'order_number' => 1]);
+        $this->createLink('Study Plan', 'https://example.com/study-plan', $section);
+
+        $response = $this->getJson('/api/home');
+
+        $response->assertStatus(200);
+        $response->assertJsonPath('status', 'success');
+        $response->assertJsonStructure([
+            'status',
+            'data' => [
+                'latest_posts' => [
+                    '*' => [
+                        'id',
+                        'slug',
+                        'title',
+                        'subtitle',
+                        'updated_at',
+                        'tags' => ['*' => ['id', 'slug', 'name']],
+                    ],
+                ],
+                'latest_links' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'link',
+                        'updated_at',
+                        'section' => ['id', 'name'],
+                    ],
+                ],
+                'dashboard',
+            ],
+        ]);
+        $response->assertJsonPath('data.latest_posts.0.title', 'AI Lab Opening');
+        $response->assertJsonPath('data.latest_posts.0.tags.0.name', 'Research');
+        $response->assertJsonPath('data.latest_links.0.name', 'Study Plan');
+        $response->assertJsonPath('data.latest_links.0.section.name', 'Curriculum');
+        $this->assertArrayNotHasKey('body', $response->json('data.latest_posts.0'));
+        $this->assertArrayNotHasKey('image', $response->json('data.latest_posts.0'));
+    }
+
+    public function test_api_home_returns_only_five_latest_posts(): void
+    {
+        foreach (range(1, 6) as $i) {
+            $this->createPost("Post ke-$i", "Subtitle $i", now()->subMinutes(6 - $i));
+        }
+
+        $response = $this->getJson('/api/home');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(5, 'data.latest_posts');
+        $response->assertJsonPath('data.latest_posts.0.title', 'Post ke-6');
+        $response->assertJsonPath('data.latest_posts.4.title', 'Post ke-2');
+    }
+
+    public function test_api_home_returns_only_five_latest_links_with_section(): void
+    {
+        $section = ImportantSection::create(['name' => 'Kemahasiswaan', 'order_number' => 1]);
+        foreach (range(1, 6) as $i) {
+            $this->createLink("Link ke-$i", "https://example.com/$i", $section, now()->subMinutes(6 - $i));
+        }
+
+        $response = $this->getJson('/api/home');
+
+        $response->assertStatus(200);
+        $response->assertJsonCount(5, 'data.latest_links');
+        $response->assertJsonPath('data.latest_links.0.name', 'Link ke-6');
+        $response->assertJsonPath('data.latest_links.4.name', 'Link ke-2');
+        $response->assertJsonPath('data.latest_links.0.section.name', 'Kemahasiswaan');
+    }
+
+    public function test_api_home_returns_dashboard_datasets_with_labels_and_values(): void
+    {
         $dataset = DashboardDataset::create([
             'title' => 'Jumlah Mahasiswa',
             'slug' => 'jumlah-mahasiswa',
@@ -69,24 +145,19 @@ class HomePageTest extends TestCase
         DashboardDatasetItem::create(['dataset_id' => $dataset->id, 'label' => '2024', 'value' => 120, 'sort_order' => 2]);
         DashboardDatasetItem::create(['dataset_id' => $dataset->id, 'label' => '2023', 'value' => 100, 'sort_order' => 1]);
 
-        $response = $this->get('/');
+        $response = $this->getJson('/api/home');
 
         $response->assertStatus(200);
-        $response->assertViewIs('app');
-        $response->assertViewHas('initialData');
-        $response->assertSee('__INITIAL_DATA__');
-        $response->assertSee('Welcome to Informatics');
-        $response->assertSee('Academic Calendar');
-        $response->assertSee('Beranda - Portal Informasi Sarjana Informatika', false);
-        $response->assertSee('Sumber informasi resmi Program Studi Sarjana Informatika Telkom University untuk perkuliahan peserta didik.', false);
-
-        preg_match('/window\.__INITIAL_DATA__ = (\{.*?\});/s', $response->getContent(), $matches);
-        $this->assertNotEmpty($matches, 'Initial data script tag not found');
-        $initialData = json_decode($matches[1], true);
-        $this->assertSame('Welcome to Informatics', $initialData['posts'][0]['title']);
-        $this->assertSame('Academic Calendar', $initialData['links'][0]['name']);
-        $this->assertSame('Jumlah Mahasiswa', $initialData['datasets'][0]['title']);
-        $this->assertSame(['2023', '2024'], $initialData['datasets'][0]['labels']);
-        $this->assertSame([100, 120], $initialData['datasets'][0]['values']);
+        $response->assertJsonStructure([
+            'data' => [
+                'dashboard' => [
+                    '*' => ['id', 'title', 'chart_type', 'x_label', 'y_label', 'labels', 'values'],
+                ],
+            ],
+        ]);
+        $response->assertJsonPath('data.dashboard.0.title', 'Jumlah Mahasiswa');
+        $response->assertJsonPath('data.dashboard.0.chart_type', 'bar');
+        $response->assertJsonPath('data.dashboard.0.labels', ['2023', '2024']);
+        $response->assertJsonPath('data.dashboard.0.values', [100, 120]);
     }
 }

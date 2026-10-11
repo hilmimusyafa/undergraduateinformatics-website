@@ -16,33 +16,12 @@ class FeedbackController extends Controller
     {
         $feedbackLink = FeedbackLink::configured()->first();
 
-        $initialData = null;
-
-        if ($feedbackLink) {
-            try {
-                $initialData = app(FormDefinitionService::class)->resolve('feedback');
-            } catch (MsFormsException) {
-                $initialData = null;
-            }
-        }
-
-        if ($initialData === null) {
-            $initialData = ['link' => null];
-        }
-
         $page = PageMeta::page('feedback');
 
-        $jsonLd = [
-            '@context' => 'https://schema.org',
-            '@type' => 'WebPage',
-            'name' => $page['title'],
-            'url' => $request->url(),
+        return view('FeedbackPage', [
+            'title' => $page['title'],
             'description' => $page['description'],
-        ];
-
-        return view('app', PageMeta::viewData($request, 'feedback', $jsonLd, [
-            'status' => 'success',
-            'data' => $initialData,
-        ]));
+            'feedbackLink' => $feedbackLink,
+        ]);
     }
 }
