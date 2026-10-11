@@ -15,6 +15,7 @@ use App\Http\Controllers\Web\MeetingAgendaController;
 use App\Http\Controllers\Web\PostController as WebPostController;
 use App\Http\Controllers\Web\ReservationController;
 use App\Http\Controllers\Web\SearchController;
+use App\Http\Controllers\Web\StatisticsController;
 use App\Http\Controllers\Web\TagController as WebTagController;
 use App\Models\DashboardDataset;
 use App\Models\ReservationSchedule;
@@ -44,6 +45,8 @@ Route::get('/post/{id}', function (string $id) {
     return redirect()->route('posts.show', ['slug' => $post->slug ?: $post->id], 301);
 });
 Route::get('/links', [LinkController::class, 'index'])->name('links.index');
+Route::get('/statistik-mahasiswa', [StatisticsController::class, 'index'])->name('statistics.index');
+Route::get('/statistik', fn () => redirect()->route('statistics.index'));
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
 Route::get('/reservation', [ReservationController::class, 'show'])->name('reservation.show');
 Route::get('/reservation/{id}/berita-acara', [ReservationController::class, 'beritaAcara'])->name('reservation.berita-acara');

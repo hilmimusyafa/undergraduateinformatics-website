@@ -23,6 +23,9 @@
                     </ul>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link {{ Route::is('statistics.*') ? 'active' : '' }}" href="{{ route('statistics.index') }}">Statistik Mahasiswa</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link {{ Route::is('links.*') ? 'active' : '' }}" href="{{ route('links.index') }}">Link Penting</a>
                 </li>
                 <li class="nav-item">
