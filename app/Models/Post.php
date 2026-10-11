@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\PostTag;
+use App\Services\Security\HtmlSanitizer;
 use App\Support\Slug;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,10 @@ class Post extends Model
     protected static function booted(): void
     {
         static::saving(function (Post $post) {
+            if ($post->body) {
+                $post->body = HtmlSanitizer::clean($post->body);
+            }
+
             if ($post->slug) {
                 return;
             }

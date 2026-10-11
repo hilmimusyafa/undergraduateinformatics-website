@@ -36,17 +36,21 @@ class PostController extends Controller
             'title' => 'required',
             'subtitle' => 'required',
             'body'   => 'required',
-            
+            'gambar' => 'nullable|file|image|mimes:jpg,png,jpeg,svg,webp|max:2048',
         ]);
         $tagDefault = Tag::where('name', "S1 Informatika")->first();
         
         if ($request->hasFile('gambar')) {
             $gambar = $request->file('gambar');
-            $foto_ekstensi = $gambar->getClientOriginalName();
-            $foto_nama = time() . "_" . $foto_ekstensi;
+            $extension = $gambar->getClientOriginalExtension() ?: 'png';
+            $safeBase = \Illuminate\Support\Str::slug(pathinfo($gambar->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'post_image';
+            $foto_nama = time() . "_" . $safeBase . "." . $extension;
 
             $pathPublic = app()->make('path.public');
             $pathPublic = $pathPublic . "/images/posts";
+            if (!File::isDirectory($pathPublic)) {
+                File::makeDirectory($pathPublic, 0755, true);
+            }
             $gambar->move($pathPublic, $foto_nama);
 
             $gambar_path = 'images/posts/' . $foto_nama;
@@ -108,26 +112,30 @@ class PostController extends Controller
             'title' => 'required',
             'subtitle' => 'required',
             'body'   => 'required',
-            
+            'gambar' => 'nullable|file|image|mimes:jpg,png,jpeg,svg,webp|max:2048',
         ]);
 
-
-    
         $tagDefault = Tag::where('name', "S1 Informatika")->first();
        
         if($request->cekgambar == "1") {       
             $post = Post::where('id',$id)->first();
            
             $pathPublic = app()->make('path.public');
-            File::delete($pathPublic . "/".$post->image);
+            if ($post && $post->image) {
+                File::delete($pathPublic . "/".$post->image);
+            }
        
             if ($request->hasFile('gambar')) {
                 $gambar = $request->file('gambar');
-                $foto_ekstensi = $gambar->getClientOriginalName();
-                $foto_nama = time() . "_" . $foto_ekstensi;
+                $extension = $gambar->getClientOriginalExtension() ?: 'png';
+                $safeBase = \Illuminate\Support\Str::slug(pathinfo($gambar->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'post_image';
+                $foto_nama = time() . "_" . $safeBase . "." . $extension;
     
                 $pathPublic = app()->make('path.public');
                 $pathPublic = $pathPublic . "/images/posts";
+                if (!File::isDirectory($pathPublic)) {
+                    File::makeDirectory($pathPublic, 0755, true);
+                }
                 $gambar->move($pathPublic, $foto_nama);
     
                 $gambar_path = 'images/posts/' . $foto_nama;
@@ -188,11 +196,15 @@ class PostController extends Controller
       
             if ($request->hasFile('gambar')) {
                 $gambar = $request->file('gambar');
-                $foto_ekstensi = $gambar->getClientOriginalName();
-                $foto_nama = time() . "_" . $foto_ekstensi;
+                $extension = $gambar->getClientOriginalExtension() ?: 'png';
+                $safeBase = \Illuminate\Support\Str::slug(pathinfo($gambar->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'post_image';
+                $foto_nama = time() . "_" . $safeBase . "." . $extension;
     
                 $pathPublic = app()->make('path.public');
                 $pathPublic = $pathPublic . "/images/posts";
+                if (!File::isDirectory($pathPublic)) {
+                    File::makeDirectory($pathPublic, 0755, true);
+                }
                 $gambar->move($pathPublic, $foto_nama);
     
                 $gambar_path = 'images/posts/' . $foto_nama;

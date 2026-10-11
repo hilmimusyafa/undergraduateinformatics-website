@@ -34,43 +34,45 @@ class PasswordRecoveryController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([ //validasi input
+        $validatedData = $request->validate([
             'user_id' => 'required',
-            'first_answer' =>'required',
-            'second_answer' =>'required'
+            'first_answer' => 'required',
+            'second_answer' => 'required'
         ]);
 
-        $user = User::where('id', $validatedData['user_id'])->get();
-        if (count($user) == 1){
-            $password_recovery = PasswordRecovery::where('id', $user->first()->id)->get();
-            $password_recovery = $password_recovery->first();
+        $user = User::find($validatedData['user_id']);
+        $password_recovery = $user ? ($user->password_recovery ?: \App\Models\PasswordRecovery::where('user_id', $user->id)->first()) : null;
+
+        if ($user && $password_recovery) {
             if (
-                ($validatedData['first_answer'] == $password_recovery['first_answer']) and
-                ($validatedData['second_answer'] == $password_recovery['second_answer'])
-                ) {
-                    return response()->json(['response' => 'Jawaban Valid']);
+                strtolower(trim((string)$validatedData['first_answer'])) === strtolower(trim((string)$password_recovery->first_answer)) &&
+                strtolower(trim((string)$validatedData['second_answer'])) === strtolower(trim((string)$password_recovery->second_answer))
+            ) {
+                $resetToken = \Illuminate\Support\Str::random(40);
+                \Illuminate\Support\Facades\Cache::put("api_pwd_reset_{$user->id}", $resetToken, now()->addMinutes(15));
+
+                return response()->json([
+                    'response' => 'Jawaban Valid',
+                    'reset_token' => $resetToken,
+                ]);
             } else {
                 return response()->json(['error' => 'Jawaban tidak sesuai'], 400);
             } 
         } else {
             return response()->json(['error' => 'User tidak valid'], 400);
         }
-        
-
     }
 
     /**
      * Display the specified resource.
      */
-
-
     public function show(String $id)
     {
-        $user = User::where('id', $id)->get();
-        if (count($user) == 1){
-            $password_recovery = PasswordRecovery::where('id', $user->first()->id)->get();
-            $password_recovery = $password_recovery->first();
-            $question['first_question'] = $password_recovery['first_question'];
+        $user = User::where('id', $id)->first();
+        $password_recovery = $user ? ($user->password_recovery ?: \App\Models\PasswordRecovery::where('user_id', $user->id)->first()) : null;
+
+        if ($user && $password_recovery) {
+            $question['first_question'] = $password_recovery->first_question;
             $question['second_question'] = $password_recovery['second_question'];
             return response()->json([
                 'question' => $question
@@ -85,18 +87,22 @@ class PasswordRecoveryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $validatedData = $request->validate([ //validasi input
-            'new_password' =>'required',
-            'confirm_new_password' =>'required'
+        $validatedData = $request->validate([
+            'reset_token' => 'required|string',
+            'new_password' => 'required|min:6',
+            'confirm_new_password' => 'required|same:new_password'
         ]);
-        $user = User::where('id', $id)->get();
-        if (count($user) == 1){
-            if ($validatedData['new_password'] == $validatedData['confirm_new_password']) {
-                User::where('id', $id)->update(['password' => bcrypt($validatedData['new_password'])]);
-                return response()->json(['response' => 'Password berhasil diupdate']);
-            } else {
-                return response()->json(['error' => 'Password tidak valid'], 400);
-            }
+
+        $cachedToken = \Illuminate\Support\Facades\Cache::get("api_pwd_reset_{$id}");
+        if (! $cachedToken || ! hash_equals((string)$cachedToken, (string)$validatedData['reset_token'])) {
+            return response()->json(['error' => 'Token reset tidak valid atau telah kadaluarsa'], 403);
+        }
+
+        $user = User::where('id', $id)->first();
+        if ($user) {
+            $user->update(['password' => bcrypt($validatedData['new_password'])]);
+            \Illuminate\Support\Facades\Cache::forget("api_pwd_reset_{$id}");
+            return response()->json(['response' => 'Password berhasil diupdate']);
         } else {
             return response()->json(['error' => 'User tidak valid'], 400);
         }

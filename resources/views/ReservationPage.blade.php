@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'city' => $s->city,
             'formatted_date' => \Carbon\Carbon::parse($s->date)->translatedFormat('l, d F Y'),
         ];
-    }) : []) !!};
+    }) : [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) !!};
 
     const allowedShifts = ['09:00', '13:00', '15:00'];
     const monthNames = [

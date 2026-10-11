@@ -40,7 +40,6 @@ Route::get('/tags', [TagController::class, 'index']);
 Route::get('/tags/{slug}', [TagController::class, 'show']);
 
 Route::get('/posts/search', [SearchController::class, 'search']);
-
 Route::get('/posts/{slug}', [PostController::class, 'show']);
 
 Route::get('/links', [LinkController::class, 'index']);
@@ -48,22 +47,24 @@ Route::get('/links', [LinkController::class, 'index']);
 Route::get('/feedback', [FeedbackController::class, 'show']);
 Route::post('/feedback', [FeedbackController::class, 'store'])->middleware('throttle:10,1');
 
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1')->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
 Route::post('/informasi/store', [AdminPostController::class, 'store'])->middleware('auth:sanctum');
 Route::post('/informasi/update/{id}', [AdminPostController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/informasi/delete/{id}', [AdminPostController::class, 'destroy'])->middleware('auth:sanctum');
 Route::get('/informasi', [AdminPostController::class, 'index'])->middleware('auth:sanctum');
+
 Route::apiResource('tag', AdminTagController::class)->middleware('auth:sanctum');
 Route::apiResource('importantSection', ImportantSectionController::class)->middleware('auth:sanctum');
 Route::apiResource('importantLink', ImportantLinkController::class)->middleware('auth:sanctum');
-Route::apiResource('passwordRecovery', PasswordRecoveryController::class);
+Route::apiResource('passwordRecovery', PasswordRecoveryController::class)->middleware('throttle:5,1');
 Route::apiResource('editPasswordRecovery', EditPasswordRecoveryController::class)->middleware('auth:sanctum');
 Route::apiResource('feedbackLink', FeedbackLinkController::class)->middleware('auth:sanctum');
+
 Route::prefix('reservation')->group(function () {
     Route::get('availability', [ReservationController::class, 'availability']);
     Route::get('/', [ReservationController::class, 'show']);
     Route::post('/', [ReservationController::class, 'store'])->middleware('throttle:10,1');
-    Route::apiResource('link', ReservationLinkController::class);
-    // ->middleware('auth:sanctum');
+    Route::apiResource('link', ReservationLinkController::class)->middleware('auth:sanctum');
 });

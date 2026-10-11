@@ -50,9 +50,10 @@ class AdminController extends Controller
     public function questionForm() 
     {
         $user = session('user');
-        if($user) {
-            $first_question = $user->password_recovery->first_question;
-            $second_question = $user->password_recovery->second_question;
+        $recovery = $user ? ($user->password_recovery ?: \App\Models\PasswordRecovery::where('user_id', $user->id)->first()) : null;
+        if($user && $recovery) {
+            $first_question = $recovery->first_question;
+            $second_question = $recovery->second_question;
             return view('PertanyaanLupaPassword', [
                 'first_question' => $first_question,
                 'second_question' => $second_question,
@@ -67,15 +68,15 @@ class AdminController extends Controller
      * Display a change password form
      */
     public function passwordRecoveryForm(){
+        $verifiedUserId = session('password_reset_verified_user_id');
         $user = session('user');
-        if($user) {
+        if($user && $verifiedUserId && (int)$verifiedUserId === (int)$user->id) {
             return view('GantiPasswordPage', [
                 'user_id' => $user->id
             ]);
         } else {
             return redirect()->to(route('admin.forgotPassword'));
         }
-        
     }
 
     /**
@@ -83,7 +84,8 @@ class AdminController extends Controller
      */
     public function submitEmailRecovery(Request $request) 
     {
-        $user = User::all()->where('email', $request->email)->first();
+        $request->validate(['email' => 'required|email']);
+        $user = User::where('email', $request->email)->first();
         if ($user) {
             return redirect()->to(route('admin.questionForm'))->with('user', $user);
         } else {
@@ -97,11 +99,23 @@ class AdminController extends Controller
      */
     public function submitAnswerRecovery(Request $request) 
     {
-        $user = User::all()->where('id', $request->user_id)->first();
-        if ($user) {
-            $first_answer = strtolower($user->password_recovery->first_answer); // strtolower() is used to make the answer case insensitive (e.g. "A" and "a" are the same
-            $second_answer = strtolower($user->password_recovery->second_answer);
-            if ($first_answer == $request->first_answer && $second_answer == $request->second_answer) {
+        $request->validate([
+            'user_id' => 'required',
+            'first_answer' => 'required',
+            'second_answer' => 'required',
+        ]);
+
+        $user = User::where('id', $request->user_id)->first();
+        $recovery = $user ? ($user->password_recovery ?: \App\Models\PasswordRecovery::where('user_id', $user->id)->first()) : null;
+
+        if ($user && $recovery) {
+            $first_answer = strtolower(trim((string)$recovery->first_answer));
+            $second_answer = strtolower(trim((string)$recovery->second_answer));
+            $inputFirst = strtolower(trim((string)$request->first_answer));
+            $inputSecond = strtolower(trim((string)$request->second_answer));
+
+            if ($first_answer === $inputFirst && $second_answer === $inputSecond) {
+                session()->put('password_reset_verified_user_id', $user->id);
                 return redirect()->to(route('admin.passwordRecoveryForm'))->with('user', $user);
             } else {
                 request()->session()->flash('error', 'Jawaban tidak sesuai!');
@@ -118,16 +132,29 @@ class AdminController extends Controller
      */
     public function submitPasswordRecovery(Request $request) 
     {
-        $user = User::all()->where('id', $request->user_id)->first();
+        $request->validate([
+            'user_id' => 'required',
+            'new_password' => 'required|min:6',
+            'confirm_new_password' => 'required|same:new_password',
+        ], [
+            'new_password.required' => 'Password baru wajib diisi.',
+            'new_password.min' => 'Password baru minimal 6 karakter.',
+            'confirm_new_password.same' => 'Konfirmasi password tidak sesuai.',
+        ]);
+
+        $verifiedUserId = session('password_reset_verified_user_id');
+        if (! $verifiedUserId || (int)$verifiedUserId !== (int)$request->user_id) {
+            request()->session()->flash('error', 'Sesi verifikasi tidak valid atau telah kadaluarsa!');
+            return redirect()->to(route('admin.forgotPassword'));
+        }
+
+        $user = User::where('id', $request->user_id)->first();
         if ($user) {
-            if ($request->new_password == $request->confirm_new_password) {
-                $user->password = bcrypt($request->new_password);
-                $user->save();
-                request()->session()->flash('success', 'Password berhasil diganti!');
-                return redirect()->to(route('admin.login'));
-            }
-            request()->session()->flash('error', 'Password tidak sesuai!');
-            return redirect()->to(route('admin.passwordRecoveryForm'))->with('user', $user);
+            $user->password = bcrypt($request->new_password);
+            $user->save();
+            session()->forget('password_reset_verified_user_id');
+            request()->session()->flash('success', 'Password berhasil diganti!');
+            return redirect()->to(route('admin.login'));
         } else {
             request()->session()->flash('error', 'Sesi telah kadaluarsa!');
             return redirect()->to(route('admin.forgotPassword'));

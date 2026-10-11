@@ -415,9 +415,9 @@ class DashboardControllerTest extends TestCase
 
     public function test_extract_parses_valid_excel_template(): void
     {
-        $filePath = base_path('test.xlsx');
+        $filePath = public_path('example.xlsx');
         if (! file_exists($filePath)) {
-            $this->markTestSkipped('test.xlsx not found');
+            $filePath = public_path('template-statistik-mahasiswa.xlsx');
         }
 
         $file = new \Illuminate\Http\UploadedFile(

@@ -108,9 +108,14 @@ class PostController extends Controller
         // If yes, store image in storage and save the image link in database
         // If not, save the image link as dummy image
         if ($request->image) {
-            $imageName = time().'_'.$request->image->getClientOriginalName();
+            $extension = $request->image->getClientOriginalExtension() ?: 'png';
+            $safeBase = \Illuminate\Support\Str::slug(pathinfo($request->image->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'post_image';
+            $imageName = time() . '_' . $safeBase . '.' . $extension;
             $pathPublic = app()->make('path.public');
             $pathPublic = $pathPublic . "/images/posts";
+            if (!File::isDirectory($pathPublic)) {
+                File::makeDirectory($pathPublic, 0755, true);
+            }
             $request->image->move($pathPublic, $imageName);
             $post->image = "images/posts/".$imageName;
         } else {
@@ -183,9 +188,14 @@ class PostController extends Controller
                 $pathPublic = app()->make('path.public');
                 File::delete($pathPublic . "/".$post->image);
             }
-            $imageName = time().'_'.$request->image->getClientOriginalName();  
+            $extension = $request->image->getClientOriginalExtension() ?: 'png';
+            $safeBase = \Illuminate\Support\Str::slug(pathinfo($request->image->getClientOriginalName(), PATHINFO_FILENAME)) ?: 'post_image';
+            $imageName = time() . '_' . $safeBase . '.' . $extension;
             $pathPublic = app()->make('path.public');
             $pathPublic = $pathPublic . "/images/posts";
+            if (!File::isDirectory($pathPublic)) {
+                File::makeDirectory($pathPublic, 0755, true);
+            }
             $request->image->move($pathPublic, $imageName);
             $post->image = "images/posts/".$imageName;
         } else if($request->has('deleteGambar')) {

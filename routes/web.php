@@ -26,9 +26,23 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::get('/tags', [WebTagController::class, 'index'])->name('tags.index');
 Route::get('/tags/{slug}', [WebTagController::class, 'show'])->name('tags.show');
+Route::get('/tag/{id}', function (string $id) {
+    $tag = \App\Models\Tag::whereSlugOrId($id)->first();
+    if (! $tag) {
+        abort(404);
+    }
+    return redirect()->route('tags.show', ['slug' => $tag->slug ?: $tag->id], 301);
+});
 Route::get('/posts', fn () => redirect()->route('posts.search'));
 Route::get('/posts/search', [SearchController::class, 'index'])->name('posts.search');
 Route::get('/posts/{slug}', [WebPostController::class, 'show'])->name('posts.show');
+Route::get('/post/{id}', function (string $id) {
+    $post = \App\Models\Post::whereSlugOrId($id)->first();
+    if (! $post) {
+        abort(404);
+    }
+    return redirect()->route('posts.show', ['slug' => $post->slug ?: $post->id], 301);
+});
 Route::get('/links', [LinkController::class, 'index'])->name('links.index');
 Route::get('/feedback', [FeedbackController::class, 'show'])->name('feedback.show');
 Route::get('/reservation', [ReservationController::class, 'show'])->name('reservation.show');
@@ -40,15 +54,15 @@ Route::post('/meeting-agenda', [MeetingAgendaController::class, 'store'])->name(
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('login', [AdminController::class, 'loginForm'])->name('login');
-        Route::post('login', [AdminController::class, 'login'])->name('loginAttempt');
+        Route::post('login', [AdminController::class, 'login'])->middleware('throttle:5,1')->name('loginAttempt');
     });
 
     Route::get('forgot-password', [AdminController::class, 'forgotForm'])->name('forgotPassword');
-    Route::post('submit-email-recovery', [AdminController::class, 'submitEmailRecovery'])->name('submitEmailRecovery');
+    Route::post('submit-email-recovery', [AdminController::class, 'submitEmailRecovery'])->middleware('throttle:10,1')->name('submitEmailRecovery');
     Route::get('question-form', [AdminController::class, 'questionForm'])->name('questionForm');
-    Route::post('submit-answer-recovery', [AdminController::class, 'submitAnswerRecovery'])->name('submitAnswerRecovery');
+    Route::post('submit-answer-recovery', [AdminController::class, 'submitAnswerRecovery'])->middleware('throttle:10,1')->name('submitAnswerRecovery');
     Route::get('password-recovery-form', [AdminController::class, 'passwordRecoveryForm'])->name('passwordRecoveryForm');
-    Route::post('submit-password-recovery', [AdminController::class, 'submitPasswordRecovery'])->name('submitPasswordRecovery');
+    Route::post('submit-password-recovery', [AdminController::class, 'submitPasswordRecovery'])->middleware('throttle:10,1')->name('submitPasswordRecovery');
 
     Route::middleware('auth')->group(function () {
         Route::get('/', fn () => redirect()->route('admin.dashboard'));
