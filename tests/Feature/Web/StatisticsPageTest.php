@@ -61,7 +61,8 @@ class StatisticsPageTest extends TestCase
         $response->assertSee('350');
         $response->assertSee('Angkatan 2022');
         $response->assertSee('410');
-        $response->assertSee('Data mahasiswa aktif per angkatan.');
+        $response->assertDontSee('Data mahasiswa aktif per angkatan.');
+        $response->assertDontSee('Tipe:');
     }
 
     public function test_statistics_page_shows_empty_state_when_no_datasets(): void

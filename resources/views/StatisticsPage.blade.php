@@ -32,16 +32,10 @@
                 <div class="d-flex flex-column gap-4">
                     @foreach ($statistics as $dataset)
                         <div class="topic-block p-4 bg-white rounded-3 shadow-sm border mb-0">
-                            <div class="topic-header border-bottom pb-3 mb-4 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                            <div class="topic-header border-bottom pb-3 mb-4">
                                 <div class="topic-header__title-wrap">
-                                    <h2 class="h4 mb-1 text-dark fw-bold">{{ $dataset->title }}</h2>
-                                    @if ($dataset->description)
-                                        <p class="text-muted small mb-0">{{ $dataset->description }}</p>
-                                    @endif
+                                    <h2 class="h4 mb-0 text-dark fw-bold">{{ $dataset->title }}</h2>
                                 </div>
-                                <span class="badge bg-light text-secondary border px-3 py-2 text-uppercase font-monospace" style="font-size: 0.75rem;">
-                                    Tipe: {{ $dataset->chart_type }}
-                                </span>
                             </div>
 
                             <div class="row g-4 align-items-center">
