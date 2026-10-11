@@ -162,6 +162,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
+Route::get('/migrasi-prod-final', function () {
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'DashboardDatasetSeeder', '--force' => true]);
+    return '<h3>MIGRASI PRODUCTION SUKSES</h3><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+});
+
 Route::fallback(function (Request $request) {
     abort(404);
 });
