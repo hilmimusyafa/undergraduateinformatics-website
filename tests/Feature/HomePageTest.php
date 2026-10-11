@@ -55,6 +55,28 @@ class HomePageTest extends TestCase
         $response->assertSee('Portal Informasi');
     }
 
+    public function test_web_home_route_loads_posts_for_all_tags_without_global_limit(): void
+    {
+        $tag1 = Tag::create(['name' => 'Category 1']);
+        $tag2 = Tag::create(['name' => 'Category 2']);
+
+        for ($i = 1; $i <= 3; $i++) {
+            $postA = $this->createPost("Tag 1 Post $i", "Subtitle $i", now()->subMinutes(10 - $i));
+            $postA->tags()->attach($tag1);
+
+            $postB = $this->createPost("Tag 2 Post $i", "Subtitle $i", now()->subMinutes(20 - $i));
+            $postB->tags()->attach($tag2);
+        }
+
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+        $tags = $response->viewData('tags');
+        $this->assertCount(2, $tags);
+        $this->assertCount(3, $tags->firstWhere('id', $tag1->id)->posts);
+        $this->assertCount(3, $tags->firstWhere('id', $tag2->id)->posts);
+    }
+
     public function test_api_home_returns_new_payload_structure(): void
     {
         $post = $this->createPost('AI Lab Opening', 'New computing resources available');

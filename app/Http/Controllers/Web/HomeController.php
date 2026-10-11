@@ -19,7 +19,7 @@ class HomeController extends Controller
 
         $tags = Tag::query()
             ->with(['posts' => function ($query) {
-                $query->orderByDesc('updated_at')->limit(3);
+                $query->orderByDesc('updated_at');
             }, 'posts.tags'])
             ->withCount('posts')
             ->orderBy('name')
